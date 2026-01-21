@@ -11,26 +11,55 @@ use App\Features\Authentication\Controllers\LogoutController;
 use App\Features\Authentication\Controllers\RefreshTokenController;
 use App\Features\Authentication\Controllers\RegisterController;
 use App\Features\Authentication\Controllers\ResetPasswordController;
+use App\Features\Roles\Controllers\RoleAllController;
+use App\Features\Roles\Enums\Roles;
+use App\Features\Users\Controllers\UserCreateController;
+use App\Features\Users\Controllers\UserDeleteController;
+use App\Features\Users\Controllers\UserExportController;
+use App\Features\Users\Controllers\UserPaginateController;
+use App\Features\Users\Controllers\UserToggleStatusController;
+use App\Features\Users\Controllers\UserToggleVerificationController;
+use App\Features\Users\Controllers\UserUpdateController;
+use App\Features\Users\Controllers\UserViewController;
+use App\Http\Enums\Guards;
+use App\Http\Enums\Throttle;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('v1')->middleware(['throttle:api'])->group(function () {
+Route::prefix('v1')->middleware([Throttle::API->middleware()])->group(function () {
     Route::prefix('auth')->group(function () {
-        Route::post('/login', [LoginController::class, 'index'])->middleware(['throttle:auth']);
-        Route::post('/register', [RegisterController::class, 'index'])->middleware(['throttle:auth']);
-        Route::post('/forgot-password', [ForgotPasswordController::class, 'index'])->middleware(['throttle:auth']);
-        Route::post('/reset-password/{token}', [ResetPasswordController::class, 'index'])->middleware(['throttle:auth'])->whereAlphaNumeric('token')->name('password.reset');
+        Route::post('/login', [LoginController::class, 'index'])->middleware([Throttle::AUTH->middleware()]);
+        Route::post('/register', [RegisterController::class, 'index'])->middleware([Throttle::AUTH->middleware()]);
+        Route::post('/forgot-password', [ForgotPasswordController::class, 'index'])->middleware([Throttle::AUTH->middleware()]);
+        Route::post('/reset-password/{token}', [ResetPasswordController::class, 'index'])->middleware([Throttle::AUTH->middleware()])->whereAlphaNumeric('token')->name('password.reset');
         Route::post('/refresh', [RefreshTokenController::class, 'index']);
-        Route::post('/logout', [LogoutController::class, 'index'])->middleware(['throttle:auth', 'auth:api']);
+        Route::post('/logout', [LogoutController::class, 'index'])->middleware([Throttle::AUTH->middleware(), Guards::API->middleware()]);
     });
 
     Route::prefix('account')->group(function () {
-        Route::get('/verify/{id}/{hash}', [ProfileVerifyController::class, 'index'])->middleware(['signed', 'throttle:auth'])->whereNumber('id')->whereAlphaNumeric('hash')->name('verification.verify');
-        Route::middleware(['auth:api'])->group(function () {
+        Route::get('/verify/{id}/{hash}', [ProfileVerifyController::class, 'index'])->middleware(['signed', Throttle::AUTH->middleware()])->whereNumber('id')->whereAlphaNumeric('hash')->name('verification.verify');
+        Route::middleware([Guards::API->middleware()])->group(function () {
             Route::get('/', [ProfileController::class, 'index']);
-            Route::post('/resend-verification', [ProfileResendVerificationController::class, 'index'])->middleware(['throttle:auth'])->name('verification.notice');
-            Route::middleware(['verified', 'throttle:auth'])->group(function () {
+            Route::post('/resend-verification', [ProfileResendVerificationController::class, 'index'])->middleware([Throttle::AUTH->middleware()])->name('verification.notice');
+            Route::middleware(['verified', Throttle::AUTH->middleware()])->group(function () {
                 Route::post('/update', [ProfileUpdateController::class, 'index']);
                 Route::post('/password', [PasswordUpdateController::class, 'index']);
+            });
+        });
+    });
+
+    Route::middleware([Guards::API->middleware(), 'verified'])->group(function () {
+        Route::middleware([Roles::SuperAdmin->middleware()])->group(function () {
+            Route::get('/roles', [RoleAllController::class, 'index']);
+
+            Route::prefix('users')->group(function () {
+                Route::get('/excel', [UserExportController::class, 'index']);
+                Route::get('/paginate', [UserPaginateController::class, 'index']);
+                Route::post('/create', [UserCreateController::class, 'index']);
+                Route::post('/update/{id}', [UserUpdateController::class, 'index']);
+                Route::get('/status/{id}', [UserToggleStatusController::class, 'index']);
+                Route::get('/verify/{id}', [UserToggleVerificationController::class, 'index']);
+                Route::get('/view/{id}', [UserViewController::class, 'index']);
+                Route::delete('/delete/{id}', [UserDeleteController::class, 'index']);
             });
         });
     });

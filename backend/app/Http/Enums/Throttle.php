@@ -2,8 +2,8 @@
 
 namespace App\Http\Enums;
 
-enum Guards:string {
-    case WEB = 'web';
+enum Throttle:string {
+    case AUTH = 'auth';
     case API = 'api';
 
     public function value(): string
@@ -13,6 +13,6 @@ enum Guards:string {
 
     public function middleware(): string
     {
-        return 'auth:'.$this->value;
+        return 'throttle:'.$this->value;
     }
 }
