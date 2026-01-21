@@ -87,10 +87,10 @@ services:
       - crm_app_npm_data:/.npm
     working_dir: /var/www
     environment:
-      COMMAND: php artisan serve --host=0.0.0.0 --port=8000
+      COMMAND: php artisan serve --host=0.0.0.0 --port=8001
       PROCESS: app
     ports:
-      - "8000:8000"
+      - "8001:8001"
     networks:
       - crm-mysql-network
       - crm-webserver-network
@@ -127,7 +127,7 @@ services:
       - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
       - ./storage/logs/nginx/:/var/log/nginx/
     ports:
-      - "8001:80"
+      - "8000:80"
     networks:
       - crm-webserver-network
       - crm-mysql-network
