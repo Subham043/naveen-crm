@@ -14,7 +14,7 @@ class AuthService
     public function register(array $data): User
     {
         $user = (new UserService)->create($data);
-        (new UserService)->syncRoles([Roles::User->value()], $user);
+        (new UserService)->syncRoles([Roles::Sales->value()], $user);
         $user->refresh();
         return $user;
     }
