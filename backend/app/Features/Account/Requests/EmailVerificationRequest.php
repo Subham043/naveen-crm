@@ -10,7 +10,7 @@ use Illuminate\Validation\Validator;
 
 class EmailVerificationRequest extends InputRequest
 {
-    private \App\Features\Users\Models\User|null $userToVerify = null;
+    private \App\Features\Users\Models\User|null $user = null;
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -18,18 +18,19 @@ class EmailVerificationRequest extends InputRequest
      */
     public function authorize(): bool
     {
-        $user = User::with('roles')->find($this->route('id'));
+        $this->user = User::with('roles')->find($this->route('id'));
 
-        if (! $user) {
+        if (! $this->user) {
             return false;
         }
 
-        if (! hash_equals(sha1($user->getEmailForVerification()), (string) $this->route('hash'))) {
+        if (! hash_equals((string) $this->user->getKey(), (string) $this->route('id'))) {
             return false;
         }
 
-        // Store found user for reuse
-        $this->userToVerify = $user;
+        if (! hash_equals(sha1($this->user->getEmailForVerification()), (string) $this->route('hash'))) {
+            return false;
+        }
 
         return true;
     }
@@ -51,36 +52,20 @@ class EmailVerificationRequest extends InputRequest
      *
      * @return void
      */
-    public function fulfill(): bool
+    public function fulfill()
     {
-        if($this->userToVerify){
-            $user = $this->userToVerify;
-        }else{
-            $user = User::with('roles')->find($this->route('id'));
-            $this->userToVerify = $user;
-        }
-        
-        $is_verified = false;
 
-        if (! $user) {
-            abort(404);
+        if (! $this->user->hasVerifiedEmail()) {
+            $this->user->markEmailAsVerified();
+            event(new Verified($this->user));
+            AuthCache::forget($this->user->id);
         }
 
-        if (! $user->hasVerifiedEmail()) {
-            $user->markEmailAsVerified();
-            $is_verified = true;
-
-            event(new Verified($user));
-        }
-
-        AuthCache::forget($user->id);
-
-        return $is_verified;
     }
     
     public function userInfo()
     {
-        return $this->userToVerify;
+        return $this->user;
     }
 
     /**
