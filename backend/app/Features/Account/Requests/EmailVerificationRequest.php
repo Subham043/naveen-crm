@@ -2,6 +2,7 @@
 
 namespace App\Features\Account\Requests;
 
+use App\Features\Authentication\Services\AuthCache;
 use App\Features\Users\Models\User;
 use App\Http\Requests\InputRequest;
 use Illuminate\Auth\Events\Verified;
@@ -71,6 +72,8 @@ class EmailVerificationRequest extends InputRequest
 
             event(new Verified($user));
         }
+
+        AuthCache::forget($user->id);
 
         return $is_verified;
     }
