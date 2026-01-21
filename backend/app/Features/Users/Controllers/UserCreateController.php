@@ -3,7 +3,6 @@
 namespace App\Features\Users\Controllers;
 
 use App\Http\Controllers\Controller;
-// use App\Features\Users\Events\UserCreated;
 use App\Features\Users\Requests\UserCreatePostRequest;
 use App\Features\Users\Resources\UserCollection;
 use App\Features\Users\Services\UserService;
@@ -27,11 +26,10 @@ class UserCreateController extends Controller
             //code...
             $user = $this->userService->create(
                 [
-                    ...$request->except('role')
+                    ...$request->except('role'),
                 ]
             );
             $this->userService->syncRoles([$request->role], $user);
-            // UserCreated::dispatch($user, $request->password);
             return response()->json([
                 "message" => "User created successfully.",
                 "data" => UserCollection::make($user),

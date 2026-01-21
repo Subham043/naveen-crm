@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Features\Roles\Enums\Roles;
 use App\Features\Users\Models\User;
+use App\Http\Enums\Throttle;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Auth\Notifications\ResetPassword;
@@ -47,13 +48,13 @@ class AppServiceProvider extends ServiceProvider
         });
 
         //global rate limiter for all api requests
-        RateLimiter::for('api', function (Request $request) {
+        RateLimiter::for(Throttle::API->value(), function (Request $request) {
             $key = $this->throttleKey($request, 'throttle-api');
             return Limit::perMinute(100)->by($key)->response(fn(Request $request, array $headers)=>$this->throttleResponse($request, $headers));
         });
 
         //rate limiter for all api auth requests
-        RateLimiter::for('auth', function (Request $request) {
+        RateLimiter::for(Throttle::AUTH->value(), function (Request $request) {
             $key = $this->throttleKey($request, 'throttle-auth');
             return Limit::perMinute(3)->by($key)->response(fn(Request $request, array $headers)=>$this->throttleResponse($request, $headers));
         });

@@ -5,7 +5,7 @@ import { Menu } from "@mantine/core";
 import { IconTrash } from "@tabler/icons-react";
 import { useCallback } from "react";
 
-const UserDeleteBtn = ({ id }: { id: string }) => {
+const UserDeleteBtn = ({ id }: { id: number }) => {
   const { handleDeleteModalOpen } = useDeleteConfirmation();
   const userDelete = useUserDeleteMutation(id);
 

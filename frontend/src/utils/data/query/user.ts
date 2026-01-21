@@ -6,16 +6,16 @@ import { usePaginationQueryParam } from "@/hooks/usePaginationQueryParam";
 import { useSearchQueryParam } from "@/hooks/useSearchQueryParam";
 
 
-export const UserQueryKey = (id: string) => {
+export const UserQueryKey = (id: number) => {
     return ["user", id]
 };
 
 export const UsersQueryKey = (query: PaginationQueryType) => {
-    const { page = 1, limit = 10, search = "" } = query;
-    return ["users", page, limit, search]
+    const { page = 1, total = 10, search = "" } = query;
+    return ["users", page, total, search]
 };
 
-export const UserQueryFn = async ({ id, signal }: { id: string, signal?: AbortSignal }) => {
+export const UserQueryFn = async ({ id, signal }: { id: number, signal?: AbortSignal }) => {
     return await getUserHandler(id, signal);
 }
 
@@ -26,7 +26,7 @@ export const UsersQueryFn = async ({ query, signal }: { query: PaginationQueryTy
 /*
   User Query Hook Function: This hook is used to fetch information of the logged in user
 */
-export const useUserQuery: (id: string, enabled: boolean) => UseQueryResult<
+export const useUserQuery: (id: number, enabled: boolean) => UseQueryResult<
     UserType | undefined,
     unknown
 > = (id, enabled) => {
@@ -47,9 +47,9 @@ export const useUsersQuery: () => UseQueryResult<
     unknown
 > = () => {
     const authToken = useAuthStore((state) => state.authToken)
-    const { page, limit } = usePaginationQueryParam();
+    const { page, total } = usePaginationQueryParam();
     const { search } = useSearchQueryParam();
-    const query: PaginationQueryType = { page, limit, search };
+    const query: PaginationQueryType = { page, total, search };
 
     return useQuery({
         queryKey: UsersQueryKey(query),

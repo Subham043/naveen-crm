@@ -8,7 +8,7 @@ const UserVerifyBtn = ({
   id,
   is_verified,
 }: {
-  id: string;
+  id: number;
   is_verified: boolean;
 }) => {
   const userVerify = useUserVerifyMutation(id);

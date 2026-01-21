@@ -1,7 +1,7 @@
 import { useToast } from "@/hooks/useToast";
 import { useMutation } from "@tanstack/react-query";
 import { nprogress } from "@mantine/nprogress";
-import type { UserCreateFormValuesType, UserStatusFormValuesType, UserUpdateFormValuesType } from "../schema/user";
+import type { UserCreateFormValuesType, UserUpdateFormValuesType } from "../schema/user";
 import { createUserHandler, deleteUserHandler, toggleUserStatusHandler, updateUserHandler, verifyUserHandler } from "../dal/users";
 import { usePaginationQueryParam } from "@/hooks/usePaginationQueryParam";
 import { useSearchQueryParam } from "@/hooks/useSearchQueryParam";
@@ -10,9 +10,9 @@ import { UserQueryKey, UsersQueryKey } from "../query/user";
 
 export const useUserCreateMutation = () => {
     const { toastSuccess } = useToast();
-    const { page, limit } = usePaginationQueryParam();
+    const { page, total } = usePaginationQueryParam();
     const { search } = useSearchQueryParam();
-    const query: PaginationQueryType = { page, limit, search };
+    const query: PaginationQueryType = { page, total, search };
 
     return useMutation({
         mutationFn: async (val: UserCreateFormValuesType) => {
@@ -24,7 +24,7 @@ export const useUserCreateMutation = () => {
             if (page === 1 && !search) {
                 context.client.setQueryData(UsersQueryKey(query), (oldData: PaginationType<UserType> | undefined) => {
                     if (!oldData) return oldData;
-                    if (oldData.data.length < limit) {
+                    if (oldData.data.length < total) {
                         return {
                             ...oldData,
                             data: [data, ...oldData.data],
@@ -35,7 +35,7 @@ export const useUserCreateMutation = () => {
                         };
                     } else {
                         const newData = [...oldData.data];
-                        newData.splice(limit - 1, 0, data);
+                        newData.splice(total - 1, 0, data);
                         return {
                             ...oldData,
                             data: [data, ...newData],
@@ -56,11 +56,11 @@ export const useUserCreateMutation = () => {
     });
 };
 
-export const useUserUpdateMutation = (id: string) => {
+export const useUserUpdateMutation = (id: number) => {
     const { toastSuccess } = useToast();
-    const { page, limit } = usePaginationQueryParam();
+    const { page, total } = usePaginationQueryParam();
     const { search } = useSearchQueryParam();
-    const query: PaginationQueryType = { page, limit, search };
+    const query: PaginationQueryType = { page, total, search };
 
     return useMutation({
         mutationFn: async (val: UserUpdateFormValuesType) => {
@@ -90,11 +90,11 @@ export const useUserUpdateMutation = (id: string) => {
     });
 };
 
-export const useUserDeleteMutation = (id: string) => {
+export const useUserDeleteMutation = (id: number) => {
     const { toastSuccess } = useToast();
-    const { page, limit } = usePaginationQueryParam();
+    const { page, total } = usePaginationQueryParam();
     const { search } = useSearchQueryParam();
-    const query: PaginationQueryType = { page, limit, search };
+    const query: PaginationQueryType = { page, total, search };
 
     return useMutation({
         mutationFn: async () => {
@@ -112,11 +112,11 @@ export const useUserDeleteMutation = (id: string) => {
     });
 };
 
-export const useUserVerifyMutation = (id: string) => {
+export const useUserVerifyMutation = (id: number) => {
     const { toastSuccess } = useToast();
-    const { page, limit } = usePaginationQueryParam();
+    const { page, total } = usePaginationQueryParam();
     const { search } = useSearchQueryParam();
-    const query: PaginationQueryType = { page, limit, search };
+    const query: PaginationQueryType = { page, total, search };
 
     return useMutation({
         mutationFn: async () => {
@@ -129,12 +129,12 @@ export const useUserVerifyMutation = (id: string) => {
                 if (!oldData) return oldData;
                 return {
                     ...oldData,
-                    data: oldData.data.map((user) => user.id === id ? { ...user, is_verified: true } : user),
+                    data: oldData.data.map((user) => user.id === id ? { ...user, verified: "VERIFIED" } : user),
                 };
             });
             context.client.setQueryData(UserQueryKey(id), (oldData: UserType | undefined) => {
                 if (!oldData) return oldData;
-                return { ...oldData, is_verified: true };
+                return { ...oldData, verified: "VERIFIED" };
             });
         },
         onSettled: () => {
@@ -143,29 +143,29 @@ export const useUserVerifyMutation = (id: string) => {
     });
 };
 
-export const useUserToggleStatusMutation = (id: string) => {
+export const useUserToggleStatusMutation = (id: number) => {
     const { toastSuccess } = useToast();
-    const { page, limit } = usePaginationQueryParam();
+    const { page, total } = usePaginationQueryParam();
     const { search } = useSearchQueryParam();
-    const query: PaginationQueryType = { page, limit, search };
+    const query: PaginationQueryType = { page, total, search };
 
     return useMutation({
-        mutationFn: async (val: UserStatusFormValuesType) => {
+        mutationFn: async () => {
             nprogress.start()
-            return await toggleUserStatusHandler(id, val);
+            return await toggleUserStatusHandler(id);
         },
-        onSuccess: (_, params, ___, context) => {
+        onSuccess: (data, _, ___, context) => {
             toastSuccess("User status toggled successfully");
             context.client.setQueryData(UsersQueryKey(query), (oldData: PaginationType<UserType> | undefined) => {
                 if (!oldData) return oldData;
                 return {
                     ...oldData,
-                    data: oldData.data.map((user) => user.id === id ? { ...user, is_blocked: params.is_blocked } : user),
+                    data: oldData.data.map((user) => user.id === id ? { ...user, is_blocked: data.is_blocked } : user),
                 };
             });
             context.client.setQueryData(UserQueryKey(id), (oldData: UserType | undefined) => {
                 if (!oldData) return oldData;
-                return { ...oldData, is_blocked: params.is_blocked };
+                return { ...oldData, is_blocked: data.is_blocked };
             });
         },
         onSettled: () => {

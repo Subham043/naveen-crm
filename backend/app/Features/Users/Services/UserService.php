@@ -2,6 +2,7 @@
 
 namespace App\Features\Users\Services;
 
+use App\Features\Authentication\Services\AuthCache;
 use App\Features\Users\Models\User;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\Filters\Filter;
@@ -73,6 +74,8 @@ class UserService
 	public function syncRoles(array $roles = [], $user): void
 	{
 		$user->syncRoles($roles);
+		AuthCache::forget($user->id);
+		app()->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
 	}
 
 	public function delete($user): bool

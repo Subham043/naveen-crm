@@ -15,7 +15,7 @@ import { useAuthStore } from "@/stores/auth.store";
 type UserTableProps = {
   users: UserType[];
   loading: boolean;
-  onEdit: (id: string) => void;
+  onEdit: (id: number) => void;
 };
 
 const UserTableRow = memo(
@@ -24,14 +24,15 @@ const UserTableRow = memo(
     name,
     email,
     phone,
-    is_verified,
+    role,
+    verified,
     is_blocked,
-    createdAt,
+    created_at,
     authUser,
     onEdit,
   }: UserType & {
     authUser: AuthType | null;
-    onEdit: (id: string) => void;
+    onEdit: (id: number) => void;
   }) => {
     const onEditHandler = useCallback(() => {
       onEdit(id);
@@ -54,8 +55,9 @@ const UserTableRow = memo(
         </Table.Td>
         <Table.Td tt="lowercase">{email}</Table.Td>
         <Table.Td>{phone}</Table.Td>
+        <Table.Td>{role}</Table.Td>
         <Table.Td>
-          {is_verified ? (
+          {verified === "VERIFIED" ? (
             <Badge size="sm" color="green">
               Yes
             </Badge>
@@ -77,12 +79,12 @@ const UserTableRow = memo(
           )}
         </Table.Td>
         <Table.Td>
-          <Datetime value={createdAt} />
+          <Datetime value={created_at} />
         </Table.Td>
         <Table.Td>
           <PermittedLayout
             outletType="children"
-            allowedRoles="Admin"
+            allowedRoles={["Super-Admin"]}
             additionalCondition={id !== authUser?.id}
           >
             <Group justify="end" gap="xs">
@@ -93,7 +95,7 @@ const UserTableRow = memo(
                 >
                   Edit
                 </Menu.Item>
-                <UserVerifyBtn id={id} is_verified={is_verified} />
+                <UserVerifyBtn id={id} is_verified={verified === "VERIFIED"} />
                 <UserToggleStatusBtn id={id} is_blocked={is_blocked} />
                 <UserDeleteBtn id={id} />
               </TrippleDotMenu>
@@ -115,6 +117,7 @@ function UserTable({ loading, users, onEdit }: UserTableProps) {
             <Table.Th>NAME</Table.Th>
             <Table.Th>EMAIL</Table.Th>
             <Table.Th>PHONE</Table.Th>
+            <Table.Th>ROLE</Table.Th>
             <Table.Th>IS VERIFIED?</Table.Th>
             <Table.Th>IS BLOCKED?</Table.Th>
             <Table.Th>CREATED AT</Table.Th>
@@ -123,7 +126,7 @@ function UserTable({ loading, users, onEdit }: UserTableProps) {
         </Table.Thead>
         <Table.Tbody>
           {loading ? (
-            <TableRowLoading colSpan={7} />
+            <TableRowLoading colSpan={8} />
           ) : users.length > 0 ? (
             users.map((item) => (
               <UserTableRow
@@ -132,18 +135,18 @@ function UserTable({ loading, users, onEdit }: UserTableProps) {
                 name={item.name}
                 email={item.email}
                 phone={item.phone}
-                is_verified={item.is_verified}
+                verified={item.verified}
                 is_blocked={item.is_blocked}
-                createdAt={item.createdAt}
-                is_admin={item.is_admin}
+                created_at={item.created_at}
                 email_verified_at={item.email_verified_at}
-                updatedAt={item.updatedAt}
+                updated_at={item.updated_at}
+                role={item.role}
                 authUser={authUser}
                 onEdit={onEdit}
               />
             ))
           ) : (
-            <TableRowNotFound colSpan={7} />
+            <TableRowNotFound colSpan={8} />
           )}
         </Table.Tbody>
       </Table>

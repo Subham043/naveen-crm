@@ -7,6 +7,7 @@ import UserTable from "./UserPage/UserTable";
 import UserFilters from "./UserPage/UserFilters";
 import { useUserTable } from "./UserPage/useUserTable";
 import { useCallback, useState } from "react";
+import UserExportBtn from "./UserPage/UserExportBtn";
 
 /*
  * Users Page
@@ -14,7 +15,7 @@ import { useCallback, useState } from "react";
 export default function User() {
   const { data, isLoading, isFetching, isRefetching } = useUserTable();
 
-  const [modal, setModal] = useState<ExtendedModalProps<{ id: string }>>({
+  const [modal, setModal] = useState<ExtendedModalProps<{ id: number }>>({
     show: false,
     type: "create",
   });
@@ -28,7 +29,7 @@ export default function User() {
     setModal({ show: true, type: "create" });
   }, []);
 
-  const handleModalUpdate = useCallback((id: string) => {
+  const handleModalUpdate = useCallback((id: number) => {
     setModal({ show: true, type: "update", id });
   }, []);
 
@@ -38,10 +39,16 @@ export default function User() {
         <Box p="sm" pos="relative">
           <Group justify="space-between" gap={10}>
             <Title order={4}>Users</Title>
-            <PermittedLayout outletType="children" allowedRoles="Admin">
-              <Button variant="filled" color="teal" onClick={handleModalOpen}>
-                ADD
-              </Button>
+            <PermittedLayout
+              outletType="children"
+              allowedRoles={["Super-Admin"]}
+            >
+              <Group gap="xs" justify="flex-end" align="center">
+                <Button variant="filled" color="teal" onClick={handleModalOpen}>
+                  ADD
+                </Button>
+                <UserExportBtn />
+              </Group>
             </PermittedLayout>
           </Group>
         </Box>

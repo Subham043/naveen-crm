@@ -7,9 +7,9 @@ import { useCallback } from "react";
 
 type PaginationQueryParamHookType = (key?: string) => {
   page: number;
-  limit: number;
+  total: number;
   setPage: (value: number) => void;
-  setLimit: (value: number) => void;
+  setTotal: (value: number) => void;
 };
 
 export const usePaginationQueryParam: PaginationQueryParamHookType = (
@@ -18,10 +18,10 @@ export const usePaginationQueryParam: PaginationQueryParamHookType = (
   const [searchParams, setSearchParams] = useSearchParams();
 
   const pageKey = `page${key}`;
-  const limitKey = `limit${key}`;
+  const totalKey = `total${key}`;
 
   const page = Number(searchParams.get(pageKey) || QueryInitialPageParam);
-  const limit = Number(searchParams.get(limitKey) || QueryTotalCount);
+  const total = Number(searchParams.get(totalKey) || QueryTotalCount);
 
   const setPage = useCallback(
     (value: number) => {
@@ -37,24 +37,24 @@ export const usePaginationQueryParam: PaginationQueryParamHookType = (
     [setSearchParams, pageKey],
   );
 
-  const setLimit = useCallback(
+  const setTotal = useCallback(
     (value: number) => {
       setSearchParams(
         (prev) => {
           const params = new URLSearchParams(prev);
-          value ? params.set(limitKey, String(value)) : params.delete(limitKey);
+          value ? params.set(totalKey, String(value)) : params.delete(totalKey);
           return params;
         },
         { replace: true },
       ); // 👈 prevent history spam
     },
-    [setSearchParams, limitKey],
+    [setSearchParams, totalKey],
   );
 
   return {
     page,
-    limit,
+    total,
     setPage,
-    setLimit,
+    setTotal,
   };
 };

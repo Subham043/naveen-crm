@@ -8,27 +8,28 @@ import { useUserQuery } from "@/utils/data/query/user";
 import { useCallback, useEffect } from "react";
 
 type Props = {
-  modal: ExtendedModalProps<{ id: string }>;
+  modal: ExtendedModalProps<{ id: number }>;
   closeModal: () => void;
 };
 
 const userFormDefaultValues = {
   name: "",
   email: "",
-  phone: "",
-  password: "",
-  confirm_password: "",
-  is_blocked: false,
+  phone: undefined,
+  role: "",
+  password: undefined,
+  confirm_password: undefined,
+  is_blocked: 0,
 }
 
 export function useUserForm({ modal, closeModal }: Props) {
   const { data, isLoading, isFetching, isRefetching } = useUserQuery(
-    modal.type === "update" ? modal.id : "",
+    modal.type === "update" ? modal.id : 0,
     modal.show && modal.type === "update"
   );
 
   const userCreate = useUserCreateMutation();
-  const userUpdate = useUserUpdateMutation(modal.type === "update" ? modal.id : "");
+  const userUpdate = useUserUpdateMutation(modal.type === "update" ? modal.id : 0);
 
   const form = useForm<UserCreateFormValuesType | UserUpdateFormValuesType>({
     resolver: yupResolver(modal.type === "update" ? userUpdateSchema : userCreateSchema) as Resolver<UserCreateFormValuesType | UserUpdateFormValuesType>,
@@ -41,10 +42,11 @@ export function useUserForm({ modal, closeModal }: Props) {
         form.reset({
           name: data ? data.name : "",
           email: data ? data.email : "",
-          phone: data ? data.phone : "",
+          phone: data && data.phone ? data.phone : undefined,
+          role: data ? data.role : "",
           password: undefined,
           confirm_password: undefined,
-          is_blocked: data && data.is_blocked !== undefined ? data.is_blocked : false,
+          is_blocked: data && data.is_blocked !== false ? 1 : 0,
         });
       } else {
         form.reset(userFormDefaultValues);

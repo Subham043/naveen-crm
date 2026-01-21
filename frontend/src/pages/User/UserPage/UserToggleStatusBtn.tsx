@@ -8,13 +8,13 @@ const UserToggleStatusBtn = ({
   id,
   is_blocked,
 }: {
-  id: string;
+  id: number;
   is_blocked: boolean;
 }) => {
   const userToggleStatus = useUserToggleStatusMutation(id);
 
   const onToggleStatus = useCallback(async () => {
-    await userToggleStatus.mutateAsync({ is_blocked: !is_blocked });
+    await userToggleStatus.mutateAsync();
   }, [userToggleStatus.mutateAsync]);
 
   return (

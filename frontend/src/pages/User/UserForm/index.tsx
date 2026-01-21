@@ -4,6 +4,7 @@ import {
   Button,
   Drawer,
   Group,
+  Input,
   LoadingOverlay,
   PasswordInput,
   Switch,
@@ -12,9 +13,10 @@ import {
 import type { ExtendedModalProps } from "@/utils/types";
 import { useUserForm } from "./useUserForm";
 import PasswordStrengthChecker from "@/components/PasswordStrengthChecker";
+import SelectRole from "@/components/SelectRole";
 
 type Props = {
-  modal: ExtendedModalProps<{ id: string }>;
+  modal: ExtendedModalProps<{ id: number }>;
   handleModalClose: () => void;
 };
 
@@ -89,6 +91,23 @@ export default function UserForm({ modal, handleModalClose }: Props) {
           />
           <Controller
             control={form.control}
+            name="role"
+            render={({ field, fieldState }) => (
+              <Input.Wrapper
+                label="Role"
+                withAsterisk
+                error={fieldState.error?.message}
+                mt="md"
+              >
+                <SelectRole
+                  selected={field.value}
+                  setSelected={field.onChange}
+                />
+              </Input.Wrapper>
+            )}
+          />
+          <Controller
+            control={form.control}
             name="password"
             render={({ field, fieldState }) => (
               <PasswordStrengthChecker value={field.value ?? ""}>
@@ -123,21 +142,19 @@ export default function UserForm({ modal, handleModalClose }: Props) {
               />
             )}
           />
-          {modal.type === "update" && (
-            <Controller
-              name="is_blocked"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Switch
-                  label="Is Blocked?"
-                  checked={field.value === true ? true : false}
-                  onChange={field.onChange}
-                  error={fieldState.error?.message}
-                  mt="md"
-                />
-              )}
-            />
-          )}
+          <Controller
+            name="is_blocked"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Switch
+                label="Is Blocked?"
+                checked={field.value === 1 ? true : false}
+                onChange={(e) => field.onChange(e.target.checked ? 1 : 0)}
+                error={fieldState.error?.message}
+                mt="md"
+              />
+            )}
+          />
           <Group gap="xs" mt="md">
             <Button
               type="submit"

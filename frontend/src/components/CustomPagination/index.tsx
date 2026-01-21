@@ -3,13 +3,13 @@ import { Box, Divider, Group, Pagination, Select } from "@mantine/core";
 import { memo, useCallback, useMemo } from "react";
 
 const CustomPagination = memo(({ totalCount }: { totalCount: number }) => {
-  const { page, setPage, limit, setLimit } = usePaginationQueryParam();
+  const { page, setPage, total, setTotal } = usePaginationQueryParam();
 
   const onLimitChange = useCallback(
     (value: string | null) => {
-      setLimit(value ? Number(value) : 10);
+      setTotal(value ? Number(value) : 10);
     },
-    [setLimit],
+    [setTotal],
   );
 
   const onPageChange = useCallback(
@@ -20,8 +20,8 @@ const CustomPagination = memo(({ totalCount }: { totalCount: number }) => {
   );
 
   const totalPages = useMemo(() => {
-    return Math.ceil(totalCount / Number(limit));
-  }, [totalCount, limit]);
+    return Math.ceil(totalCount / Number(total));
+  }, [totalCount, total]);
 
   return (
     <>
@@ -32,7 +32,7 @@ const CustomPagination = memo(({ totalCount }: { totalCount: number }) => {
             data={["10", "20", "30"]}
             placeholder="Items Per Page"
             w={80}
-            value={limit.toString()}
+            value={total.toString()}
             onChange={onLimitChange}
           />
           <Pagination

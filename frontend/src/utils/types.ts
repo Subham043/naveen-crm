@@ -8,7 +8,7 @@ export type AuthType = {
   id: number;
   name: string;
   email: string;
-  phone: string;
+  phone?: string;
   verified: "VERIFIED" | "VERIFICATION PENDING";
   email_verified_at: string;
   is_blocked: boolean;
@@ -22,15 +22,22 @@ export type ProfileType = AuthType;
 export type UserType = {
   email: string;
   name: string;
-  phone: string;
-  id: string;
+  phone?: string;
+  id: number;
+  verified: "VERIFIED" | "VERIFICATION PENDING";
+  email_verified_at: string;
   is_blocked: boolean;
-  is_admin: boolean;
-  email_verified_at: Date | null;
-  is_verified: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+  role: AvailableRoles;
+  created_at: string;
+  updated_at: string;
 }
+
+export type RoleType = {
+  id: number;
+  name: string;
+  created_at: string;
+  updated_at: string;
+};
 
 export type TexteditorImageType = {
   id: number;
@@ -78,7 +85,7 @@ export type PaginationType<T> = {
 
 export type PaginationQueryType = {
   page?: number;
-  limit?: number;
+  total?: number;
   search?: string;
 }
 

@@ -113,22 +113,4 @@ class User extends Authenticatable implements MustVerifyEmail, RoleTraitInterfac
             AuthCache::forget($user->id);
         });
     }
-
-    public function syncRoles(...$roles)
-    {
-        AuthCache::forget($this->id);
-
-        app()->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
-
-        return parent::syncRoles(...$roles);
-    }
-
-    public function syncPermissions(...$permissions)
-    {
-        AuthCache::forget($this->id);
-
-        app()->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
-
-        return parent::syncPermissions(...$permissions);
-    }
 }

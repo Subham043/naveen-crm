@@ -15,7 +15,11 @@ export const userCreateSchema = yup
             .string()
             .matches(/^[0-9]+$/, "Phone must contain numbers only")
             .length(10, "Phone must contain exactly 10 digits")
-            .defined(),
+            .optional(),
+        role: yup
+            .string()
+            .typeError("Role must contain characters only")
+            .required("Role is required"),
         password: yup
             .string()
             .typeError("Password must contain characters only")
@@ -33,11 +37,12 @@ export const userCreateSchema = yup
             .string()
             .typeError("Confirm Password must contain characters only")
             .required("Confirm Password is required")
-            .oneOf([yup.ref("new_password")], "Passwords must match"),
+            .oneOf([yup.ref("password")], "Passwords must match"),
         is_blocked: yup
-            .boolean()
-            .typeError("Is Blocked must be a boolean")
-            .optional(),
+            .number()
+            .typeError("Is Blocked must be a number")
+            .oneOf([0, 1], "Is Blocked must be 0 or 1")
+            .required(),
     })
     .required();
 
@@ -58,7 +63,11 @@ export const userUpdateSchema = yup
             .string()
             .matches(/^[0-9]+$/, "Phone must contain numbers only")
             .length(10, "Phone must contain exactly 10 digits")
-            .defined(),
+            .optional(),
+        role: yup
+            .string()
+            .typeError("Role must contain characters only")
+            .required("Role is required"),
         password: yup
             .string()
             .typeError("Password must contain characters only")
@@ -78,21 +87,11 @@ export const userUpdateSchema = yup
             otherwise: (schema) => schema.optional(),
         }),
         is_blocked: yup
-            .boolean()
-            .typeError("Is Blocked must be a boolean")
-            .optional(),
+            .number()
+            .typeError("Is Blocked must be a number")
+            .oneOf([0, 1], "Is Blocked must be 0 or 1")
+            .required(),
     })
     .required();
 
 export type UserUpdateFormValuesType = yup.InferType<typeof userUpdateSchema>;
-
-export const userStatusSchema = yup
-    .object({
-        is_blocked: yup
-            .boolean()
-            .typeError("Is Blocked must be a boolean")
-            .required("Is Blocked is required"),
-    })
-    .required();
-
-export type UserStatusFormValuesType = yup.InferType<typeof userStatusSchema>;
