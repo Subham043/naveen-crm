@@ -67,7 +67,7 @@ services:
       timeout: 10s
       retries: 20
 
-  app: &app
+  app:
     build:
       context: ./
       dockerfile: docker/php/Dockerfile
@@ -87,17 +87,15 @@ services:
       - crm_app_npm_data:/.npm
     working_dir: /var/www
     environment:
-      COMMAND: php artisan serve --host=0.0.0.0 --port=8001
+      COMMAND: php-fpm
       PROCESS: app
-    ports:
-      - "8001:8001"
     networks:
       - crm-mysql-network
       - crm-webserver-network
       - crm-redis-network
 
   horizon:
-    <<: *app
+    extends: app
     container_name: crm-horizon
     environment:
       COMMAND: php artisan horizon
@@ -108,7 +106,7 @@ services:
       - crm-redis-network
 
   schedule:
-    <<: *app
+    extends: app
     container_name: crm-schedule
     environment:
       COMMAND: supercronic -quiet /var/www/docker/php/schedule/crontab
@@ -142,10 +140,8 @@ volumes:
   redis_data:
   crm_app_composer_data:
   crm_app_npm_data:
-  # crm_rabbitmq_data:
 
 networks:
   crm-mysql-network:
   crm-webserver-network:
   crm-redis-network:
-  # crm-rabbitmq-network:
