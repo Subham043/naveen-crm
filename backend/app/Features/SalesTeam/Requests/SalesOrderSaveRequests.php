@@ -8,7 +8,6 @@ use App\Http\Requests\InputRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\Enum;
 
-
 class SalesOrderSaveRequests extends InputRequest
 {
     /**
@@ -31,13 +30,13 @@ class SalesOrderSaveRequests extends InputRequest
         return [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255',
-            'phone' => 'nullable|numeric|digits:10',
-            'country_code' => 'nullable|string|max:255',
-            'billing_address' => 'nullable|string|max:255',
-            'part_name' => 'nullable|string|max:255',
-            'part_description' => 'nullable|string|max:255',
-            'lead_source' => ['required', 'numeric', new Enum(LeadSource::class)],
             'is_active' => 'required|boolean',
+            'phone' => ['required_if:is_active,1', 'numeric', 'digits:10'],
+            'country_code' => ['required_if:is_active,1', 'string', 'max:255'],
+            'billing_address' => ['required_if:is_active,1', 'string'],
+            'part_name' => ['required_if:is_active,1', 'string', 'max:255'],
+            'part_description' => ['required_if:is_active,1', 'string'],
+            'lead_source' => ['required', 'numeric', new Enum(LeadSource::class)],
         ];
     }
 

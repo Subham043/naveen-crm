@@ -21,6 +21,6 @@ class SalesOrderExportController extends Controller
     public function index(){
         ini_set('memory_limit', '-1');
         ini_set('max_execution_time', 300);
-        return (auth()->guard(Guards::API->value())->user()->current_role == Roles::Sales->value()) ? Excel::download(new SalesOrderExport($this->salesOrderService->query()), 'sales-order.xlsx') : abort(403);
+        return (auth()->guard(Guards::API->value())->user()->current_role == Roles::Sales->value()) ? Excel::download(new SalesOrderExport($this->salesOrderService->query()), 'orders.xlsx') : abort(403);
     }
 }

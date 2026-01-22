@@ -39,6 +39,30 @@ export type RoleType = {
   updated_at: string;
 };
 
+export type SalesOrderType = {
+  id: number;
+  name: string;
+  email: string;
+  phone?: string;
+  country_code?: string;
+  phone_number?: string;
+  billing_address?: string;
+  part_name?: string;
+  part_description?: string;
+  lead_source: number;
+  lead_source_info?: string;
+  sales_user_id?: number;
+  is_created_by_agent: boolean;
+  assigned_at?: string;
+  order_status: number;
+  order_status_info?: string;
+  approval_by_id?: number;
+  approval_at?: string;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
 export type TexteditorImageType = {
   id: number;
   image: string;

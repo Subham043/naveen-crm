@@ -1,5 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
+import { useForm, type Resolver } from "react-hook-form";
 import { handleFormServerErrors } from "@/utils/helper";
 import { useProfileQuery } from "@/utils/data/query/profile";
 import { useProfileUpdateMutation } from "@/utils/data/mutation/profile";
@@ -11,11 +11,11 @@ export function useProfileUpdateForm() {
   const profileUpdate = useProfileUpdateMutation();
 
   const form = useForm<ProfileUpdateFormValuesType>({
-    resolver: yupResolver(profileUpdateFormSchema),
+    resolver: yupResolver(profileUpdateFormSchema) as Resolver<ProfileUpdateFormValuesType>,
     defaultValues: {
       name: "",
       email: "",
-      phone: "",
+      phone: undefined,
     }
   });
 
@@ -24,7 +24,7 @@ export function useProfileUpdateForm() {
       form.reset({
         name: data.name,
         email: data.email,
-        phone: data.phone,
+        phone: data.phone ? data.phone : undefined,
       });
     }
   }, [data, form.reset]);

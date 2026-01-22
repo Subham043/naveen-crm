@@ -3,11 +3,11 @@ import { api_routes } from "@/utils/routes/api_routes";
 import { Button } from "@mantine/core";
 import { useCallback } from "react";
 
-const UserExportBtn = () => {
+const SalesOrderExportBtn = () => {
   const { exportExcel, excelLoading } = useExcelExport();
 
   const onExportHandler = useCallback(async () => {
-    await exportExcel(api_routes.users.excel, "users.xlsx");
+    await exportExcel(api_routes.sales.orders.excel, "orders.xlsx");
   }, [exportExcel]);
 
   return (
@@ -23,4 +23,4 @@ const UserExportBtn = () => {
   );
 };
 
-export default UserExportBtn;
+export default SalesOrderExportBtn;

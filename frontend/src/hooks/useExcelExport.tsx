@@ -30,7 +30,7 @@ export const useExcelExport: ExcelExportHookType = () => {
       const link = document.createElement("a");
       try {
         const params = new URLSearchParams();
-        if (search) params.append("filter[search]", encodeURIComponent(search));
+        if (search) params.append("filter[search]", search);
         const response = await axios.get(excel_url, {
           params,
           signal,

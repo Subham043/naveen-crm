@@ -1,6 +1,7 @@
 import { page_routes } from "@/utils/routes/page_routes";
 import type { AvailableRoles } from "@/utils/types";
 import {
+  IconFileSpreadsheet,
   IconHome,
   IconUsers,
 } from "@tabler/icons-react";
@@ -33,6 +34,12 @@ export const menus: LinksGroupProps[] = [
     label: page_routes.users.name,
     icon: IconUsers,
     canAccess: ["Super-Admin"],
+  },
+  {
+    link: page_routes.sales_orders.link,
+    label: page_routes.sales_orders.name,
+    icon: IconFileSpreadsheet,
+    canAccess: ["Sales-Team"],
   },
   // {
   //   label: "Admin",

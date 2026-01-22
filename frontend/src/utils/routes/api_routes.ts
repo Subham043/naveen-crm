@@ -28,6 +28,15 @@ export const api_routes = {
     verify: "/api/v1/users/verify",
     excel: "/api/v1/users/excel",
   },
+  sales: {
+    orders: {
+      paginate: "/api/v1/sales/order/paginate",
+      create: "/api/v1/sales/order/create",
+      update: "/api/v1/sales/order/update",
+      view: "/api/v1/sales/order/view",
+      excel: "/api/v1/sales/order/excel",
+    }
+  },
   textEditor: {
     imageUpload: "/api/v1/admin/texteditor-image"
   }

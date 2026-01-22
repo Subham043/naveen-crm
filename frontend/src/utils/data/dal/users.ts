@@ -39,7 +39,7 @@ export const getUsersHandler = async (query: PaginationQueryType, signal?: Gener
     const params = new URLSearchParams();
     if (page) params.append("page", page.toString());
     if (total) params.append("total", total.toString());
-    if (search) params.append("filter[search]", encodeURIComponent(search));
+    if (search) params.append("filter[search]", search);
     const response = await axios.get<PaginationType<UserType>>(api_routes.users.paginate, { params, signal });
     return response.data;
 }

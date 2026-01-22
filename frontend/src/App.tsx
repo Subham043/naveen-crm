@@ -31,6 +31,7 @@ const Login = React.lazy(() => import("@/pages/Auth/Login"));
 const ForgotPassword = React.lazy(() => import("@/pages/Auth/ForgotPassword"));
 const ResetPassword = React.lazy(() => import("@/pages/Auth/ResetPassword"));
 const User = React.lazy(() => import("@/pages/User/index.tsx"));
+const SalesOrder = React.lazy(() => import("@/pages/SalesOrder/index.tsx"));
 
 function App() {
   return (
@@ -62,6 +63,21 @@ function App() {
                     <Route
                       path={page_routes.profile.link}
                       element={<Profile />}
+                    />
+                  </Route>
+                  <Route
+                    element={
+                      <PermittedLayout
+                        outletType="outlet"
+                        allowedRoles={["Sales-Team"]}
+                        allowLoading={true}
+                        display403={true}
+                      />
+                    }
+                  >
+                    <Route
+                      path={page_routes.sales_orders.link}
+                      element={<SalesOrder />}
                     />
                   </Route>
                   <Route

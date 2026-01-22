@@ -22,7 +22,7 @@ class SalesOrderCollection extends JsonResource {
 			'email' => $this->email,
 			'phone' => $this->phone,
 			'country_code' => $this->country_code,
-            'phone_number' => $this->country_code . $this->phone,
+            'phone_number' => $this->country_code && $this->phone ? $this->country_code . $this->phone : null,
 			'billing_address' => $this->billing_address,
 			'part_name' => $this->part_name,
 			'part_description' => $this->part_description,

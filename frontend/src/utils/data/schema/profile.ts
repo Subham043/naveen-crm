@@ -16,7 +16,7 @@ export const profileUpdateFormSchema = yup
             .string()
             .matches(/^[0-9]+$/, "Phone must contain numbers only")
             .length(10, "Phone must contain exactly 10 digits")
-            .defined(),
+            .optional(),
     })
     .required();
 
