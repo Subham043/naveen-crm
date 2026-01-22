@@ -13,6 +13,7 @@ use App\Features\Authentication\Controllers\RegisterController;
 use App\Features\Authentication\Controllers\ResetPasswordController;
 use App\Features\Roles\Controllers\RoleAllController;
 use App\Features\Roles\Enums\Roles;
+use App\Features\SalesTeam\Controllers\SalesOrderCreateController;
 use App\Features\Users\Controllers\UserCreateController;
 use App\Features\Users\Controllers\UserDeleteController;
 use App\Features\Users\Controllers\UserExportController;
@@ -21,6 +22,10 @@ use App\Features\Users\Controllers\UserToggleStatusController;
 use App\Features\Users\Controllers\UserToggleVerificationController;
 use App\Features\Users\Controllers\UserUpdateController;
 use App\Features\Users\Controllers\UserViewController;
+use App\Features\SalesTeam\Controllers\SalesOrderExportController;
+use App\Features\SalesTeam\Controllers\SalesOrderPaginateController;
+use App\Features\SalesTeam\Controllers\SalesOrderUpdateController;
+use App\Features\SalesTeam\Controllers\SalesOrderViewController;
 use App\Http\Enums\Guards;
 use App\Http\Enums\Throttle;
 use Illuminate\Support\Facades\Route;
@@ -60,6 +65,15 @@ Route::prefix('v1')->middleware([Throttle::API->middleware()])->group(function (
                 Route::get('/verify/{id}', [UserToggleVerificationController::class, 'index']);
                 Route::get('/view/{id}', [UserViewController::class, 'index']);
                 Route::delete('/delete/{id}', [UserDeleteController::class, 'index']);
+            });
+        });
+        Route::prefix('sales')->middleware([Roles::Sales->middleware()])->group(function () {
+            Route::prefix('order')->group(function () {
+                Route::get('/excel', [SalesOrderExportController::class, 'index']);
+                Route::get('/paginate', [SalesOrderPaginateController::class, 'index']);
+                Route::post('/create', [SalesOrderCreateController::class, 'index']);
+                Route::post('/update/{id}', [SalesOrderUpdateController::class, 'index']);
+                Route::get('/view/{id}', [SalesOrderViewController::class, 'index']);
             });
         });
     });

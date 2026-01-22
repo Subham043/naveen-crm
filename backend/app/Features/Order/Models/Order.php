@@ -2,6 +2,7 @@
 
 namespace App\Features\Order\Models;
 
+use App\Features\Users\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,15 +19,61 @@ class Order extends Model
      */
     protected $fillable = [
         'name',
+        'email',
+        'phone',
+        'country_code',
+        'billing_address',
+        'part_name',
+        'part_description',
+        'lead_source',
+        'sales_user_id',
+        'is_created_by_agent',
+        'assigned_at',
+        'payment_status',
+        'yard_located',
+        'total_price',
+        'cost_price',
+        'shipping_cost',
+        'tracking_details',
+        'invoice_status',
+        'shipment_status',
+        'order_status',
+        'approval_by_id',
+        'approval_at',
         'is_active',
     ];
 
     protected $attributes = [
         'is_active' => true,
+        'phone' => null,
+        'country_code' => null,
+        'billing_address' => null,
+        'part_name' => null,
+        'part_description' => null,
+        'lead_source' => 1,
+        'sales_user_id' => null,
+        'is_created_by_agent' => false,
+        'assigned_at' => null,
+        'payment_status' => 0,
+        'yard_located' => false,
+        'total_price' => null,
+        'cost_price' => null,
+        'shipping_cost' => null,
+        'tracking_details' => null,
+        'invoice_status' => 0,
+        'shipment_status' => 1,
+        'order_status' => 0,
+        'approval_by_id' => null,
+        'approval_at' => null,
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
+        'yard_located' => 'boolean',
+        'is_created_by_agent' => 'boolean',
+        'total_price' => 'decimal:2',
+        'cost_price' => 'decimal:2',
+        'shipping_cost' => 'decimal:2',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
@@ -35,5 +82,15 @@ class Order extends Model
     // {
     //     return $this->hasMany(City::class, 'state_id');
     // }
+
+    public function salesUser()
+    {
+        return $this->belongsTo(User::class, 'sales_user_id')->withDefault();
+    }
+
+    public function approvalBy()
+    {
+        return $this->belongsTo(User::class, 'approval_by_id')->withDefault();
+    }
 
 }

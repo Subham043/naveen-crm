@@ -1,0 +1,41 @@
+<?php
+
+namespace App\Features\SalesTeam\Controllers;
+
+use App\Http\Controllers\Controller;
+use App\Features\SalesTeam\Requests\SalesOrderSaveRequests;
+use App\Features\SalesTeam\Resources\SalesOrderCollection;
+use App\Features\SalesTeam\Services\SalesOrderService;
+use Illuminate\Support\Facades\DB;
+
+class SalesOrderUpdateController extends Controller
+{
+    public function __construct(private SalesOrderService $salesOrderService){}
+
+    /**
+     * Update an user
+     *
+     * @param SalesOrderSaveRequests $request
+     * @param int $id
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function index(SalesOrderSaveRequests $request, $id){
+        $order = $this->salesOrderService->getByIdAndIsInactive($id);
+        DB::beginTransaction();
+        try {
+            //code...
+            $this->salesOrderService->update(
+                [...$request->validated()],
+                $order
+            );
+            return response()->json(["message" => "Order updated successfully.", "data" => SalesOrderCollection::make($order)], 200);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json(["message" => "Something went wrong. Please try again"], 400);
+        } finally {
+            DB::commit();
+        }
+
+    }
+}
