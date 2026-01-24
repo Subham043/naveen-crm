@@ -84,7 +84,6 @@ export default function UserForm({ modal, handleModalClose }: Props) {
                 value={field.value ? field.value : ""}
                 onChange={field.onChange}
                 error={fieldState.error?.message}
-                withAsterisk
                 mt="md"
               />
             )}
