@@ -53,7 +53,7 @@ const imageUploadViaFileSchema = yup
             return value.size <= 3000000;
           }
           return false;
-        }
+        },
       )
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .test("fileFormat", "Please select a valid image file", (value: any) => {
@@ -178,7 +178,7 @@ const ImageFileUpload = ({
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        }
+        },
       );
       addImageUrl(response.data.data.image_link);
       onCancel();
@@ -251,7 +251,7 @@ export default function ImageButton({ editor }: { editor: Editor }) {
         handleModalClose();
       }
     },
-    [editor, handleModalClose]
+    [editor, handleModalClose],
   );
 
   if (!editor) {
@@ -273,12 +273,14 @@ export default function ImageButton({ editor }: { editor: Editor }) {
         <Menu.Dropdown>
           <Menu.Item
             leftSection={<IconUpload size={14} />}
+            type="button"
             onClick={() => setModal({ show: true, type: "file" })}
           >
             Upload from computer
           </Menu.Item>
           <Menu.Item
             leftSection={<IconLinkPlus size={14} />}
+            type="button"
             onClick={() => setModal({ show: true, type: "url" })}
           >
             Insert via URL

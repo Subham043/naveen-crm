@@ -58,7 +58,12 @@ function Header({ opened, toggle }: Props) {
             withinPortal={false}
           >
             <Menu.Target>
-              <Button variant="default" px="xs" disabled={!authUser}>
+              <Button
+                variant="default"
+                px="xs"
+                type="button"
+                disabled={!authUser}
+              >
                 <Group gap={7}>
                   <Text fw={500} size="sm" lh={1} mr={3}>
                     {authUser ? authUser.name : "User"}
@@ -83,6 +88,7 @@ function Header({ opened, toggle }: Props) {
                     stroke={1.5}
                   />
                 }
+                type="button"
                 component={Link}
                 to={page_routes.profile.link}
               >
@@ -96,6 +102,7 @@ function Header({ opened, toggle }: Props) {
                     stroke={1.5}
                   />
                 }
+                type="button"
                 disabled={logout.isPending || !authUser}
                 onClick={() => onLogoutHandler()}
               >

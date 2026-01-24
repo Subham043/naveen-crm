@@ -32,6 +32,9 @@ const ForgotPassword = React.lazy(() => import("@/pages/Auth/ForgotPassword"));
 const ResetPassword = React.lazy(() => import("@/pages/Auth/ResetPassword"));
 const User = React.lazy(() => import("@/pages/User/index.tsx"));
 const SalesOrder = React.lazy(() => import("@/pages/SalesOrder/index.tsx"));
+const SalesOrderView = React.lazy(
+  () => import("@/pages/SalesOrder/SalesOrderViewPage/index.tsx"),
+);
 
 function App() {
   return (
@@ -78,6 +81,10 @@ function App() {
                     <Route
                       path={page_routes.sales_orders.link}
                       element={<SalesOrder />}
+                    />
+                    <Route
+                      path={`${page_routes.sales_orders.link}/:id`}
+                      element={<SalesOrderView />}
                     />
                   </Route>
                   <Route

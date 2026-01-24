@@ -91,6 +91,7 @@ const UserTableRow = memo(
               <TrippleDotMenu width={170}>
                 <Menu.Item
                   leftSection={<IconEdit size={16} stroke={1.5} />}
+                  type="button"
                   onClick={onEditHandler}
                 >
                   Edit

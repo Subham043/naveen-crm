@@ -28,6 +28,7 @@ const UserToggleStatusBtn = ({
           )
         ) : undefined
       }
+      type="button"
       onClick={onToggleStatus}
       disabled={userToggleStatus.isPending}
     >

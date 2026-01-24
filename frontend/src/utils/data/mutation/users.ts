@@ -83,6 +83,7 @@ export const useUserUpdateMutation = (id: number) => {
                 return oldData;
             });
             context.client.setQueryData(UserQueryKey(id), data);
+            context.client.setQueryData(UserQueryKey(id, true), data);
         },
         onSettled: () => {
             nprogress.complete();
@@ -105,6 +106,7 @@ export const useUserDeleteMutation = (id: number) => {
             toastSuccess("User deleted successfully");
             context.client.invalidateQueries({ queryKey: UsersQueryKey(query) });
             context.client.setQueryData(UserQueryKey(id), undefined);
+            context.client.setQueryData(UserQueryKey(id, true), undefined);
         },
         onError: (error: any) => {
             toastError(error?.response?.data?.message || "Something went wrong, please try again later.");
@@ -139,6 +141,10 @@ export const useUserVerifyMutation = (id: number) => {
                 if (!oldData) return oldData;
                 return { ...oldData, verified: "VERIFIED" };
             });
+            context.client.setQueryData(UserQueryKey(id, true), (oldData: UserType | undefined) => {
+                if (!oldData) return oldData;
+                return { ...oldData, verified: "VERIFIED" };
+            });
         },
         onError: (error: any) => {
             toastError(error?.response?.data?.message || "Something went wrong, please try again later.");
@@ -170,6 +176,10 @@ export const useUserToggleStatusMutation = (id: number) => {
                 };
             });
             context.client.setQueryData(UserQueryKey(id), (oldData: UserType | undefined) => {
+                if (!oldData) return oldData;
+                return { ...oldData, is_blocked: data.is_blocked };
+            });
+            context.client.setQueryData(UserQueryKey(id, true), (oldData: UserType | undefined) => {
                 if (!oldData) return oldData;
                 return { ...oldData, is_blocked: data.is_blocked };
             });

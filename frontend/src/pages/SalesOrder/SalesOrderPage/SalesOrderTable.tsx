@@ -2,12 +2,14 @@ import TableRowLoading from "@/components/TableRowLoading";
 import TrippleDotMenu from "@/components/TrippleDotMenu";
 import PermittedLayout from "@/layouts/PermittedLayout";
 import type { SalesOrderType } from "@/utils/types";
-import { Avatar, Badge, Group, Menu, Table, Text } from "@mantine/core";
+import { Avatar, Group, Menu, Table, Text } from "@mantine/core";
 import { IconEdit } from "@tabler/icons-react";
 import TableRowNotFound from "@/components/TableRowNotFound";
 import Datetime from "@/components/Datetime";
 import { memo, useCallback } from "react";
 import SalesSubmitForApprovalBtn from "./SalesSubmitForApprovalBtn";
+import SalesOrderViewBtn from "./SalesOrderViewBtn";
+import SalesOrderStatus from "../SalesOrderViewPage/SalesOrderStatus";
 
 type SalesOrderTableProps = {
   salesOrders: SalesOrderType[];
@@ -22,8 +24,10 @@ const SalesOrderTableRow = memo(
     email,
     phone_number,
     lead_source_info,
-    order_status_info,
+    order_status,
     is_active,
+    approval_by_info,
+    approval_at,
     created_at,
     onEdit,
   }: SalesOrderType & {
@@ -52,39 +56,37 @@ const SalesOrderTableRow = memo(
         <Table.Td tt="lowercase">{email}</Table.Td>
         <Table.Td>{phone_number}</Table.Td>
         <Table.Td>{lead_source_info}</Table.Td>
-        <Table.Td>{order_status_info}</Table.Td>
         <Table.Td>
-          {is_active ? (
-            <Badge size="sm" color="red">
-              No
-            </Badge>
-          ) : (
-            <Badge size="sm" color="green">
-              Yes
-            </Badge>
-          )}
+          <SalesOrderStatus
+            is_active={is_active}
+            order_status={order_status}
+            approval_by_info={approval_by_info}
+            approval_at={approval_at}
+          />
         </Table.Td>
         <Table.Td>
           <Datetime value={created_at} />
         </Table.Td>
         <Table.Td>
-          <PermittedLayout
-            outletType="children"
-            allowedRoles={["Sales-Team"]}
-            additionalCondition={!is_active}
-          >
-            <Group justify="end" gap="xs">
-              <TrippleDotMenu width={200}>
+          <Group justify="end" gap="xs">
+            <TrippleDotMenu width={200}>
+              <SalesOrderViewBtn id={id} />
+              <PermittedLayout
+                outletType="children"
+                allowedRoles={["Sales-Team"]}
+                additionalCondition={!is_active}
+              >
                 <Menu.Item
                   leftSection={<IconEdit size={16} stroke={1.5} />}
                   onClick={onEditHandler}
+                  type="button"
                 >
                   Edit
                 </Menu.Item>
                 <SalesSubmitForApprovalBtn id={id} is_active={is_active} />
-              </TrippleDotMenu>
-            </Group>
-          </PermittedLayout>
+              </PermittedLayout>
+            </TrippleDotMenu>
+          </Group>
         </Table.Td>
       </Table.Tr>
     );
@@ -107,14 +109,13 @@ function SalesOrderTable({
             <Table.Th>PHONE</Table.Th>
             <Table.Th>SOURCE</Table.Th>
             <Table.Th>STATUS</Table.Th>
-            <Table.Th>DRAFT</Table.Th>
             <Table.Th>CREATED AT</Table.Th>
             <Table.Th />
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
           {loading ? (
-            <TableRowLoading colSpan={8} />
+            <TableRowLoading colSpan={7} />
           ) : salesOrders.length > 0 ? (
             salesOrders.map((item) => (
               <SalesOrderTableRow
@@ -156,7 +157,7 @@ function SalesOrderTable({
               />
             ))
           ) : (
-            <TableRowNotFound colSpan={8} />
+            <TableRowNotFound colSpan={7} />
           )}
         </Table.Tbody>
       </Table>

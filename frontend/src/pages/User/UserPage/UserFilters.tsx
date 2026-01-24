@@ -17,7 +17,7 @@ function UserFilters() {
   return (
     <Group gap="xs">
       <SearchField defaultValue={search} onChange={onSearchChange} />
-      <Button variant="filled" color="dark" onClick={onClear}>
+      <Button variant="filled" type="button" color="dark" onClick={onClear}>
         CLEAR
       </Button>
     </Group>

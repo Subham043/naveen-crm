@@ -146,12 +146,13 @@ export type ModalProps<T> =
     show: true;
   } & T);
 
-export type ExtendedModalProps<T> =
-  | {
+export type ExtendedModalProps<T, N> =
+  | ({
     show: boolean;
     type: "create";
-  }
+
+  } & T)
   | ({
     show: boolean;
     type: "update";
-  } & T);
+  } & N);

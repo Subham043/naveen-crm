@@ -15,18 +15,21 @@ import SalesOrderExportBtn from "./SalesOrderPage/SalesOrderExportBtn";
 export default function SalesOrder() {
   const { data, isLoading, isFetching, isRefetching } = useSalesOrderTable();
 
-  const [modal, setModal] = useState<ExtendedModalProps<{ id: number }>>({
+  const [modal, setModal] = useState<
+    ExtendedModalProps<{ id: undefined }, { id: number }>
+  >({
     show: false,
     type: "create",
+    id: undefined,
   });
 
   const handleModalClose = useCallback(
-    () => setModal({ show: false, type: "create" }),
+    () => setModal({ show: false, type: "create", id: undefined }),
     [],
   );
 
   const handleModalOpen = useCallback(() => {
-    setModal({ show: true, type: "create" });
+    setModal({ show: true, type: "create", id: undefined });
   }, []);
 
   const handleModalUpdate = useCallback((id: number) => {
@@ -44,7 +47,12 @@ export default function SalesOrder() {
               allowedRoles={["Sales-Team"]}
             >
               <Group gap="xs" justify="flex-end" align="center">
-                <Button variant="filled" color="teal" onClick={handleModalOpen}>
+                <Button
+                  variant="filled"
+                  color="teal"
+                  type="button"
+                  onClick={handleModalOpen}
+                >
                   ADD
                 </Button>
                 <SalesOrderExportBtn />
@@ -70,7 +78,9 @@ export default function SalesOrder() {
           <CustomPagination totalCount={data ? data.meta.total : 0} />
         )}
       </Paper>
-      <SalesOrderForm modal={modal} handleModalClose={handleModalClose} />
+      <PermittedLayout outletType="children" allowedRoles={["Sales-Team"]}>
+        <SalesOrderForm modal={modal} handleModalClose={handleModalClose} />
+      </PermittedLayout>
     </>
   );
 }

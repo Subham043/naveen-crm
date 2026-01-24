@@ -60,6 +60,7 @@ export default function Sidebar() {
           <Button
             variant="transparent"
             fullWidth
+            type="button"
             loading={logout.isPending}
             disabled={logout.isPending}
             loaderProps={{ type: "dots" }}

@@ -6,8 +6,11 @@ import { usePaginationQueryParam } from "@/hooks/usePaginationQueryParam";
 import { useSearchQueryParam } from "@/hooks/useSearchQueryParam";
 
 
-export const UserQueryKey = (id: number) => {
-    return ["user", id]
+export const UserQueryKey = (id: number, isEdit: boolean = false) => {
+    if (isEdit) {
+        return ["user", id, "edit"]
+    }
+    return ["user", id, "view"]
 };
 
 export const UsersQueryKey = (query: PaginationQueryType) => {
@@ -26,14 +29,14 @@ export const UsersQueryFn = async ({ query, signal }: { query: PaginationQueryTy
 /*
   User Query Hook Function: This hook is used to fetch information of the logged in user
 */
-export const useUserQuery: (id: number, enabled: boolean) => UseQueryResult<
+export const useUserQuery: (id: number, enabled: boolean, isEdit?: boolean) => UseQueryResult<
     UserType | undefined,
     unknown
-> = (id, enabled) => {
+> = (id, enabled, isEdit = false) => {
     const authToken = useAuthStore((state) => state.authToken)
 
     return useQuery({
-        queryKey: UserQueryKey(id),
+        queryKey: UserQueryKey(id, isEdit),
         queryFn: () => UserQueryFn({ id }),
         enabled: authToken !== null && enabled,
     });

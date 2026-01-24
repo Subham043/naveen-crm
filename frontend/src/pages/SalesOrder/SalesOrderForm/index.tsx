@@ -16,7 +16,7 @@ import { useSalesOrderForm } from "./useSalesOrderForm";
 import { PhoneInput } from "react-international-phone";
 
 type Props = {
-  modal: ExtendedModalProps<{ id: number }>;
+  modal: ExtendedModalProps<{ id: undefined }, { id: number }>;
   handleModalClose: () => void;
 };
 

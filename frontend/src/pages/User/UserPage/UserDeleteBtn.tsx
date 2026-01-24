@@ -21,6 +21,7 @@ const UserDeleteBtn = ({ id }: { id: number }) => {
       onClick={() => handleDeleteModalOpen(onDelete)}
       disabled={userDelete.isPending}
       color="red"
+      type="button"
     >
       {userDelete.isPending ? <CustomLoading size="xs" /> : <>Delete</>}
     </Menu.Item>

@@ -16,7 +16,7 @@ import PasswordStrengthChecker from "@/components/PasswordStrengthChecker";
 import SelectRole from "@/components/SelectRole";
 
 type Props = {
-  modal: ExtendedModalProps<{ id: number }>;
+  modal: ExtendedModalProps<{ id: undefined }, { id: number }>;
   handleModalClose: () => void;
 };
 

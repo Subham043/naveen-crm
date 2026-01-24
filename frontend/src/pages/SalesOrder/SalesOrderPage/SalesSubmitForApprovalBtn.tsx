@@ -27,6 +27,7 @@ const SalesSubmitForApprovalBtn = ({
           <IconUserStar size={16} stroke={1.5} />
         ) : undefined
       }
+      type="button"
       onClick={onSubmitForApprovalHandler}
       disabled={salesOrderSubmitForApproval.isPending}
     >

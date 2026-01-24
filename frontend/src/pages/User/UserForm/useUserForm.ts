@@ -8,7 +8,7 @@ import { useUserQuery } from "@/utils/data/query/user";
 import { useCallback, useEffect } from "react";
 
 type Props = {
-  modal: ExtendedModalProps<{ id: number }>;
+  modal: ExtendedModalProps<{ id: undefined }, { id: number }>;
   closeModal: () => void;
 };
 
@@ -23,9 +23,11 @@ const userFormDefaultValues = {
 }
 
 export function useUserForm({ modal, closeModal }: Props) {
+  const isEdit = modal.show && modal.type === "update" && !!modal.id;
   const { data, isLoading, isFetching, isRefetching } = useUserQuery(
     modal.type === "update" ? modal.id : 0,
-    modal.show && modal.type === "update"
+    isEdit,
+    isEdit
   );
 
   const userCreate = useUserCreateMutation();
@@ -37,22 +39,22 @@ export function useUserForm({ modal, closeModal }: Props) {
   });
 
   useEffect(() => {
-    if (modal.show) {
-      if (data && modal.type === "update") {
-        form.reset({
-          name: data ? data.name : "",
-          email: data ? data.email : "",
-          phone: data && data.phone ? data.phone : undefined,
-          role: data ? data.role : "",
-          password: undefined,
-          confirm_password: undefined,
-          is_blocked: data && data.is_blocked !== false ? 1 : 0,
-        });
-      } else {
-        form.reset(userFormDefaultValues);
-      }
+    if (!modal.show) return;
+    if (modal.type === "update" && data) {
+      form.reset({
+        name: data ? data.name : "",
+        email: data ? data.email : "",
+        phone: data && data.phone ? data.phone : undefined,
+        role: data ? data.role : "",
+        password: undefined,
+        confirm_password: undefined,
+        is_blocked: data && data.is_blocked !== false ? 1 : 0,
+      });
     }
-  }, [modal.show, modal.type, data]);
+    if (modal.type === "create") {
+      form.reset(userFormDefaultValues);
+    }
+  }, [modal.show, modal.type, modal.id, data]);
 
   const handleClose = useCallback(() => {
     form.reset(userFormDefaultValues);

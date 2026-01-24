@@ -83,6 +83,7 @@ export const useSalesOrderUpdateMutation = (id: number) => {
                 return oldData;
             });
             context.client.setQueryData(SalesOrderQueryKey(id), data);
+            context.client.setQueryData(SalesOrderQueryKey(id, true), data);
         },
         onSettled: () => {
             nprogress.complete();
@@ -117,6 +118,7 @@ export const useSalesOrderSubmitForApprovalMutation = (id: number) => {
                 return oldData;
             });
             context.client.setQueryData(SalesOrderQueryKey(id), data);
+            context.client.setQueryData(SalesOrderQueryKey(id, true), data);
         },
         onError: (error: any) => {
             toastError(error?.response?.data?.message || "Something went wrong, please try again later.");

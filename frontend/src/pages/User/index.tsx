@@ -15,18 +15,21 @@ import UserExportBtn from "./UserPage/UserExportBtn";
 export default function User() {
   const { data, isLoading, isFetching, isRefetching } = useUserTable();
 
-  const [modal, setModal] = useState<ExtendedModalProps<{ id: number }>>({
+  const [modal, setModal] = useState<
+    ExtendedModalProps<{ id: undefined }, { id: number }>
+  >({
     show: false,
     type: "create",
+    id: undefined,
   });
 
   const handleModalClose = useCallback(
-    () => setModal({ show: false, type: "create" }),
+    () => setModal({ show: false, type: "create", id: undefined }),
     [],
   );
 
   const handleModalOpen = useCallback(() => {
-    setModal({ show: true, type: "create" });
+    setModal({ show: true, type: "create", id: undefined });
   }, []);
 
   const handleModalUpdate = useCallback((id: number) => {
@@ -44,7 +47,12 @@ export default function User() {
               allowedRoles={["Super-Admin"]}
             >
               <Group gap="xs" justify="flex-end" align="center">
-                <Button variant="filled" color="teal" onClick={handleModalOpen}>
+                <Button
+                  variant="filled"
+                  type="button"
+                  color="teal"
+                  onClick={handleModalOpen}
+                >
                   ADD
                 </Button>
                 <UserExportBtn />
@@ -70,7 +78,9 @@ export default function User() {
           <CustomPagination totalCount={data ? data.meta.total : 0} />
         )}
       </Paper>
-      <UserForm modal={modal} handleModalClose={handleModalClose} />
+      <PermittedLayout outletType="children" allowedRoles={["Super-Admin"]}>
+        <UserForm modal={modal} handleModalClose={handleModalClose} />
+      </PermittedLayout>
     </>
   );
 }

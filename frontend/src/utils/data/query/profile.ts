@@ -4,8 +4,11 @@ import { useQuery, type UseQueryResult } from "@tanstack/react-query";
 import { getProfileHandler } from "../dal/profile";
 
 
-export const ProfileQueryKey = () => {
-    return ["profile", useAuthStore.getState().authToken]
+export const ProfileQueryKey = (isEdit: boolean = false) => {
+    if (isEdit) {
+        return ["profile", useAuthStore.getState().authToken, "edit"]
+    }
+    return ["profile", useAuthStore.getState().authToken, "view"]
 };
 
 export const ProfileQueryFn = async ({ signal }: { signal?: AbortSignal }) => {
@@ -22,14 +25,14 @@ export const ProfileQueryFn = async ({ signal }: { signal?: AbortSignal }) => {
 /*
   Profile Query Hook Function: This hook is used to fetch information of the logged in user
 */
-export const useProfileQuery: () => UseQueryResult<
+export const useProfileQuery: (isEdit?: boolean) => UseQueryResult<
     ProfileType | undefined,
     unknown
-> = () => {
+> = (isEdit = false) => {
     const authToken = useAuthStore((state) => state.authToken)
 
     return useQuery({
-        queryKey: ProfileQueryKey(),
+        queryKey: ProfileQueryKey(isEdit),
         queryFn: ProfileQueryFn,
         enabled: authToken !== null,
     });

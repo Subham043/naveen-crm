@@ -34,6 +34,7 @@ function PageNotFound() {
             </Text>
             <Button
               variant="outline"
+              type="button"
               component={NavLink}
               to={page_routes.dashboard.link}
               size="md"

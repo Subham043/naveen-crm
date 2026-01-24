@@ -44,6 +44,7 @@ export default function ErrorFallback({
               onClick={resetErrorBoundary}
               size="md"
               mt="xl"
+              type="button"
               className={classes.control}
             >
               Try again

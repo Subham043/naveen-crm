@@ -8,7 +8,7 @@ import { useSalesOrderQuery } from "@/utils/data/query/sales_order";
 import { useCallback, useEffect } from "react";
 
 type Props = {
-  modal: ExtendedModalProps<{ id: number }>;
+  modal: ExtendedModalProps<{ id: undefined }, { id: number }>;
   closeModal: () => void;
 };
 
@@ -26,9 +26,11 @@ const salesOrderDefaultValues: SalesOrderFormValuesType = {
 }
 
 export function useSalesOrderForm({ modal, closeModal }: Props) {
+  const isEdit = modal.show && modal.type === "update" && !!modal.id;
   const { data, isLoading, isFetching, isRefetching } = useSalesOrderQuery(
     modal.type === "update" ? modal.id : 0,
-    modal.show && modal.type === "update"
+    isEdit,
+    isEdit
   );
 
   const salesOrderCreate = useSalesOrderCreateMutation();
@@ -40,25 +42,26 @@ export function useSalesOrderForm({ modal, closeModal }: Props) {
   });
 
   useEffect(() => {
-    if (modal.show) {
-      if (data && modal.type === "update") {
-        form.reset({
-          name: data ? data.name : "",
-          email: data ? data.email : "",
-          phone: data && data.phone ? data.phone : undefined,
-          country_code: data && data.country_code ? data.country_code : undefined,
-          phone_number: data && data.phone_number ? data.phone_number : undefined,
-          billing_address: data && data.billing_address ? data.billing_address : undefined,
-          part_name: data && data.part_name ? data.part_name : undefined,
-          part_description: data && data.part_description ? data.part_description : undefined,
-          lead_source: data && data.lead_source ? data.lead_source : undefined,
-          is_active: data && data.is_active === true ? 1 : 0,
-        });
-      } else {
-        form.reset(salesOrderDefaultValues);
-      }
+    if (!modal.show) return;
+    if (modal.type === "update" && data) {
+      form.reset({
+        name: data.name ?? "",
+        email: data.email ?? "",
+        phone: data.phone ?? undefined,
+        country_code: data.country_code ?? undefined,
+        phone_number: data.phone_number ?? undefined,
+        billing_address: data.billing_address ?? undefined,
+        part_name: data.part_name ?? undefined,
+        part_description: data.part_description ?? undefined,
+        lead_source: data.lead_source ?? 2,
+        is_active: data.is_active ? 1 : 0,
+      });
     }
-  }, [modal.show, modal.type, data]);
+
+    if (modal.type === "create") {
+      form.reset(salesOrderDefaultValues);
+    }
+  }, [modal.show, modal.type, modal.id, data]);
 
   const handleClose = useCallback(() => {
     form.reset(salesOrderDefaultValues);

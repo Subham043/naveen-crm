@@ -19,6 +19,7 @@ export const useProfileUpdateMutation = () => {
         onSuccess: (data, _, __, context) => {
             toastSuccess("Profile updated successfully");
             context.client.setQueryData(ProfileQueryKey(), data);
+            context.client.setQueryData(ProfileQueryKey(true), data);
             setAuthUser(data)
         },
         onSettled: () => {
@@ -76,6 +77,7 @@ export const useVerifyProfileMutation = () => {
             if (authUser) {
                 const updatedAuthUser = { ...authUser, is_verified: true };
                 context.client.setQueryData(ProfileQueryKey(), updatedAuthUser);
+                context.client.setQueryData(ProfileQueryKey(true), updatedAuthUser);
                 setAuthUser(updatedAuthUser)
             }
         },

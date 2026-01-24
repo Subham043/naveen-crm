@@ -6,8 +6,11 @@ import { usePaginationQueryParam } from "@/hooks/usePaginationQueryParam";
 import { useSearchQueryParam } from "@/hooks/useSearchQueryParam";
 
 
-export const SalesOrderQueryKey = (id: number) => {
-    return ["sales_order", id]
+export const SalesOrderQueryKey = (id: number, isEdit: boolean = false) => {
+    if (isEdit) {
+        return ["sales_order", id, "edit"]
+    }
+    return ["sales_order", id, "view"]
 };
 
 export const SalesOrdersQueryKey = (query: PaginationQueryType) => {
@@ -26,14 +29,14 @@ export const SalesOrdersQueryFn = async ({ query, signal }: { query: PaginationQ
 /*
   Sales Order Query Hook Function: This hook is used to fetch information of the logged in user
 */
-export const useSalesOrderQuery: (id: number, enabled: boolean) => UseQueryResult<
+export const useSalesOrderQuery: (id: number, enabled: boolean, isEdit?: boolean) => UseQueryResult<
     SalesOrderType | undefined,
     unknown
-> = (id, enabled) => {
+> = (id, enabled, isEdit = false) => {
     const authToken = useAuthStore((state) => state.authToken)
 
     return useQuery({
-        queryKey: SalesOrderQueryKey(id),
+        queryKey: SalesOrderQueryKey(id, isEdit),
         queryFn: () => SalesOrderQueryFn({ id }),
         enabled: authToken !== null && enabled,
     });

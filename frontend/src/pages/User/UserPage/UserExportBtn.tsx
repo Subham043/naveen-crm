@@ -14,6 +14,7 @@ const UserExportBtn = () => {
     <Button
       variant="filled"
       color="cyan"
+      type="button"
       onClick={onExportHandler}
       disabled={excelLoading}
       loading={excelLoading}

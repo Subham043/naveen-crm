@@ -28,6 +28,7 @@ const UserVerifyBtn = ({
       }
       onClick={onVerifyHandler}
       disabled={userVerify.isPending}
+      type="button"
     >
       {userVerify.isPending ? <CustomLoading size="xs" /> : <>Verify</>}
     </Menu.Item>
