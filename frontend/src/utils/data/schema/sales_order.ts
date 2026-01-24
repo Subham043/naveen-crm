@@ -1,5 +1,7 @@
 import * as yup from "yup";
 
+import { PhoneNumberUtil } from 'google-libphonenumber';
+
 export const salesOrderSchema = yup
     .object({
         name: yup
@@ -21,7 +23,7 @@ export const salesOrderSchema = yup
             .typeError("Phone must contain characters only")
             .when("is_active", {
                 is: (val: number | undefined) => val === 1,
-                then: (schema) => schema.matches(/^[0-9]+$/, "Phone must contain numbers only").length(10, "Phone must contain exactly 10 digits").required("Phone is required"),
+                then: (schema) => schema.matches(/^[0-9]+$/, "Phone must contain numbers only").required("Phone is required"),
                 otherwise: (schema) => schema.optional(),
             }),
         country_code: yup
@@ -30,6 +32,24 @@ export const salesOrderSchema = yup
             .when("is_active", {
                 is: (val: number | undefined) => val === 1,
                 then: (schema) => schema.required("Country Code is required"),
+                otherwise: (schema) => schema.optional(),
+            }),
+        phone_number: yup
+            .string()
+            .typeError("Phone Number must contain characters only")
+            .when("is_active", {
+                is: (val: number | undefined) => val === 1,
+                then: (schema) => schema.test("phone-number", "Phone Number is invalid", function (_) {
+                    const { country_code, phone } = this.parent;
+                    if (!country_code || !phone) return true;
+                    try {
+                        const phoneUtil = PhoneNumberUtil.getInstance();
+                        const phoneNumber = phoneUtil.parse(`${country_code}${phone}`);
+                        return phoneUtil.isValidNumber(phoneNumber);
+                    } catch (error) {
+                        return false;
+                    }
+                }).required("Phone Number is required"),
                 otherwise: (schema) => schema.optional(),
             }),
         billing_address: yup

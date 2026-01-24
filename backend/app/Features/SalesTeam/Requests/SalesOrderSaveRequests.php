@@ -31,7 +31,7 @@ class SalesOrderSaveRequests extends InputRequest
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255',
             'is_active' => 'required|boolean',
-            'phone' => ['required_if:is_active,1', 'numeric', 'digits:10'],
+            'phone' => ['required_if:is_active,1', 'numeric'],
             'country_code' => ['required_if:is_active,1', 'string', 'max:255'],
             'billing_address' => ['required_if:is_active,1', 'string'],
             'part_name' => ['required_if:is_active,1', 'string', 'max:255'],

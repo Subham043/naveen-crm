@@ -16,12 +16,13 @@ const salesOrderDefaultValues: SalesOrderFormValuesType = {
   name: "",
   email: "",
   phone: undefined,
+  phone_number: undefined,
   country_code: undefined,
   billing_address: undefined,
   part_name: undefined,
   part_description: undefined,
   lead_source: 2,
-  is_active: 1,
+  is_active: 0,
 }
 
 export function useSalesOrderForm({ modal, closeModal }: Props) {
@@ -46,11 +47,12 @@ export function useSalesOrderForm({ modal, closeModal }: Props) {
           email: data ? data.email : "",
           phone: data && data.phone ? data.phone : undefined,
           country_code: data && data.country_code ? data.country_code : undefined,
+          phone_number: data && data.phone_number ? data.phone_number : undefined,
           billing_address: data && data.billing_address ? data.billing_address : undefined,
           part_name: data && data.part_name ? data.part_name : undefined,
           part_description: data && data.part_description ? data.part_description : undefined,
           lead_source: data && data.lead_source ? data.lead_source : undefined,
-          is_active: data && data.is_active !== false ? 1 : 0,
+          is_active: data && data.is_active === true ? 1 : 0,
         });
       } else {
         form.reset(salesOrderDefaultValues);

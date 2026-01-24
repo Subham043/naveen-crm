@@ -2,7 +2,7 @@ import { useToast } from "@/hooks/useToast";
 import { useMutation } from "@tanstack/react-query";
 import { nprogress } from "@mantine/nprogress";
 import type { SalesOrderFormValuesType } from "../schema/sales_order";
-import { createSalesOrderHandler, updateSalesOrderHandler } from "../dal/sales_order";
+import { createSalesOrderHandler, submitForApprovalSalesOrderHandler, updateSalesOrderHandler } from "../dal/sales_order";
 import { usePaginationQueryParam } from "@/hooks/usePaginationQueryParam";
 import { useSearchQueryParam } from "@/hooks/useSearchQueryParam";
 import type { PaginationQueryType, PaginationType, SalesOrderType } from "@/utils/types";
@@ -83,6 +83,43 @@ export const useSalesOrderUpdateMutation = (id: number) => {
                 return oldData;
             });
             context.client.setQueryData(SalesOrderQueryKey(id), data);
+        },
+        onSettled: () => {
+            nprogress.complete();
+        }
+    });
+};
+
+export const useSalesOrderSubmitForApprovalMutation = (id: number) => {
+    const { toastSuccess, toastError } = useToast();
+    const { page, total } = usePaginationQueryParam();
+    const { search } = useSearchQueryParam();
+    const query: PaginationQueryType = { page, total, search };
+
+    return useMutation({
+        mutationFn: async () => {
+            nprogress.start()
+            return await submitForApprovalSalesOrderHandler(id);
+        },
+        onSuccess: (data, __, ___, context) => {
+            toastSuccess("Sales Order submitted for approval successfully");
+            context.client.setQueryData(SalesOrdersQueryKey(query), (oldData: PaginationType<SalesOrderType> | undefined) => {
+                if (!oldData) return oldData;
+                const oldUserDataIndex = oldData.data.findIndex((user) => user.id === id);
+                if (oldUserDataIndex !== -1) {
+                    const newData = [...oldData.data];
+                    newData[oldUserDataIndex] = data;
+                    return {
+                        ...oldData,
+                        data: newData,
+                    };
+                }
+                return oldData;
+            });
+            context.client.setQueryData(SalesOrderQueryKey(id), data);
+        },
+        onError: (error: any) => {
+            toastError(error?.response?.data?.message || "Something went wrong, please try again later.");
         },
         onSettled: () => {
             nprogress.complete();

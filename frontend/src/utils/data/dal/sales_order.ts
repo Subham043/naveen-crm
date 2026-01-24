@@ -14,6 +14,11 @@ export const updateSalesOrderHandler = async (id: number, val: SalesOrderFormVal
     return response.data.data;
 }
 
+export const submitForApprovalSalesOrderHandler = async (id: number, signal?: GenericAbortSignal | undefined) => {
+    const response = await axios.get<{ data: SalesOrderType }>(api_routes.sales.orders.submitForApproval + `/${id}`, { signal });
+    return response.data.data;
+}
+
 export const getSalesOrderHandler = async (id: number, signal?: GenericAbortSignal | undefined) => {
     const response = await axios.get<{ data: SalesOrderType }>(api_routes.sales.orders.view + `/${id}`, { signal });
     return response.data.data;

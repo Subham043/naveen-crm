@@ -65,7 +65,7 @@ export const useResendVerificationCodeMutation = () => {
 export const useVerifyProfileMutation = () => {
     const authUser = useAuthStore((state) => state.authUser)
     const setAuthUser = useAuthStore((state) => state.setAuthUser)
-    const { toastSuccess } = useToast();
+    const { toastSuccess, toastError } = useToast();
     return useMutation({
         mutationFn: async (val: { id: number, token: string }) => {
             nprogress.start()
@@ -78,6 +78,9 @@ export const useVerifyProfileMutation = () => {
                 context.client.setQueryData(ProfileQueryKey(), updatedAuthUser);
                 setAuthUser(updatedAuthUser)
             }
+        },
+        onError: (error: any) => {
+            toastError(error?.response?.data?.message || "Something went wrong, please try again later.");
         },
         onSettled: () => {
             nprogress.complete();

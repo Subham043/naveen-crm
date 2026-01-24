@@ -1,9 +1,10 @@
-import { Controller } from "react-hook-form";
+import { Controller, useWatch } from "react-hook-form";
 import {
   Box,
   Button,
   Drawer,
   Group,
+  Input,
   LoadingOverlay,
   Select,
   Switch,
@@ -12,6 +13,7 @@ import {
 } from "@mantine/core";
 import type { ExtendedModalProps } from "@/utils/types";
 import { useSalesOrderForm } from "./useSalesOrderForm";
+import { PhoneInput } from "react-international-phone";
 
 type Props = {
   modal: ExtendedModalProps<{ id: number }>;
@@ -28,6 +30,11 @@ export default function SalesOrderForm({ modal, handleModalClose }: Props) {
       closeModal: handleModalClose,
     },
   );
+
+  const isActive = useWatch({
+    control: form.control,
+    name: "is_active",
+  });
 
   return (
     <Drawer
@@ -77,30 +84,27 @@ export default function SalesOrderForm({ modal, handleModalClose }: Props) {
           />
           <Controller
             control={form.control}
-            name="country_code"
+            name="phone_number"
             render={({ field, fieldState }) => (
-              <TextInput
-                label="Country Code"
-                value={field.value ? field.value : ""}
-                onChange={field.onChange}
+              <Input.Wrapper
+                label="Phone Number"
                 error={fieldState.error?.message}
-                withAsterisk
+                withAsterisk={isActive === 1}
                 mt="md"
-              />
-            )}
-          />
-          <Controller
-            control={form.control}
-            name="phone"
-            render={({ field, fieldState }) => (
-              <TextInput
-                label="Phone"
-                value={field.value ? field.value : ""}
-                onChange={field.onChange}
-                error={fieldState.error?.message}
-                withAsterisk
-                mt="md"
-              />
+              >
+                <PhoneInput
+                  defaultCountry="in"
+                  value={field.value}
+                  disableFormatting={true}
+                  onChange={(phoneNumber, meta) => {
+                    const [countryCode, phone] = meta.inputValue.split(" ");
+                    field.onChange(phoneNumber);
+                    form.setValue("country_code", countryCode);
+                    form.setValue("phone", phone);
+                  }}
+                  inputStyle={{ width: "100%" }}
+                />
+              </Input.Wrapper>
             )}
           />
           <Controller
@@ -112,7 +116,7 @@ export default function SalesOrderForm({ modal, handleModalClose }: Props) {
                 value={field.value ? field.value : ""}
                 onChange={field.onChange}
                 error={fieldState.error?.message}
-                withAsterisk
+                withAsterisk={isActive === 1}
                 rows={5}
                 mt="md"
               />
@@ -127,7 +131,7 @@ export default function SalesOrderForm({ modal, handleModalClose }: Props) {
                 value={field.value ? field.value : ""}
                 onChange={field.onChange}
                 error={fieldState.error?.message}
-                withAsterisk
+                withAsterisk={isActive === 1}
                 mt="md"
               />
             )}
@@ -141,7 +145,7 @@ export default function SalesOrderForm({ modal, handleModalClose }: Props) {
                 value={field.value ? field.value : ""}
                 onChange={field.onChange}
                 error={fieldState.error?.message}
-                withAsterisk
+                withAsterisk={isActive === 1}
                 rows={5}
                 mt="md"
               />
@@ -173,8 +177,8 @@ export default function SalesOrderForm({ modal, handleModalClose }: Props) {
             render={({ field, fieldState }) => (
               <Switch
                 label="Is Draft?"
-                checked={field.value === 1 ? true : false}
-                onChange={(e) => field.onChange(e.target.checked ? 1 : 0)}
+                checked={field.value === 0}
+                onChange={(e) => field.onChange(e.target.checked ? 0 : 1)}
                 error={fieldState.error?.message}
                 mt="md"
               />
@@ -184,11 +188,11 @@ export default function SalesOrderForm({ modal, handleModalClose }: Props) {
             <Button
               type="submit"
               variant="filled"
-              color="blue"
+              color={isActive === 1 ? "blue" : "cyan"}
               disabled={loading}
               loading={loading}
             >
-              Save
+              {isActive === 1 ? "Submit for Approval" : "Save as Draft"}
             </Button>
             <Button
               type="button"

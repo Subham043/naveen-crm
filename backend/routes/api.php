@@ -24,6 +24,7 @@ use App\Features\Users\Controllers\UserUpdateController;
 use App\Features\Users\Controllers\UserViewController;
 use App\Features\SalesTeam\Controllers\SalesOrderExportController;
 use App\Features\SalesTeam\Controllers\SalesOrderPaginateController;
+use App\Features\SalesTeam\Controllers\SalesOrderSubmitForApprovalController;
 use App\Features\SalesTeam\Controllers\SalesOrderUpdateController;
 use App\Features\SalesTeam\Controllers\SalesOrderViewController;
 use App\Http\Enums\Guards;
@@ -74,6 +75,7 @@ Route::prefix('v1')->middleware([Throttle::API->middleware()])->group(function (
                 Route::post('/create', [SalesOrderCreateController::class, 'index']);
                 Route::post('/update/{id}', [SalesOrderUpdateController::class, 'index']);
                 Route::get('/view/{id}', [SalesOrderViewController::class, 'index']);
+                Route::get('/submit-for-approval/{id}', [SalesOrderSubmitForApprovalController::class, 'index']);
             });
         });
     });

@@ -35,6 +35,7 @@ export const api_routes = {
       update: "/api/v1/sales/order/update",
       view: "/api/v1/sales/order/view",
       excel: "/api/v1/sales/order/excel",
+      submitForApproval: "/api/v1/sales/order/submit-for-approval",
     }
   },
   textEditor: {

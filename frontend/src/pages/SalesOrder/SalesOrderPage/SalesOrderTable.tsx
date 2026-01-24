@@ -7,6 +7,7 @@ import { IconEdit } from "@tabler/icons-react";
 import TableRowNotFound from "@/components/TableRowNotFound";
 import Datetime from "@/components/Datetime";
 import { memo, useCallback } from "react";
+import SalesSubmitForApprovalBtn from "./SalesSubmitForApprovalBtn";
 
 type SalesOrderTableProps = {
   salesOrders: SalesOrderType[];
@@ -73,13 +74,14 @@ const SalesOrderTableRow = memo(
             additionalCondition={!is_active}
           >
             <Group justify="end" gap="xs">
-              <TrippleDotMenu width={170}>
+              <TrippleDotMenu width={200}>
                 <Menu.Item
                   leftSection={<IconEdit size={16} stroke={1.5} />}
                   onClick={onEditHandler}
                 >
                   Edit
                 </Menu.Item>
+                <SalesSubmitForApprovalBtn id={id} is_active={is_active} />
               </TrippleDotMenu>
             </Group>
           </PermittedLayout>

@@ -91,7 +91,7 @@ export const useUserUpdateMutation = (id: number) => {
 };
 
 export const useUserDeleteMutation = (id: number) => {
-    const { toastSuccess } = useToast();
+    const { toastSuccess, toastError } = useToast();
     const { page, total } = usePaginationQueryParam();
     const { search } = useSearchQueryParam();
     const query: PaginationQueryType = { page, total, search };
@@ -106,6 +106,9 @@ export const useUserDeleteMutation = (id: number) => {
             context.client.invalidateQueries({ queryKey: UsersQueryKey(query) });
             context.client.setQueryData(UserQueryKey(id), undefined);
         },
+        onError: (error: any) => {
+            toastError(error?.response?.data?.message || "Something went wrong, please try again later.");
+        },
         onSettled: () => {
             nprogress.complete();
         }
@@ -113,7 +116,7 @@ export const useUserDeleteMutation = (id: number) => {
 };
 
 export const useUserVerifyMutation = (id: number) => {
-    const { toastSuccess } = useToast();
+    const { toastSuccess, toastError } = useToast();
     const { page, total } = usePaginationQueryParam();
     const { search } = useSearchQueryParam();
     const query: PaginationQueryType = { page, total, search };
@@ -137,6 +140,9 @@ export const useUserVerifyMutation = (id: number) => {
                 return { ...oldData, verified: "VERIFIED" };
             });
         },
+        onError: (error: any) => {
+            toastError(error?.response?.data?.message || "Something went wrong, please try again later.");
+        },
         onSettled: () => {
             nprogress.complete();
         }
@@ -144,7 +150,7 @@ export const useUserVerifyMutation = (id: number) => {
 };
 
 export const useUserToggleStatusMutation = (id: number) => {
-    const { toastSuccess } = useToast();
+    const { toastSuccess, toastError } = useToast();
     const { page, total } = usePaginationQueryParam();
     const { search } = useSearchQueryParam();
     const query: PaginationQueryType = { page, total, search };
@@ -167,6 +173,9 @@ export const useUserToggleStatusMutation = (id: number) => {
                 if (!oldData) return oldData;
                 return { ...oldData, is_blocked: data.is_blocked };
             });
+        },
+        onError: (error: any) => {
+            toastError(error?.response?.data?.message || "Something went wrong, please try again later.");
         },
         onSettled: () => {
             nprogress.complete();
