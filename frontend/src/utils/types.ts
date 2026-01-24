@@ -52,11 +52,36 @@ export type SalesOrderType = {
   lead_source: number;
   lead_source_info?: string;
   sales_user_id?: number;
+  sales_user_info: {
+    id: number;
+    name: string;
+    email: string;
+    phone?: string;
+  } | null;
   is_created_by_agent: boolean;
   assigned_at?: string;
+  payment_status: number;
+  payment_status_info?: string;
+  yard_located: boolean;
+  total_price?: number;
+  cost_price?: number;
+  shipping_cost?: number;
+  sales_tax?: number;
+  gross_profit?: number;
+  tracking_details?: string;
+  invoice_status: number;
+  invoice_status_info?: string;
+  shipment_status: number;
+  shipment_status_info?: string;
   order_status: number;
   order_status_info?: string;
   approval_by_id?: number;
+  approval_by_info: {
+    id: number;
+    name: string;
+    email: string;
+    phone?: string;
+  } | null;
   approval_at?: string;
   is_active: boolean;
   created_at: string;

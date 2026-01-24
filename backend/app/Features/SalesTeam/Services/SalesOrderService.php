@@ -16,7 +16,7 @@ class SalesOrderService extends AbstractService
 
     public function model(): Builder
     {
-        return Order::select('id', 'name', 'email', 'phone', 'country_code', 'billing_address', 'part_name', 'part_description', 'lead_source', 'sales_user_id', 'is_created_by_agent', 'assigned_at', 'order_status', 'approval_by_id', 'approval_at', 'is_active', 'created_at', 'updated_at')
+        return Order::select('id', 'name', 'email', 'phone', 'country_code', 'billing_address', 'part_name', 'part_description', 'lead_source', 'sales_user_id', 'is_created_by_agent', 'assigned_at', 'payment_status', 'yard_located', 'total_price', 'cost_price', 'shipping_cost', 'tracking_details', 'invoice_status', 'shipment_status', 'order_status', 'approval_by_id', 'approval_at', 'is_active', 'created_at', 'updated_at')
         ->with([
             'salesUser' => function($query){
                 $query->select('id', 'name', 'email', 'phone')->where('id', Auth::guard(Guards::API->value())->user()->id);

@@ -5,6 +5,7 @@ namespace App\Features\Order\Models;
 use App\Features\Users\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Order extends Model
 {
@@ -78,10 +79,26 @@ class Order extends Model
         'updated_at' => 'datetime',
     ];
 
+    protected $appends = ['sales_tax', 'gross_profit'];
+
     // public function cities()
     // {
     //     return $this->hasMany(City::class, 'state_id');
     // }
+
+    public function salesTax(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->cost_price ? $this->cost_price * 0.04 : null,
+        );
+    }
+
+    public function grossProfit(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => !($this->cost_price || $this->shipping_cost || $this->total_price) ? null : ($this->total_price - ($this->cost_price + $this->shipping_cost + $this->sales_tax)),
+        );
+    }
 
     public function salesUser()
     {
