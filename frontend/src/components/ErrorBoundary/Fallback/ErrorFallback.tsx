@@ -1,3 +1,4 @@
+import type { FallbackProps } from "react-error-boundary";
 import {
   Button,
   Center,
@@ -7,15 +8,23 @@ import {
   Text,
   Title,
 } from "@mantine/core";
-import image from "@/assets/images/page403.png";
+import image from "@/assets/images/error.png";
 import classes from "./index.module.css";
-import { NavLink } from "react-router";
-import { page_routes } from "@/utils/routes/page_routes";
+import { isAxiosError } from "axios";
 
-/*
- * 403 Page
- */
-function PageNotPermitted() {
+export default function ErrorFallback({
+  error,
+  resetErrorBoundary,
+}: FallbackProps) {
+  const errorMessage = () => {
+    if (isAxiosError(error)) {
+      return error.response?.data?.message;
+    }
+    if (error instanceof Error) {
+      return error.message;
+    }
+    return "Our app is having some issues at the moment. Please try again later.";
+  };
   return (
     <Container className={classes.root}>
       <Center w="100%" h="100dvh">
@@ -26,21 +35,18 @@ function PageNotPermitted() {
         >
           <Image src={image} className={classes.mobileImage} />
           <div>
-            <Title className={classes.title}>Something is not right...</Title>
+            <Title className={classes.title}>Something went wrong...</Title>
             <Text c="dimmed" size="lg">
-              You don't have the required permissions to access this page. You
-              may have mistyped the address, or the page has been moved to
-              another URL. If you think this is an error contact support.
+              {errorMessage()}
             </Text>
             <Button
               variant="outline"
-              component={NavLink}
-              to={page_routes.dashboard.link}
+              onClick={resetErrorBoundary}
               size="md"
               mt="xl"
               className={classes.control}
             >
-              Get back to home page
+              Try again
             </Button>
           </div>
           <Image src={image} className={classes.desktopImage} />
@@ -49,5 +55,3 @@ function PageNotPermitted() {
     </Container>
   );
 }
-
-export default PageNotPermitted;

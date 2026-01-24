@@ -34,12 +34,13 @@ axios.interceptors.response.use(
     const original = error.config;
 
     // Skip refresh endpoint
-    if (original?.url === api_routes.auth.refresh) {
+    if (original?.url === api_routes.account.refresh) {
       return Promise.reject(error);
     }
 
     // Token expired?
-    if ((error.response?.status === 401 || error.response?.status === 403) && !original._retry) {
+    // if ((error.response?.status === 401 || error.response?.status === 403) && !original._retry) {
+    if ((error.response?.status === 401) && !original._retry) {
       original._retry = true;
 
       // Queue all requests until refresh is completed
