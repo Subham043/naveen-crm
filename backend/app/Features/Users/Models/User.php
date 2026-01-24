@@ -44,7 +44,7 @@ class User extends Authenticatable implements MustVerifyEmail, RoleTraitInterfac
         'remember_token',
     ];
 
-    protected $appends = ['current_role'];
+    // protected $appends = ['current_role'];
 
     /**
      * Get the attributes that should be cast.

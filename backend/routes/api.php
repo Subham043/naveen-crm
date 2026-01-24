@@ -5,10 +5,10 @@ use App\Features\Account\Controllers\ProfileController;
 use App\Features\Account\Controllers\ProfileResendVerificationController;
 use App\Features\Account\Controllers\ProfileUpdateController;
 use App\Features\Account\Controllers\ProfileVerifyController;
+use App\Features\Account\Controllers\LogoutController;
+use App\Features\Account\Controllers\RefreshTokenController;
 use App\Features\Authentication\Controllers\ForgotPasswordController;
 use App\Features\Authentication\Controllers\LoginController;
-use App\Features\Authentication\Controllers\LogoutController;
-use App\Features\Authentication\Controllers\RefreshTokenController;
 use App\Features\Authentication\Controllers\RegisterController;
 use App\Features\Authentication\Controllers\ResetPasswordController;
 use App\Features\Roles\Controllers\RoleAllController;
@@ -37,14 +37,14 @@ Route::prefix('v1')->middleware([Throttle::API->middleware()])->group(function (
         Route::post('/register', [RegisterController::class, 'index'])->middleware([Throttle::AUTH->middleware()]);
         Route::post('/forgot-password', [ForgotPasswordController::class, 'index'])->middleware([Throttle::AUTH->middleware()]);
         Route::post('/reset-password/{token}', [ResetPasswordController::class, 'index'])->middleware([Throttle::AUTH->middleware()])->whereAlphaNumeric('token')->name('password.reset');
-        Route::post('/refresh', [RefreshTokenController::class, 'index']);
-        Route::post('/logout', [LogoutController::class, 'index'])->middleware([Throttle::AUTH->middleware(), Guards::API->middleware()]);
     });
 
     Route::prefix('account')->group(function () {
+        Route::post('/refresh', [RefreshTokenController::class, 'index']);
         Route::get('/verify/{id}/{hash}', [ProfileVerifyController::class, 'index'])->middleware(['signed', Throttle::AUTH->middleware()])->whereNumber('id')->whereAlphaNumeric('hash')->name('verification.verify');
         Route::middleware([Guards::API->middleware()])->group(function () {
             Route::get('/', [ProfileController::class, 'index']);
+            Route::post('/logout', [LogoutController::class, 'index'])->middleware([Throttle::AUTH->middleware()]);
             Route::post('/resend-verification', [ProfileResendVerificationController::class, 'index'])->middleware([Throttle::AUTH->middleware()])->name('verification.notice');
             Route::middleware(['verified', Throttle::AUTH->middleware()])->group(function () {
                 Route::post('/update', [ProfileUpdateController::class, 'index']);

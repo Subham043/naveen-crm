@@ -5,8 +5,8 @@ namespace App\Features\Authentication\Services;
 use App\Features\Roles\Enums\Roles;
 use App\Features\Users\Models\User;
 use App\Features\Users\Services\UserService;
-use App\Http\Enums\Guards;
 use Illuminate\Support\Facades\Auth;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthService
 {
@@ -42,9 +42,13 @@ class AuthService
 
 	public function refresh_token(): string
 	{
-		/** @var \Tymon\JWTAuth\JWTGuard $guard */
-		$guard = Auth::guard(Guards::API->value());
-		return $guard->refresh();
+		$token = JWTAuth::getToken();
+
+		if (! $token) {
+			throw new \Exception('Token not found');
+		}
+
+		return JWTAuth::refresh($token);
 	}
 
 	public function profile(string $guard): User

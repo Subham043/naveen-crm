@@ -7,8 +7,6 @@ export const api_routes = {
     login: "/api/v1/auth/login",
     forgotPassword: "/api/v1/auth/forgot-password",
     resetPassword: "/api/v1/auth/reset-password",
-    refresh: "/api/v1/auth/refresh",
-    logout: "/api/v1/auth/logout",
   },
   account: {
     get: "/api/v1/account",
@@ -16,6 +14,8 @@ export const api_routes = {
     updatePassword: "/api/v1/account/password",
     verify: "/api/v1/account/verify",
     resendVerificationCode: "/api/v1/account/resend-verification",
+    refresh: "/api/v1/account/refresh",
+    logout: "/api/v1/account/logout",
   },
   roles: "/api/v1/roles",
   users: {

@@ -2,18 +2,15 @@
 
 namespace App\Features\Roles\Traits;
 
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Builder;
 
 trait RoleTrait
 {
-    public function currentRole(): Attribute
+    public function currentRole()
     {
         $roles_array = $this->getRoleNames();
         $currentRole = count($roles_array) > 0 ? $roles_array[0] : null;
-        return Attribute::make(
-            get: fn () => $currentRole,
-        );
+        return $currentRole;
     }
 
     public function scopeHasRoles(Builder $query, array $roles): Builder

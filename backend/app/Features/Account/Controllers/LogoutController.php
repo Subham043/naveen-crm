@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Features\Authentication\Controllers;
+namespace App\Features\Account\Controllers;
 
 use App\Features\Authentication\Services\AuthService;
 use App\Http\Controllers\Controller;

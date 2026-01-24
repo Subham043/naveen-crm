@@ -28,7 +28,7 @@ class UserExport implements FromQuery, WithHeadings, WithMapping
 			$data->name,
 			$data->email,
 			(string) $data->phone.' ',
-			$data->current_role,
+			$data->currentRole(),
 			$data->is_blocked ? 'Yes' : 'No',
 			$data->created_at->format('Y-m-d H:i:s'),
 		];

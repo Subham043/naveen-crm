@@ -30,10 +30,10 @@ export const verifyProfileHandler = async (id: number, token: string, signal?: G
 }
 
 export const logoutHandler = async (signal?: GenericAbortSignal | undefined) => {
-    await axios.post(api_routes.auth.logout, {}, { signal });
+    await axios.post(api_routes.account.logout, {}, { signal });
 }
 
 export const refreshTokenHandler = async (signal?: GenericAbortSignal | undefined) => {
-    const response = await publicAxios.post<{ token: string }>(api_routes.auth.refresh, {}, { ...axiosConfig, signal });
+    const response = await publicAxios.post<{ token: string }>(api_routes.account.refresh, {}, { ...axiosConfig, signal });
     return response.data.token;
 }

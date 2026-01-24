@@ -2,9 +2,7 @@
 
 namespace App\Features\Users\Controllers;
 
-use App\Features\Roles\Enums\Roles;
 use App\Http\Controllers\Controller;
-use App\Http\Enums\Guards;
 use App\Features\Users\Exports\UserExport;
 use App\Features\Users\Services\UserService;
 use Maatwebsite\Excel\Facades\Excel;
@@ -21,7 +19,6 @@ class UserExportController extends Controller
     public function index(){
         ini_set('memory_limit', '-1');
         ini_set('max_execution_time', 300);
-        return (auth()->guard(Guards::API->value())->user()->current_role == Roles::SuperAdmin->value()) ? Excel::download(new UserExport($this->userService->query()), 'users.xlsx') : abort(403);
-        // return Excel::download(new UserExport($this->userService->query()), 'users.xlsx');
+        return Excel::download(new UserExport($this->userService->query()), 'users.xlsx');
     }
 }
