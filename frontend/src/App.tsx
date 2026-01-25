@@ -31,6 +31,7 @@ const Login = React.lazy(() => import("@/pages/Auth/Login"));
 const ForgotPassword = React.lazy(() => import("@/pages/Auth/ForgotPassword"));
 const ResetPassword = React.lazy(() => import("@/pages/Auth/ResetPassword"));
 const User = React.lazy(() => import("@/pages/User/index.tsx"));
+const Order = React.lazy(() => import("@/pages/Order/index.tsx"));
 const SalesOrder = React.lazy(() => import("@/pages/SalesOrder/index.tsx"));
 const SalesOrderView = React.lazy(
   () => import("@/pages/SalesOrder/SalesOrderViewPage/index.tsx"),
@@ -98,6 +99,7 @@ function App() {
                     }
                   >
                     <Route path={page_routes.users.link} element={<User />} />
+                    <Route path={page_routes.orders.link} element={<Order />} />
                   </Route>
                 </Route>
               </Route>

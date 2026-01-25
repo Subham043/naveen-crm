@@ -39,7 +39,7 @@ export type RoleType = {
   updated_at: string;
 };
 
-export type SalesOrderType = {
+export type OrderType = {
   id: number;
   name: string;
   email: string;
@@ -87,6 +87,8 @@ export type SalesOrderType = {
   created_at: string;
   updated_at: string;
 }
+
+export type SalesOrderType = OrderType;
 
 export type TexteditorImageType = {
   id: number;

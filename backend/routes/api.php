@@ -36,6 +36,7 @@ use App\Http\Enums\Throttle;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->middleware([Throttle::API->middleware()])->group(function () {
+    //Auth Routes
     Route::prefix('auth')->group(function () {
         Route::post('/login', [LoginController::class, 'index'])->middleware([Throttle::AUTH->middleware()]);
         Route::post('/register', [RegisterController::class, 'index'])->middleware([Throttle::AUTH->middleware()]);
@@ -43,6 +44,7 @@ Route::prefix('v1')->middleware([Throttle::API->middleware()])->group(function (
         Route::post('/reset-password/{token}', [ResetPasswordController::class, 'index'])->middleware([Throttle::AUTH->middleware()])->whereAlphaNumeric('token')->name('password.reset');
     });
 
+    //Account Routes
     Route::prefix('account')->group(function () {
         Route::post('/refresh', [RefreshTokenController::class, 'index']);
         Route::get('/verify/{id}/{hash}', [ProfileVerifyController::class, 'index'])->middleware(['signed', Throttle::AUTH->middleware()])->whereNumber('id')->whereAlphaNumeric('hash')->name('verification.verify');
@@ -58,6 +60,7 @@ Route::prefix('v1')->middleware([Throttle::API->middleware()])->group(function (
     });
 
     Route::middleware([Guards::API->middleware(), 'verified'])->group(function () {
+        //Admin Routes
         Route::middleware([Roles::SuperAdmin->middleware()])->group(function () {
             Route::get('/roles', [RoleAllController::class, 'index']);
 
@@ -78,6 +81,8 @@ Route::prefix('v1')->middleware([Throttle::API->middleware()])->group(function (
                 Route::post('/approval/{id}', [OrderApprovalController::class, 'index']);
             });
         });
+
+        //Sales Routes
         Route::prefix('sales')->middleware([Roles::Sales->middleware()])->group(function () {
             Route::prefix('order')->group(function () {
                 Route::get('/excel', [SalesOrderExportController::class, 'index']);

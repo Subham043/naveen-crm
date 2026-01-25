@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Features\Order\Resources\OrderCollection;
 use App\Features\Order\Services\OrderService;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Enums\Guards;
 
 class OrderApprovalController extends Controller
 {
@@ -26,7 +28,7 @@ class OrderApprovalController extends Controller
         try {
             //code...
             $this->orderService->update(
-                $request->validated(),
+                [...$request->validated(), 'approval_by_id' => Auth::guard(Guards::API->value())->user()->id, 'approval_at' => now()],
                 $order
             );
             return response()->json(["message" => $request->order_status == OrderStatus::Approved->value() ? "Order approved successfully." : "Order rejected successfully.", "data" => OrderCollection::make($order)], 200);

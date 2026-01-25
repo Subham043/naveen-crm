@@ -36,6 +36,12 @@ export const menus: LinksGroupProps[] = [
     canAccess: ["Super-Admin"],
   },
   {
+    link: page_routes.orders.link,
+    label: page_routes.orders.name,
+    icon: IconFileSpreadsheet,
+    canAccess: ["Super-Admin"],
+  },
+  {
     link: page_routes.sales_orders.link,
     label: page_routes.sales_orders.name,
     icon: IconFileSpreadsheet,

@@ -28,6 +28,12 @@ export const api_routes = {
     verify: "/api/v1/users/verify",
     excel: "/api/v1/users/excel",
   },
+  orders: {
+    paginate: "/api/v1/order/paginate",
+    view: "/api/v1/order/view",
+    excel: "/api/v1/order/excel",
+    approval: "/api/v1/order/approval",
+  },
   sales: {
     orders: {
       paginate: "/api/v1/sales/order/paginate",
