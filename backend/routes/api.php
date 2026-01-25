@@ -11,6 +11,10 @@ use App\Features\Authentication\Controllers\ForgotPasswordController;
 use App\Features\Authentication\Controllers\LoginController;
 use App\Features\Authentication\Controllers\RegisterController;
 use App\Features\Authentication\Controllers\ResetPasswordController;
+use App\Features\Order\Controllers\OrderApprovalController;
+use App\Features\Order\Controllers\OrderExportController;
+use App\Features\Order\Controllers\OrderPaginateController;
+use App\Features\Order\Controllers\OrderViewController;
 use App\Features\Roles\Controllers\RoleAllController;
 use App\Features\Roles\Enums\Roles;
 use App\Features\SalesTeam\Controllers\SalesOrderCreateController;
@@ -66,6 +70,12 @@ Route::prefix('v1')->middleware([Throttle::API->middleware()])->group(function (
                 Route::get('/verify/{id}', [UserToggleVerificationController::class, 'index']);
                 Route::get('/view/{id}', [UserViewController::class, 'index']);
                 Route::delete('/delete/{id}', [UserDeleteController::class, 'index']);
+            });
+            Route::prefix('order')->group(function () {
+                Route::get('/excel', [OrderExportController::class, 'index']);
+                Route::get('/paginate', [OrderPaginateController::class, 'index']);
+                Route::get('/view/{id}', [OrderViewController::class, 'index']);
+                Route::post('/approval/{id}', [OrderApprovalController::class, 'index']);
             });
         });
         Route::prefix('sales')->middleware([Roles::Sales->middleware()])->group(function () {

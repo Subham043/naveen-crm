@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Features\SalesTeam\Resources;
+namespace App\Features\Order\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
 
-class SalesOrderUserCollection extends JsonResource
+class OrderUserCollection extends JsonResource
 {
 	/**
 	 * Transform the resource collection into an array.

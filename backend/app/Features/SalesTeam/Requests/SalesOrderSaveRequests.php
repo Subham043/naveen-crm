@@ -7,6 +7,7 @@ use App\Http\Enums\Guards;
 use App\Http\Requests\InputRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\Enum;
+use Illuminate\Validation\Rule;
 
 class SalesOrderSaveRequests extends InputRequest
 {
@@ -36,7 +37,7 @@ class SalesOrderSaveRequests extends InputRequest
             'billing_address' => ['required_if:is_active,1', 'string'],
             'part_name' => ['required_if:is_active,1', 'string', 'max:255'],
             'part_description' => ['required_if:is_active,1', 'string'],
-            'lead_source' => ['required', 'numeric', new Enum(LeadSource::class)],
+            'lead_source' => ['required', 'numeric', new Enum(LeadSource::class), Rule::notIn([LeadSource::Website->value])],
         ];
     }
 
