@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Spatie\QueryBuilder\AllowedFilter;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
-use Illuminate\Auth\Events\Registered;
+// use Illuminate\Auth\Events\Registered;
 
 class UserService
 {
@@ -60,7 +60,7 @@ class UserService
 	public function create(array $data): User
 	{
 		$user = $this->model()->create([...$data]);
-		event(new Registered($user));
+		// event(new Registered($user));
 		return $user;
 	}
 
