@@ -25,19 +25,17 @@ class UserToggleStatusController extends Controller
 
     public function index($id){
         $user = $this->userService->getById($id);
-        DB::beginTransaction();
         try {
             //code...
-            $this->userService->update(['is_blocked'=>!$user->is_blocked], $user);
-            if($user->is_blocked){
-                return response()->json(["message" => "User blocked successfully.", "data" => UserCollection::make($user)], 200);
+            $updated_user = DB::transaction(function () use ($user) {
+                return $this->userService->update(['is_blocked'=>!$user->is_blocked], $user);
+            });
+            if($updated_user->is_blocked){
+                return response()->json(["message" => "User blocked successfully.", "data" => UserCollection::make($updated_user)], 200);
             }
-            return response()->json(["message" => "User unblocked successfully.", "data" => UserCollection::make($user)], 200);
+            return response()->json(["message" => "User unblocked successfully.", "data" => UserCollection::make($updated_user)], 200);
         } catch (\Throwable $th) {
-            DB::rollBack();
             return response()->json(["message" => "Something went wrong. Please try again"], 400);
-        } finally {
-            DB::commit();
         }
 
     }

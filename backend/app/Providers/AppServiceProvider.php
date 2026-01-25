@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Features\Order\Events\PublicOrderCreated;
+use App\Features\Order\Listeners\AssignAgentToCreatedPublicOrderListener;
 use App\Features\Roles\Enums\Roles;
 use App\Features\Users\Models\User;
 use App\Http\Enums\Throttle;
@@ -14,6 +16,7 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Support\Facades\Event;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -59,6 +62,12 @@ class AppServiceProvider extends ServiceProvider
             $message->line('If you did not create an account, no further action is required.');
             return $message;
         });
+
+        //event listeners
+        Event::listen(
+            PublicOrderCreated::class,
+            AssignAgentToCreatedPublicOrderListener::class,
+        );
 
         //global rate limiter for all api requests
         RateLimiter::for(Throttle::API->value(), function (Request $request) {

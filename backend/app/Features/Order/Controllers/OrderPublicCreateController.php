@@ -3,6 +3,7 @@
 namespace App\Features\Order\Controllers;
 
 use App\Features\Order\Enums\LeadSource;
+use App\Features\Order\Events\PublicOrderCreated;
 use App\Http\Controllers\Controller;
 use App\Features\Order\Requests\OrderPublicCreateRequests;
 use App\Features\Order\Services\OrderService;
@@ -21,23 +22,21 @@ class OrderPublicCreateController extends Controller
      */
     
     public function index(OrderPublicCreateRequests $request){
-        DB::beginTransaction();
         try {
-            //code...
-            $this->orderService->create([
-                ...$request->validated(),
-                'is_active' => true,
-                'is_created_by_agent' => false,
-                'lead_source' => LeadSource::Website->value(),
-            ]);
+            $order = DB::transaction(function () use ($request) {
+                return $this->orderService->create([
+                    ...$request->validated(),
+                    'is_active' => false,
+                    'is_created_by_agent' => false,
+                    'lead_source' => LeadSource::Website->value(),
+                ]);
+            });
+            event(new PublicOrderCreated($order));
             return response()->json([
                 "message" => "Order created successfully.",
             ], 201);
         } catch (\Throwable $th) {
-            DB::rollBack();
             return response()->json(["message" => "Something went wrong. Please try again"], 400);
-        } finally {
-            DB::commit();
         }
 
     }

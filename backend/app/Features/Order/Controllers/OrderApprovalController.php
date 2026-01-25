@@ -24,19 +24,17 @@ class OrderApprovalController extends Controller
      */
     public function index(OrderApprovalRequests $request, $id){
         $order = $this->orderService->getByIdAndActiveStatus($id, true);
-        DB::beginTransaction();
         try {
             //code...
-            $this->orderService->update(
-                [...$request->validated(), 'approval_by_id' => Auth::guard(Guards::API->value())->user()->id, 'approval_at' => now()],
-                $order
-            );
+            DB::transaction(function () use ($request, $order) {
+                $this->orderService->update(
+                    [...$request->validated(), 'approval_by_id' => Auth::guard(Guards::API->value())->user()->id, 'approval_at' => now()],
+                    $order
+                );
+            });
             return response()->json(["message" => $request->order_status == OrderStatus::Approved->value() ? "Order approved successfully." : "Order rejected successfully.", "data" => OrderCollection::make($order)], 200);
         } catch (\Throwable $th) {
-            DB::rollBack();
             return response()->json(["message" => "Something went wrong. Please try again"], 400);
-        } finally {
-            DB::commit();
         }
 
     }

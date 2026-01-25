@@ -23,19 +23,17 @@ class SalesOrderSubmitForApprovalController extends Controller
         if(empty($order->country_code) || empty($order->phone) || empty($order->billing_address) || empty($order->part_name) || empty($order->part_description)){
             return response()->json(["message" => "Please fill all the required fields to submit for approval."], 400);
         }
-        DB::beginTransaction();
         try {
             //code...
-            $this->salesOrderService->update(
-                ['is_active' => 1],
-                $order
-            );
-            return response()->json(["message" => "Order submitted for approval successfully.", "data" => SalesOrderCollection::make($order)], 200);
+            $updated_order = DB::transaction(function () use ($order) {
+                return $this->salesOrderService->update(
+                    ['is_active' => 1],
+                    $order
+                );
+            });
+            return response()->json(["message" => "Order submitted for approval successfully.", "data" => SalesOrderCollection::make($updated_order)], 200);
         } catch (\Throwable $th) {
-            DB::rollBack();
             return response()->json(["message" => "Something went wrong. Please try again"], 400);
-        } finally {
-            DB::commit();
         }
 
     }

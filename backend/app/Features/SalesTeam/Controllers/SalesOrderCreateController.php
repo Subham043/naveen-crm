@@ -23,23 +23,21 @@ class SalesOrderCreateController extends Controller
      */
     
     public function index(SalesOrderSaveRequests $request){
-        DB::beginTransaction();
         try {
             //code...
-            $order = $this->salesOrderService->create([
-                ...$request->validated(),
-                'sales_user_id' => Auth::guard(Guards::API->value())->user()->id,
-                'is_created_by_agent' => true,
-            ]);
+            $order = DB::transaction(function () use ($request) {
+                return $this->salesOrderService->create([
+                    ...$request->validated(),
+                    'sales_user_id' => Auth::guard(Guards::API->value())->user()->id,
+                    'is_created_by_agent' => true,
+                ]);
+            });
             return response()->json([
                 "message" => $request->is_active ? "Order saved successfully." : "Order saved as draft successfully.",
                 "data" => SalesOrderCollection::make($order),
             ], 201);
         } catch (\Throwable $th) {
-            DB::rollBack();
             return response()->json(["message" => "Something went wrong. Please try again"], 400);
-        } finally {
-            DB::commit();
         }
 
     }

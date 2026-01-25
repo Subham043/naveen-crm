@@ -20,19 +20,17 @@ class UserDeleteController extends Controller
      */
     public function index($id){
         $user = $this->userService->getById($id);
-        DB::beginTransaction();
         try {
             //code...
-            $this->userService->delete(
-                $user
-            );
-            $this->userService->syncRoles([], $user);
+            DB::transaction(function () use ($user) {
+                $this->userService->delete(
+                    $user
+                );
+                $this->userService->syncRoles([], $user);
+            });
             return response()->json(["message" => "User deleted successfully.", "data" => UserCollection::make($user)], 200);
         } catch (\Throwable $th) {
-            DB::rollBack();
             return response()->json(["message" => "Something went wrong. Please try again"], 400);
-        } finally {
-            DB::commit();
         }
     }
 

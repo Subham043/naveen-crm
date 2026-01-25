@@ -7,7 +7,6 @@ use App\Features\Users\Models\User;
 use App\Features\Users\Services\UserService;
 use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Facades\JWTAuth;
-use Illuminate\Auth\Events\Registered;
 
 class AuthService
 {
@@ -16,7 +15,6 @@ class AuthService
     {
         $user = (new UserService)->create($data);
         (new UserService)->syncRoles([Roles::Sales->value()], $user);
-		event(new Registered($user));
         $user->refresh();
         return $user;
     }

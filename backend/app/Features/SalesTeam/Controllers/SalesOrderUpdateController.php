@@ -22,19 +22,17 @@ class SalesOrderUpdateController extends Controller
      */
     public function index(SalesOrderSaveRequests $request, $id){
         $order = $this->salesOrderService->getByIdAndIsInactive($id);
-        DB::beginTransaction();
         try {
             //code...
-            $this->salesOrderService->update(
-                [...$request->validated()],
-                $order
-            );
-            return response()->json(["message" => "Order updated successfully.", "data" => SalesOrderCollection::make($order)], 200);
+            $updated_order = DB::transaction(function () use ($request, $order) {
+                return $this->salesOrderService->update(
+                    [...$request->validated()],
+                    $order
+                );
+            });
+            return response()->json(["message" => "Order updated successfully.", "data" => SalesOrderCollection::make($updated_order)], 200);
         } catch (\Throwable $th) {
-            DB::rollBack();
             return response()->json(["message" => "Something went wrong. Please try again"], 400);
-        } finally {
-            DB::commit();
         }
 
     }

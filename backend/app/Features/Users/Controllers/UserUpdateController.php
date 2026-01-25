@@ -22,21 +22,19 @@ class UserUpdateController extends Controller
      */
     public function index(UserUpdatePostRequest $request, $id){
         $user = $this->userService->getById($id);
-        DB::beginTransaction();
         try {
             //code...
-            $this->userService->update(
-                [...$request->except(['role'])],
-                $user
-            );
-            $this->userService->syncRoles([$request->role], $user);
-            return response()->json(["message" => "User updated successfully.", "data" => UserCollection::make($user)], 200);
+            $updated_user = DB::transaction(function () use ($request, $user) {
+                $updated_user = $this->userService->update(
+                    [...$request->except(['role'])],
+                    $user
+                );
+                $this->userService->syncRoles([$request->role], $updated_user);
+                return $updated_user;
+            });
+            return response()->json(["message" => "User updated successfully.", "data" => UserCollection::make($updated_user)], 200);
         } catch (\Throwable $th) {
-            DB::rollBack();
             return response()->json(["message" => "Something went wrong. Please try again"], 400);
-        } finally {
-            DB::commit();
         }
-
     }
 }
