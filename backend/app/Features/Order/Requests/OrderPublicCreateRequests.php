@@ -25,7 +25,7 @@ class OrderPublicCreateRequests extends InputRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255',
+            'email' => 'required|string|email:rfc,dns|max:255',
             'phone' => ['required', 'numeric'],
             'country_code' => ['required', 'string', 'max:255'],
             'billing_address' => ['required', 'string'],

@@ -12,6 +12,8 @@ use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Http\Exceptions\ThrottleRequestsException;
+use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Notifications\Messages\MailMessage;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -45,6 +47,17 @@ class AppServiceProvider extends ServiceProvider
             $finalUrl = "{$frontendBase}/{$token}";
 
             return $finalUrl;
+        });
+
+        //custom message for verify email
+        VerifyEmail::toMailUsing(function (object $notifiable, string $url) {
+            $message = (new MailMessage);
+            $message->subject('Verify Email Address');
+            $message->greeting('Hello ' . $notifiable->name);
+            $message->line('Please click the button below to verify your email address.');
+            $message->action('Verify Email Address', $url);
+            $message->line('If you did not create an account, no further action is required.');
+            return $message;
         });
 
         //global rate limiter for all api requests

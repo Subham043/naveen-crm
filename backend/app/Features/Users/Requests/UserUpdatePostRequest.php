@@ -16,7 +16,7 @@ class UserUpdatePostRequest extends UserCreatePostRequest
     {
         $parentRules = parent::rules();
         return array_merge($parentRules, [
-            'email' => 'required|string|email|max:255|unique:users,email,'.$this->route('id'),
+            'email' => 'required|string|email:rfc,dns|max:255|unique:users,email,'.$this->route('id'),
             'phone' => 'nullable|numeric|digits:10|unique:users,phone,'.$this->route('id'),
             'password' => ['nullable',
                 'string',

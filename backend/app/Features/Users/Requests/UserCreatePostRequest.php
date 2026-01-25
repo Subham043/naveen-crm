@@ -29,7 +29,7 @@ class UserCreatePostRequest extends InputRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'email' => 'required|string|email:rfc,dns|max:255|unique:users',
             'phone' => 'nullable|numeric|digits:10|unique:users',
             'is_blocked' => 'required|boolean',
             'role' => 'required|string|exists:Spatie\Permission\Models\Role,name',

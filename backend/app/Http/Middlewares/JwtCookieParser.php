@@ -26,7 +26,7 @@ class JwtCookieParser
             $token = $request->cookie(config('session.cookie'));
             // $request->headers->set('Authorization', 'Bearer ' . $token);
         }
-        if ($token) {
+        if ($token && str_contains($token, '.')) {
             // Make JWTAuth aware of the token
             JWTAuth::setToken($token);
 

@@ -30,7 +30,7 @@ class SalesOrderSaveRequests extends InputRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255',
+            'email' => 'required|string|email:rfc,dns|max:255',
             'is_active' => 'required|boolean',
             'phone' => ['required_if:is_active,1', 'numeric'],
             'country_code' => ['required_if:is_active,1', 'string', 'max:255'],

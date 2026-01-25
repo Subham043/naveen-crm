@@ -4,13 +4,13 @@ namespace App\Features\Users\Services;
 
 use App\Features\Authentication\Services\AuthCache;
 use App\Features\Users\Models\User;
+use App\Features\Users\Notifications\AdminVerifyEmailNotification;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\QueryBuilder\AllowedFilter;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
-// use Illuminate\Auth\Events\Registered;
 
 class UserService
 {
@@ -60,7 +60,10 @@ class UserService
 	public function create(array $data): User
 	{
 		$user = $this->model()->create([...$data]);
-		// event(new Registered($user));
+		$user->notify(new AdminVerifyEmailNotification(
+			createdByAdmin: true,
+			plainPassword: $data['password']
+		));
 		return $user;
 	}
 
