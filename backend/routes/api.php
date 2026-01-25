@@ -60,7 +60,7 @@ Route::prefix('v1')->middleware([Throttle::API->middleware()])->group(function (
         });
     });
 
-    Route::post('/order/public/create', [OrderPublicCreateController::class, 'index']);
+    Route::post('/order/public/create', [OrderPublicCreateController::class, 'index'])->middleware([Throttle::AUTH->middleware()]);
 
     Route::middleware([Guards::API->middleware(), 'verified'])->group(function () {
         //Admin Routes
