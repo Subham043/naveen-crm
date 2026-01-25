@@ -1,24 +1,23 @@
 import CustomLoading from "@/components/CustomLoading";
-import { useSalesOrderQuery } from "@/utils/data/query/sales_order";
+import { useOrderQuery } from "@/utils/data/query/order";
 import { Blockquote, Box, Button, Group, Title } from "@mantine/core";
 import { IconArrowNarrowLeft, IconX } from "@tabler/icons-react";
 import { useParams } from "react-router";
 import { useNavigate } from "react-router";
-import SalesOrderCustomerInfo from "./SalesOrderCustomerInfo";
-import SalesOrderAgentInfo from "./SalesOrderAgentInfo";
-import SalesOrderPaymentInfo from "./SalesOrderPaymentInfo";
-import SalesOrderYardInfo from "./SalesOrderYardInfo";
-import SalesOrderLogisticInfo from "./SalesOrderLogisticInfo";
-import SalesOrderEditBtn from "./SalesOrderEditBtn";
-import SalesOrderSubmitForApprovalBtn from "./SalesOrderSubmitForApprovalBtn";
+import OrderCustomerInfo from "./OrderCustomerInfo";
+import OrderAgentInfo from "./OrderAgentInfo";
+import OrderPaymentInfo from "./OrderPaymentInfo";
+import OrderYardInfo from "./OrderYardInfo";
+import OrderLogisticInfo from "./OrderLogisticInfo";
+import OrderViewApprovalBtn from "./OrderViewApprovalBtn";
 
-export default function SalesOrderView() {
+export default function OrderView() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
   const isNumber = id !== undefined && !isNaN(Number(id));
 
-  const { data, isLoading, isFetching, isRefetching } = useSalesOrderQuery(
+  const { data, isLoading, isFetching, isRefetching } = useOrderQuery(
     Number(id),
     isNumber,
   );
@@ -45,10 +44,17 @@ export default function SalesOrderView() {
         <Group justify="space-between" align="center">
           <Title order={3}>Order #{data.id}</Title>
           <Group gap="xs" justify="flex-end" align="center">
-            <SalesOrderEditBtn is_active={data.is_active} id={data.id} />
-            <SalesOrderSubmitForApprovalBtn
+            <OrderViewApprovalBtn
               is_active={data.is_active}
               id={data.id}
+              order_status={data.order_status as 0 | 1 | 2}
+              update_order_status={1}
+            />
+            <OrderViewApprovalBtn
+              is_active={data.is_active}
+              id={data.id}
+              order_status={data.order_status as 0 | 1 | 2}
+              update_order_status={2}
             />
             <Button
               leftSection={<IconArrowNarrowLeft size={16} />}
@@ -63,7 +69,7 @@ export default function SalesOrderView() {
         </Group>
       </Box>
 
-      <SalesOrderCustomerInfo
+      <OrderCustomerInfo
         name={data.name}
         email={data.email}
         phone_number={data.phone_number}
@@ -78,7 +84,7 @@ export default function SalesOrderView() {
         approval_at={data.approval_at}
       />
 
-      <SalesOrderAgentInfo
+      <OrderAgentInfo
         sales_user_info={data.sales_user_info}
         is_created_by_agent={data.is_created_by_agent}
         assigned_at={data.assigned_at}
@@ -86,7 +92,7 @@ export default function SalesOrderView() {
 
       {data.order_status === 1 && (
         <>
-          <SalesOrderPaymentInfo
+          <OrderPaymentInfo
             total_price={data.total_price}
             cost_price={data.cost_price}
             shipping_cost={data.shipping_cost}
@@ -95,9 +101,9 @@ export default function SalesOrderView() {
             payment_status_info={data.payment_status_info}
           />
 
-          <SalesOrderYardInfo yard_located={data.yard_located} />
+          <OrderYardInfo yard_located={data.yard_located} />
 
-          <SalesOrderLogisticInfo
+          <OrderLogisticInfo
             tracking_details={data.tracking_details}
             invoice_status_info={data.invoice_status_info}
             shipment_status_info={data.shipment_status_info}

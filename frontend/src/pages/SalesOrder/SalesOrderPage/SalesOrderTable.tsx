@@ -2,7 +2,7 @@ import TableRowLoading from "@/components/TableRowLoading";
 import TrippleDotMenu from "@/components/TrippleDotMenu";
 import PermittedLayout from "@/layouts/PermittedLayout";
 import type { SalesOrderType } from "@/utils/types";
-import { Avatar, Group, Menu, Table, Text } from "@mantine/core";
+import { Avatar, Box, Group, Menu, Table, Text } from "@mantine/core";
 import { IconEdit } from "@tabler/icons-react";
 import TableRowNotFound from "@/components/TableRowNotFound";
 import Datetime from "@/components/Datetime";
@@ -23,9 +23,11 @@ const SalesOrderTableRow = memo(
     name,
     email,
     phone_number,
+    part_name,
     lead_source_info,
     order_status,
     is_active,
+    is_created_by_agent,
     approval_by_info,
     approval_at,
     created_at,
@@ -40,7 +42,7 @@ const SalesOrderTableRow = memo(
       <Table.Tr key={id}>
         <Table.Td>{id}</Table.Td>
         <Table.Td>
-          <Group gap={7}>
+          <Group gap={7} align="flex-start">
             <Avatar
               name={name}
               color="initials"
@@ -48,14 +50,40 @@ const SalesOrderTableRow = memo(
               radius="xl"
               size={30}
             />
-            <Text fw={500} size="sm" lh={1} ml={3} tt="capitalize">
-              {name}
-            </Text>
+            <Box>
+              <Text fw={500} size="sm" lh={1} ml={3} tt="capitalize">
+                {name}
+              </Text>
+              <Text
+                fw={500}
+                fs="italic"
+                size="xs"
+                lh={1}
+                ml={3}
+                tt="lowercase"
+                mt={5}
+              >
+                {email}
+              </Text>
+              {phone_number && (
+                <Text
+                  fw={500}
+                  fs="italic"
+                  size="xs"
+                  lh={1}
+                  ml={3}
+                  tt="lowercase"
+                  mt={5}
+                >
+                  {phone_number}
+                </Text>
+              )}
+            </Box>
           </Group>
         </Table.Td>
-        <Table.Td tt="lowercase">{email}</Table.Td>
-        <Table.Td>{phone_number}</Table.Td>
+        <Table.Td>{part_name || "N/A"}</Table.Td>
         <Table.Td>{lead_source_info}</Table.Td>
+        <Table.Td>{is_created_by_agent ? "Yes" : "No"}</Table.Td>
         <Table.Td>
           <SalesOrderStatus
             is_active={is_active}
@@ -105,9 +133,9 @@ function SalesOrderTable({
           <Table.Tr bg={"var(--mantine-color-blue-light)"}>
             <Table.Th>ID</Table.Th>
             <Table.Th>NAME</Table.Th>
-            <Table.Th>EMAIL</Table.Th>
-            <Table.Th>PHONE</Table.Th>
+            <Table.Th>PART NAME</Table.Th>
             <Table.Th>SOURCE</Table.Th>
+            <Table.Th>SELF CREATED</Table.Th>
             <Table.Th>STATUS</Table.Th>
             <Table.Th>CREATED AT</Table.Th>
             <Table.Th />
@@ -115,7 +143,7 @@ function SalesOrderTable({
         </Table.Thead>
         <Table.Tbody>
           {loading ? (
-            <TableRowLoading colSpan={7} />
+            <TableRowLoading colSpan={8} />
           ) : salesOrders.length > 0 ? (
             salesOrders.map((item) => (
               <SalesOrderTableRow
@@ -157,7 +185,7 @@ function SalesOrderTable({
               />
             ))
           ) : (
-            <TableRowNotFound colSpan={7} />
+            <TableRowNotFound colSpan={8} />
           )}
         </Table.Tbody>
       </Table>

@@ -2,7 +2,7 @@ import TableRowLoading from "@/components/TableRowLoading";
 import TrippleDotMenu from "@/components/TrippleDotMenu";
 import PermittedLayout from "@/layouts/PermittedLayout";
 import type { OrderType } from "@/utils/types";
-import { Avatar, Group, Table, Text } from "@mantine/core";
+import { Avatar, Box, Group, Table, Text } from "@mantine/core";
 import TableRowNotFound from "@/components/TableRowNotFound";
 import Datetime from "@/components/Datetime";
 import { memo } from "react";
@@ -21,10 +21,13 @@ const OrderTableRow = memo(
     name,
     email,
     phone_number,
+    part_name,
     lead_source_info,
     order_status,
     is_active,
+    sales_user_info,
     approval_by_info,
+    total_price,
     approval_at,
     created_at,
   }: OrderType) => {
@@ -32,7 +35,7 @@ const OrderTableRow = memo(
       <Table.Tr key={id}>
         <Table.Td>{id}</Table.Td>
         <Table.Td>
-          <Group gap={7}>
+          <Group gap={7} align="flex-start">
             <Avatar
               name={name}
               color="initials"
@@ -40,14 +43,84 @@ const OrderTableRow = memo(
               radius="xl"
               size={30}
             />
-            <Text fw={500} size="sm" lh={1} ml={3} tt="capitalize">
-              {name}
-            </Text>
+            <Box>
+              <Text fw={500} size="sm" lh={1} ml={3} tt="capitalize">
+                {name}
+              </Text>
+              <Text
+                fw={500}
+                fs="italic"
+                size="xs"
+                lh={1}
+                ml={3}
+                tt="lowercase"
+                mt={5}
+              >
+                {email}
+              </Text>
+              {phone_number && (
+                <Text
+                  fw={500}
+                  fs="italic"
+                  size="xs"
+                  lh={1}
+                  ml={3}
+                  tt="lowercase"
+                  mt={5}
+                >
+                  {phone_number}
+                </Text>
+              )}
+            </Box>
           </Group>
         </Table.Td>
-        <Table.Td tt="lowercase">{email}</Table.Td>
-        <Table.Td>{phone_number}</Table.Td>
+        <Table.Td>{part_name || "N/A"}</Table.Td>
         <Table.Td>{lead_source_info}</Table.Td>
+        <Table.Td>
+          {sales_user_info ? (
+            <Group gap={7} align="flex-start">
+              <Avatar
+                name={sales_user_info.name}
+                color="initials"
+                alt={sales_user_info.name}
+                radius="xl"
+                size={30}
+              />
+              <Box>
+                <Text fw={500} size="sm" lh={1} ml={3} tt="capitalize">
+                  {sales_user_info.name}
+                </Text>
+                <Text
+                  fw={500}
+                  fs="italic"
+                  size="xs"
+                  lh={1}
+                  ml={3}
+                  tt="lowercase"
+                  mt={5}
+                >
+                  {sales_user_info.email}
+                </Text>
+                {sales_user_info.phone && (
+                  <Text
+                    fw={500}
+                    fs="italic"
+                    size="xs"
+                    lh={1}
+                    ml={3}
+                    tt="lowercase"
+                    mt={5}
+                  >
+                    {sales_user_info.phone}
+                  </Text>
+                )}
+              </Box>
+            </Group>
+          ) : (
+            "N/A"
+          )}
+        </Table.Td>
+        <Table.Td>{total_price || "N/A"}</Table.Td>
         <Table.Td>
           <OrderStatus
             is_active={is_active}
@@ -96,10 +169,11 @@ function OrderTable({ loading, orders }: OrderTableProps) {
         <Table.Thead>
           <Table.Tr bg={"var(--mantine-color-blue-light)"}>
             <Table.Th>ID</Table.Th>
-            <Table.Th>NAME</Table.Th>
-            <Table.Th>EMAIL</Table.Th>
-            <Table.Th>PHONE</Table.Th>
+            <Table.Th>CUSTOMER</Table.Th>
+            <Table.Th>PART NAME</Table.Th>
             <Table.Th>SOURCE</Table.Th>
+            <Table.Th>AGENT</Table.Th>
+            <Table.Th>TOTAL PRICE</Table.Th>
             <Table.Th>STATUS</Table.Th>
             <Table.Th>CREATED AT</Table.Th>
             <Table.Th />
@@ -107,7 +181,7 @@ function OrderTable({ loading, orders }: OrderTableProps) {
         </Table.Thead>
         <Table.Tbody>
           {loading ? (
-            <TableRowLoading colSpan={7} />
+            <TableRowLoading colSpan={9} />
           ) : orders.length > 0 ? (
             orders.map((item) => (
               <OrderTableRow
@@ -148,7 +222,7 @@ function OrderTable({ loading, orders }: OrderTableProps) {
               />
             ))
           ) : (
-            <TableRowNotFound colSpan={7} />
+            <TableRowNotFound colSpan={9} />
           )}
         </Table.Tbody>
       </Table>

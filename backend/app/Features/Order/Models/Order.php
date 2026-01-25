@@ -77,6 +77,8 @@ class Order extends Model
         'shipping_cost' => 'decimal:2',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'assigned_at' => 'datetime',
+        'approval_at' => 'datetime',
     ];
 
     protected $appends = ['sales_tax', 'gross_profit'];
