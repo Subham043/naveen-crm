@@ -15,8 +15,8 @@ class JwtCookieParser
             return $next($request);
         }
 
-        // Skip auth routes
-        if($request->is('api/v1/auth/*')){
+        // Skip auth routes and public order create route
+        if($request->is('api/v1/auth/*') || $request->is('api/v1/order/public/create')){
             return $next($request);
         }
 

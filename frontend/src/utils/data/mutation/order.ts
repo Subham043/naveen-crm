@@ -1,8 +1,8 @@
 import { useToast } from "@/hooks/useToast";
 import { useMutation } from "@tanstack/react-query";
 import { nprogress } from "@mantine/nprogress";
-import type { OrderApprovalFormValuesType } from "../schema/order";
-import { approvalOrderHandler } from "../dal/order";
+import type { OrderApprovalFormValuesType, OrderPublicCreateFormValuesType } from "../schema/order";
+import { approvalOrderHandler, createPublicOrderHandler } from "../dal/order";
 import { usePaginationQueryParam } from "@/hooks/usePaginationQueryParam";
 import { useSearchQueryParam } from "@/hooks/useSearchQueryParam";
 import type { PaginationQueryType, PaginationType, OrderType } from "@/utils/types";
@@ -39,6 +39,23 @@ export const useOrderApprovalMutation = (id: number) => {
         },
         onError: (error: any) => {
             toastError(error?.response?.data?.message || "Something went wrong, please try again later.");
+        },
+        onSettled: () => {
+            nprogress.complete();
+        }
+    });
+};
+
+export const useOrderPublicCreateMutation = () => {
+    const { toastSuccess } = useToast();
+
+    return useMutation({
+        mutationFn: async (val: OrderPublicCreateFormValuesType) => {
+            nprogress.start()
+            await createPublicOrderHandler(val);
+        },
+        onSuccess: () => {
+            toastSuccess("Order created successfully");
         },
         onSettled: () => {
             nprogress.complete();

@@ -22,7 +22,8 @@ class OrderService extends AbstractService
             'approvalBy' => function($query){
                 $query->select('id', 'name', 'email', 'phone');
             }
-        ]);
+        ])
+        ->whereHas('salesUser');
     }
 
     public function query(): QueryBuilder

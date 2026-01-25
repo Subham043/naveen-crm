@@ -39,6 +39,9 @@ const SalesOrder = React.lazy(() => import("@/pages/SalesOrder/index.tsx"));
 const SalesOrderView = React.lazy(
   () => import("@/pages/SalesOrder/SalesOrderViewPage/index.tsx"),
 );
+const OrderPublicForm = React.lazy(
+  () => import("@/pages/OrderPublicForm/index.tsx"),
+);
 
 function App() {
   return (
@@ -128,6 +131,12 @@ function App() {
           </Route>
         </Route>
 
+        <Route element={<AuthLayout />}>
+          <Route
+            path={page_routes.public_orders.link}
+            element={<OrderPublicForm />}
+          />
+        </Route>
         <Route element={<SuspenseOutlet />}>
           <Route path="*" element={<PageNotFound />} />
         </Route>

@@ -34,8 +34,8 @@ export default function Sidebar() {
           <CustomLoading color="white" size="sm" type="dots" />
         ) : (
           <>
-            {menus.map((item) => (
-              <LinksGroup {...item} key={item.label} />
+            {menus.map((item, index) => (
+              <LinksGroup {...item} key={index} />
             ))}
           </>
         )}

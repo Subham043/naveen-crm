@@ -8,6 +8,7 @@ export const page_routes = {
   reset_password: { link: "/reset-password", name: "Reset Password" },
   users: { link: "/users", name: "Users" },
   orders: { link: "/orders", name: "Orders" },
+  public_orders: { link: "/public/order", name: "Orders" },
   sales_orders: { link: "/sales/orders", name: "Orders" },
   dashboard: { link: "/", name: "Dashboard" },
 } as const;

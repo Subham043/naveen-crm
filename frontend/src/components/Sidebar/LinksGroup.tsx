@@ -17,19 +17,19 @@ export default function LinksGroup({
 }: LinksGroupProps) {
   const hasLinks = Array.isArray(links);
   const [opened, setOpened] = useState(initiallyOpened || false);
-  const items = (hasLinks ? links : []).map((link) => (
+  const items = (hasLinks ? links : []).map((link, index) => (
     <PermittedLayout
       outletType="children"
       allowedRoles={link.canAccess}
       allowLoading={false}
-      key={link.label}
+      key={index}
     >
       <NavLink
         className={({ isActive }) =>
           `${classes.sub_link} ${isActive ? classes.active : ""}`
         }
         to={link.link}
-        key={link.label}
+        key={index}
       >
         {link.label}
       </NavLink>

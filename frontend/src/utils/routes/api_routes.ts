@@ -33,6 +33,7 @@ export const api_routes = {
     view: "/api/v1/order/view",
     excel: "/api/v1/order/excel",
     approval: "/api/v1/order/approval",
+    publicCreate: "/api/v1/order/public/create",
   },
   sales: {
     orders: {
