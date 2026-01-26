@@ -1,7 +1,7 @@
 import Datetime from "@/components/Datetime";
 import { Badge } from "@mantine/core";
 
-interface OrderStatusProps {
+interface OrderApprovalStatusProps {
   is_active: boolean;
   order_status: number;
   approval_by_info: {
@@ -13,12 +13,12 @@ interface OrderStatusProps {
   approval_at?: string;
 }
 
-function OrderStatus({
+function OrderApprovalStatus({
   is_active,
   order_status,
   approval_by_info,
   approval_at,
-}: OrderStatusProps) {
+}: OrderApprovalStatusProps) {
   if (!is_active) {
     return <Badge color="gray">Saved As Draft</Badge>;
   }
@@ -50,4 +50,4 @@ function OrderStatus({
   return null;
 }
 
-export default OrderStatus;
+export default OrderApprovalStatus;

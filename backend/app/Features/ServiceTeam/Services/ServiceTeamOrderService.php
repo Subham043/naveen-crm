@@ -53,7 +53,18 @@ class ServiceTeamOrderService extends AbstractService
 
     public function syncYards(array $data, $order)
     {
-        // 1. Prepare data
+        // 1. Collect incoming IDs
+        $incomingIds = collect($data)
+            ->pluck('id')
+            ->filter()
+            ->values();
+
+        // 2. Delete removed yards
+        $order->yards()
+            ->whereNotIn('id', $incomingIds)
+            ->delete();
+
+        // 3. Prepare data
         $yards = collect($data)->map(function ($yard) use ($order) {
             return [
                 'id' => $yard['id'] ?? null, // important for update
@@ -65,8 +76,8 @@ class ServiceTeamOrderService extends AbstractService
             ];
         })->toArray();
 
-        // 2. Upsert
-        $order->yards()->upsert($yards, ['id'], ['yard', 'service_team_id', 'updated_at']);
+        // 4. Upsert
+        Yard::upsert($yards, ['id'], ['yard', 'updated_at']);
     }
 
     public function createComment(string $comment, $order)

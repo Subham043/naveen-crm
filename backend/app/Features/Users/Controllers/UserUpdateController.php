@@ -30,7 +30,7 @@ class UserUpdateController extends Controller
                     $user
                 );
                 $this->userService->syncRoles([$request->role], $updated_user);
-                return $updated_user;
+                return $updated_user->fresh();
             });
             return response()->json(["message" => "User updated successfully.", "data" => UserCollection::make($updated_user)], 200);
         } catch (\Throwable $th) {

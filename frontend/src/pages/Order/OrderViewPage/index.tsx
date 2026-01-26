@@ -4,12 +4,12 @@ import { Blockquote, Box, Button, Group, Title } from "@mantine/core";
 import { IconArrowNarrowLeft, IconX } from "@tabler/icons-react";
 import { useParams } from "react-router";
 import { useNavigate } from "react-router";
-import OrderCustomerInfo from "./OrderCustomerInfo";
-import OrderAgentInfo from "./OrderAgentInfo";
-import OrderPaymentInfo from "./OrderPaymentInfo";
-import OrderYardInfo from "./OrderYardInfo";
-import OrderLogisticInfo from "./OrderLogisticInfo";
 import OrderViewApprovalBtn from "./OrderViewApprovalBtn";
+import OrderViewCustomerInfo from "@/components/Order/OrderView/OrderViewCustomerInfo";
+import OrderViewAgentInfo from "@/components/Order/OrderView/OrderViewAgentInfo";
+import OrderViewPaymentInfo from "@/components/Order/OrderView/OrderViewPaymentInfo";
+import OrderViewYardInfo from "@/components/Order/OrderView/OrderViewYardInfo";
+import OrderViewLogisticInfo from "@/components/Order/OrderView/OrderViewLogisticInfo";
 
 export default function OrderView() {
   const { id } = useParams<{ id: string }>();
@@ -69,7 +69,7 @@ export default function OrderView() {
         </Group>
       </Box>
 
-      <OrderCustomerInfo
+      <OrderViewCustomerInfo
         name={data.name}
         email={data.email}
         phone_number={data.phone_number}
@@ -84,7 +84,7 @@ export default function OrderView() {
         approval_at={data.approval_at}
       />
 
-      <OrderAgentInfo
+      <OrderViewAgentInfo
         sales_user_info={data.sales_user_info}
         is_created_by_agent={data.is_created_by_agent}
         assigned_at={data.assigned_at}
@@ -92,21 +92,24 @@ export default function OrderView() {
 
       {data.order_status === 1 && (
         <>
-          <OrderPaymentInfo
+          <OrderViewPaymentInfo
             total_price={data.total_price}
             cost_price={data.cost_price}
             shipping_cost={data.shipping_cost}
             sales_tax={data.sales_tax}
             gross_profit={data.gross_profit}
-            payment_status_info={data.payment_status_info}
+            payment_status={data.payment_status}
           />
 
-          <OrderYardInfo yard_located={data.yard_located} />
+          <OrderViewYardInfo
+            yard_located={data.yard_located}
+            yards={data.yards}
+          />
 
-          <OrderLogisticInfo
+          <OrderViewLogisticInfo
             tracking_details={data.tracking_details}
-            invoice_status_info={data.invoice_status_info}
-            shipment_status_info={data.shipment_status_info}
+            invoice_status={data.invoice_status}
+            shipment_status={data.shipment_status}
           />
         </>
       )}

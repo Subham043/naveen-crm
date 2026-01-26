@@ -1,16 +1,22 @@
 import { Box, Divider, Paper, SimpleGrid, Text, Title } from "@mantine/core";
-import type { ServiceTeamOrderType } from "@/utils/types";
+import type { OrderType } from "@/utils/types";
+import OrderInvoiceStatus, {
+  type InvoiceStatus,
+} from "@/components/Order/OrderInvoiceStatus";
+import OrderShipmentStatus, {
+  type ShipmentStatus,
+} from "@/components/Order/OrderShipmentStatus";
 
 type Props = {
-  tracking_details: ServiceTeamOrderType["tracking_details"];
-  invoice_status_info: ServiceTeamOrderType["invoice_status_info"];
-  shipment_status_info: ServiceTeamOrderType["shipment_status_info"];
+  tracking_details: OrderType["tracking_details"];
+  invoice_status: OrderType["invoice_status"];
+  shipment_status: OrderType["shipment_status"];
 };
 
-function ServiceTeamOrderLogisticInfo({
+function OrderViewLogisticInfo({
   tracking_details,
-  invoice_status_info,
-  shipment_status_info,
+  invoice_status,
+  shipment_status,
 }: Props) {
   return (
     <Paper shadow="xs" mb="lg" withBorder>
@@ -32,17 +38,17 @@ function ServiceTeamOrderLogisticInfo({
             <Text fw={600} c="blue">
               Invoice Status
             </Text>
-            <Text size="sm" c="dimmed">
-              {invoice_status_info || "N/A"}
-            </Text>
+            <OrderInvoiceStatus
+              invoice_status={invoice_status as InvoiceStatus}
+            />
           </Box>
           <Box>
             <Text fw={600} c="blue">
               Shipping Status
             </Text>
-            <Text size="sm" c="dimmed">
-              {shipment_status_info || "N/A"}
-            </Text>
+            <OrderShipmentStatus
+              shipment_status={shipment_status as ShipmentStatus}
+            />
           </Box>
         </SimpleGrid>
       </Box>
@@ -50,4 +56,4 @@ function ServiceTeamOrderLogisticInfo({
   );
 }
 
-export default ServiceTeamOrderLogisticInfo;
+export default OrderViewLogisticInfo;

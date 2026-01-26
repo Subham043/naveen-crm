@@ -1,14 +1,14 @@
 import { Box, Divider, Paper, SimpleGrid, Text, Title } from "@mantine/core";
-import type { ServiceTeamOrderType } from "@/utils/types";
+import type { OrderType } from "@/utils/types";
 import Datetime from "@/components/Datetime";
 
 type Props = {
-  sales_user_info: ServiceTeamOrderType["sales_user_info"];
-  is_created_by_agent: ServiceTeamOrderType["is_created_by_agent"];
-  assigned_at: ServiceTeamOrderType["assigned_at"];
+  sales_user_info: OrderType["sales_user_info"];
+  is_created_by_agent: OrderType["is_created_by_agent"];
+  assigned_at: OrderType["assigned_at"];
 };
 
-function ServiceTeamOrderAgentInfo({
+function OrderViewAgentInfo({
   sales_user_info,
   is_created_by_agent,
   assigned_at,
@@ -70,4 +70,4 @@ function ServiceTeamOrderAgentInfo({
   );
 }
 
-export default ServiceTeamOrderAgentInfo;
+export default OrderViewAgentInfo;

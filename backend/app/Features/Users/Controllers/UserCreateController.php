@@ -31,7 +31,7 @@ class UserCreateController extends Controller
                     ]
                 );
                 $this->userService->syncRoles([$request->role], $user);
-                return $user;
+                return $user->fresh();
             });
             $user->notify(new AdminVerifyEmailNotification(
                 createdByAdmin: true,

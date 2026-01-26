@@ -4,7 +4,6 @@ namespace App\Features\ServiceTeam\Resources;
 
 use App\Features\Order\Resources\OrderCollection;
 use App\Features\ServiceTeam\Resources\ServiceTeamOrderCommentCollection;
-use App\Features\ServiceTeam\Resources\ServiceTeamOrderYardCollection;
 
 
 class ServiceTeamOrderCollection extends OrderCollection
@@ -19,7 +18,6 @@ class ServiceTeamOrderCollection extends OrderCollection
 	{
 		$parentArray = parent::toArray($request);
 		return array_merge($parentArray, [
-            'yards' => ServiceTeamOrderYardCollection::collection($this->yards),
             'comments' => ServiceTeamOrderCommentCollection::collection($this->comments),
 		]);
 	}

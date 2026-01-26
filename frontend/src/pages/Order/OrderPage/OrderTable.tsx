@@ -7,8 +7,8 @@ import TableRowNotFound from "@/components/TableRowNotFound";
 import Datetime from "@/components/Datetime";
 import { memo } from "react";
 import OrderViewBtn from "./OrderViewBtn";
-import OrderStatus from "../OrderViewPage/OrderStatus";
 import OrderApprovalBtn from "./OrderApprovalBtn";
+import OrderApprovalStatus from "@/components/Order/OrderApprovalStatus";
 
 type OrderTableProps = {
   orders: OrderType[];
@@ -122,7 +122,7 @@ const OrderTableRow = memo(
         </Table.Td>
         <Table.Td>{total_price || "N/A"}</Table.Td>
         <Table.Td>
-          <OrderStatus
+          <OrderApprovalStatus
             is_active={is_active}
             order_status={order_status}
             approval_by_info={approval_by_info}
@@ -192,6 +192,9 @@ function OrderTable({ loading, orders }: OrderTableProps) {
                 phone={item.phone}
                 country_code={item.country_code}
                 phone_number={item.phone_number}
+                part_name={item.part_name}
+                part_description={item.part_description}
+                billing_address={item.billing_address}
                 lead_source={item.lead_source}
                 lead_source_info={item.lead_source_info}
                 sales_user_id={item.sales_user_id}
@@ -219,6 +222,7 @@ function OrderTable({ loading, orders }: OrderTableProps) {
                 is_active={item.is_active}
                 created_at={item.created_at}
                 updated_at={item.updated_at}
+                yards={item.yards}
               />
             ))
           ) : (

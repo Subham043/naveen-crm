@@ -4,13 +4,13 @@ import { Blockquote, Box, Button, Group, Title } from "@mantine/core";
 import { IconArrowNarrowLeft, IconX } from "@tabler/icons-react";
 import { useParams } from "react-router";
 import { useNavigate } from "react-router";
-import SalesOrderCustomerInfo from "./SalesOrderCustomerInfo";
-import SalesOrderAgentInfo from "./SalesOrderAgentInfo";
-import SalesOrderPaymentInfo from "./SalesOrderPaymentInfo";
-import SalesOrderYardInfo from "./SalesOrderYardInfo";
-import SalesOrderLogisticInfo from "./SalesOrderLogisticInfo";
 import SalesOrderEditBtn from "./SalesOrderEditBtn";
 import SalesOrderSubmitForApprovalBtn from "./SalesOrderSubmitForApprovalBtn";
+import OrderViewAgentInfo from "@/components/Order/OrderView/OrderViewAgentInfo";
+import OrderViewPaymentInfo from "@/components/Order/OrderView/OrderViewPaymentInfo";
+import OrderViewYardInfo from "@/components/Order/OrderView/OrderViewYardInfo";
+import OrderViewLogisticInfo from "@/components/Order/OrderView/OrderViewLogisticInfo";
+import OrderViewCustomerInfo from "@/components/Order/OrderView/OrderViewCustomerInfo";
 
 export default function SalesOrderView() {
   const { id } = useParams<{ id: string }>();
@@ -63,7 +63,7 @@ export default function SalesOrderView() {
         </Group>
       </Box>
 
-      <SalesOrderCustomerInfo
+      <OrderViewCustomerInfo
         name={data.name}
         email={data.email}
         phone_number={data.phone_number}
@@ -78,7 +78,7 @@ export default function SalesOrderView() {
         approval_at={data.approval_at}
       />
 
-      <SalesOrderAgentInfo
+      <OrderViewAgentInfo
         sales_user_info={data.sales_user_info}
         is_created_by_agent={data.is_created_by_agent}
         assigned_at={data.assigned_at}
@@ -86,21 +86,24 @@ export default function SalesOrderView() {
 
       {data.order_status === 1 && (
         <>
-          <SalesOrderPaymentInfo
+          <OrderViewPaymentInfo
             total_price={data.total_price}
             cost_price={data.cost_price}
             shipping_cost={data.shipping_cost}
             sales_tax={data.sales_tax}
             gross_profit={data.gross_profit}
-            payment_status_info={data.payment_status_info}
+            payment_status={data.payment_status}
           />
 
-          <SalesOrderYardInfo yard_located={data.yard_located} />
+          <OrderViewYardInfo
+            yard_located={data.yard_located}
+            yards={data.yards}
+          />
 
-          <SalesOrderLogisticInfo
+          <OrderViewLogisticInfo
             tracking_details={data.tracking_details}
-            invoice_status_info={data.invoice_status_info}
-            shipment_status_info={data.shipment_status_info}
+            invoice_status={data.invoice_status}
+            shipment_status={data.shipment_status}
           />
         </>
       )}

@@ -23,6 +23,9 @@ class SalesOrderService extends AbstractService
             },
             'approvalBy' => function($query){
                 $query->select('id', 'name', 'email', 'phone');
+            },
+            'yards' => function($query){
+                $query->select('id', 'yard', 'order_id', 'service_team_id', 'created_at', 'updated_at');
             }
         ])->whereHas('salesUser', function($query){
             $query->where('id', Auth::guard(Guards::API->value())->user()->id);

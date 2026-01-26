@@ -8,7 +8,13 @@ import TableRowNotFound from "@/components/TableRowNotFound";
 import Datetime from "@/components/Datetime";
 import { memo, useCallback } from "react";
 import ServiceTeamOrderViewBtn from "./ServiceTeamOrderViewBtn";
-import ServiceTeamOrderStatus from "../ServiceTeamOrderViewPage/ServiceTeamStatus";
+import OrderShipmentStatus, {
+  type ShipmentStatus,
+} from "@/components/Order/OrderShipmentStatus";
+import type { PaymentStatus } from "@/components/Order/OrderPaymentStatus";
+import OrderPaymentStatus from "@/components/Order/OrderPaymentStatus";
+import type { InvoiceStatus } from "@/components/Order/OrderInvoiceStatus";
+import OrderInvoiceStatus from "@/components/Order/OrderInvoiceStatus";
 
 type ServiceTeamOrderTableProps = {
   serviceTeamOrders: ServiceTeamOrderType[];
@@ -24,11 +30,12 @@ const ServiceTeamOrderTableRow = memo(
     phone_number,
     part_name,
     lead_source_info,
-    order_status,
+    payment_status,
+    invoice_status,
+    shipment_status,
     is_active,
-    is_created_by_agent,
-    approval_by_info,
-    approval_at,
+    sales_user_info,
+    total_price,
     created_at,
     onEdit,
   }: ServiceTeamOrderType & {
@@ -82,13 +89,64 @@ const ServiceTeamOrderTableRow = memo(
         </Table.Td>
         <Table.Td>{part_name || "N/A"}</Table.Td>
         <Table.Td>{lead_source_info}</Table.Td>
-        <Table.Td>{is_created_by_agent ? "Yes" : "No"}</Table.Td>
         <Table.Td>
-          <ServiceTeamOrderStatus
-            is_active={is_active}
-            order_status={order_status}
-            approval_by_info={approval_by_info}
-            approval_at={approval_at}
+          {sales_user_info ? (
+            <Group gap={7} align="flex-start">
+              <Avatar
+                name={sales_user_info.name}
+                color="initials"
+                alt={sales_user_info.name}
+                radius="xl"
+                size={30}
+              />
+              <Box>
+                <Text fw={500} size="sm" lh={1} ml={3} tt="capitalize">
+                  {sales_user_info.name}
+                </Text>
+                <Text
+                  fw={500}
+                  fs="italic"
+                  size="xs"
+                  lh={1}
+                  ml={3}
+                  tt="lowercase"
+                  mt={5}
+                >
+                  {sales_user_info.email}
+                </Text>
+                {sales_user_info.phone && (
+                  <Text
+                    fw={500}
+                    fs="italic"
+                    size="xs"
+                    lh={1}
+                    ml={3}
+                    tt="lowercase"
+                    mt={5}
+                  >
+                    {sales_user_info.phone}
+                  </Text>
+                )}
+              </Box>
+            </Group>
+          ) : (
+            "N/A"
+          )}
+        </Table.Td>
+        <Table.Td>{total_price || "N/A"}</Table.Td>
+        <Table.Td>
+          <OrderPaymentStatus
+            payment_status={payment_status as PaymentStatus}
+          />
+        </Table.Td>
+        <Table.Td>
+          <OrderInvoiceStatus
+            invoice_status={invoice_status as InvoiceStatus}
+          />
+        </Table.Td>
+        <Table.Td>
+          <OrderShipmentStatus
+            shipment_status={shipment_status as ShipmentStatus}
           />
         </Table.Td>
         <Table.Td>
@@ -130,18 +188,21 @@ function ServiceTeamOrderTable({
         <Table.Thead>
           <Table.Tr bg={"var(--mantine-color-blue-light)"}>
             <Table.Th>ID</Table.Th>
-            <Table.Th>NAME</Table.Th>
+            <Table.Th>CUSTOMER</Table.Th>
             <Table.Th>PART NAME</Table.Th>
             <Table.Th>SOURCE</Table.Th>
-            <Table.Th>SELF CREATED</Table.Th>
-            <Table.Th>STATUS</Table.Th>
+            <Table.Th>AGENT</Table.Th>
+            <Table.Th>TOTAL PRICE</Table.Th>
+            <Table.Th>PAYMENT</Table.Th>
+            <Table.Th>INVOICE</Table.Th>
+            <Table.Th>SHIPMENT</Table.Th>
             <Table.Th>CREATED AT</Table.Th>
             <Table.Th />
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
           {loading ? (
-            <TableRowLoading colSpan={8} />
+            <TableRowLoading colSpan={11} />
           ) : serviceTeamOrders.length > 0 ? (
             serviceTeamOrders.map((item) => (
               <ServiceTeamOrderTableRow
@@ -152,6 +213,9 @@ function ServiceTeamOrderTable({
                 phone={item.phone}
                 country_code={item.country_code}
                 phone_number={item.phone_number}
+                part_name={item.part_name}
+                part_description={item.part_description}
+                billing_address={item.billing_address}
                 lead_source={item.lead_source}
                 lead_source_info={item.lead_source_info}
                 sales_user_id={item.sales_user_id}
@@ -185,7 +249,7 @@ function ServiceTeamOrderTable({
               />
             ))
           ) : (
-            <TableRowNotFound colSpan={8} />
+            <TableRowNotFound colSpan={11} />
           )}
         </Table.Tbody>
       </Table>

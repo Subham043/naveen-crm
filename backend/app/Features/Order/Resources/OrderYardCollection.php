@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Features\ServiceTeam\Resources;
+namespace App\Features\Order\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
 
-class ServiceTeamOrderYardCollection extends JsonResource
+class OrderYardCollection extends JsonResource
 {
 	/**
 	 * Transform the resource collection into an array.

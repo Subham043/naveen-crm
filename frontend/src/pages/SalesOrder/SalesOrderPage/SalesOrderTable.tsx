@@ -9,7 +9,7 @@ import Datetime from "@/components/Datetime";
 import { memo, useCallback } from "react";
 import SalesSubmitForApprovalBtn from "./SalesSubmitForApprovalBtn";
 import SalesOrderViewBtn from "./SalesOrderViewBtn";
-import SalesOrderStatus from "../SalesOrderViewPage/SalesOrderStatus";
+import OrderApprovalStatus from "@/components/Order/OrderApprovalStatus";
 
 type SalesOrderTableProps = {
   salesOrders: SalesOrderType[];
@@ -85,7 +85,7 @@ const SalesOrderTableRow = memo(
         <Table.Td>{lead_source_info}</Table.Td>
         <Table.Td>{is_created_by_agent ? "Yes" : "No"}</Table.Td>
         <Table.Td>
-          <SalesOrderStatus
+          <OrderApprovalStatus
             is_active={is_active}
             order_status={order_status}
             approval_by_info={approval_by_info}
@@ -132,7 +132,7 @@ function SalesOrderTable({
         <Table.Thead>
           <Table.Tr bg={"var(--mantine-color-blue-light)"}>
             <Table.Th>ID</Table.Th>
-            <Table.Th>NAME</Table.Th>
+            <Table.Th>CUSTOMER</Table.Th>
             <Table.Th>PART NAME</Table.Th>
             <Table.Th>SOURCE</Table.Th>
             <Table.Th>SELF CREATED</Table.Th>
@@ -154,6 +154,9 @@ function SalesOrderTable({
                 phone={item.phone}
                 country_code={item.country_code}
                 phone_number={item.phone_number}
+                part_name={item.part_name}
+                part_description={item.part_description}
+                billing_address={item.billing_address}
                 lead_source={item.lead_source}
                 lead_source_info={item.lead_source_info}
                 sales_user_id={item.sales_user_id}
@@ -181,6 +184,7 @@ function SalesOrderTable({
                 is_active={item.is_active}
                 created_at={item.created_at}
                 updated_at={item.updated_at}
+                yards={item.yards}
                 onEdit={onEdit}
               />
             ))

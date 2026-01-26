@@ -7,26 +7,26 @@ import {
   Text,
   Title,
 } from "@mantine/core";
-import ServiceTeamOrderStatus from "./ServiceTeamStatus";
-import type { ServiceTeamOrderType } from "@/utils/types";
+import type { OrderType } from "@/utils/types";
 import Datetime from "@/components/Datetime";
+import OrderApprovalStatus from "@/components/Order/OrderApprovalStatus";
 
 type Props = {
-  is_active: ServiceTeamOrderType["is_active"];
-  order_status: ServiceTeamOrderType["order_status"];
-  approval_by_info: ServiceTeamOrderType["approval_by_info"];
-  approval_at: ServiceTeamOrderType["approval_at"];
-  name: ServiceTeamOrderType["name"];
-  email: ServiceTeamOrderType["email"];
-  phone_number: ServiceTeamOrderType["phone_number"];
-  lead_source_info: ServiceTeamOrderType["lead_source_info"];
-  part_name: ServiceTeamOrderType["part_name"];
-  part_description: ServiceTeamOrderType["part_description"];
-  billing_address: ServiceTeamOrderType["billing_address"];
-  created_at: ServiceTeamOrderType["created_at"];
+  is_active: OrderType["is_active"];
+  order_status: OrderType["order_status"];
+  approval_by_info: OrderType["approval_by_info"];
+  approval_at: OrderType["approval_at"];
+  name: OrderType["name"];
+  email: OrderType["email"];
+  phone_number: OrderType["phone_number"];
+  lead_source_info: OrderType["lead_source_info"];
+  part_name: OrderType["part_name"];
+  part_description: OrderType["part_description"];
+  billing_address: OrderType["billing_address"];
+  created_at: OrderType["created_at"];
 };
 
-function ServiceTeamOrderCustomerInfo({
+function OrderViewCustomerInfo({
   is_active,
   order_status,
   approval_by_info,
@@ -45,7 +45,7 @@ function ServiceTeamOrderCustomerInfo({
       <Box p="sm" pos="relative">
         <Group justify="space-between" align="center">
           <Title order={5}>Customer Info</Title>
-          <ServiceTeamOrderStatus
+          <OrderApprovalStatus
             is_active={is_active}
             order_status={order_status}
             approval_by_info={approval_by_info}
@@ -126,4 +126,4 @@ function ServiceTeamOrderCustomerInfo({
   );
 }
 
-export default ServiceTeamOrderCustomerInfo;
+export default OrderViewCustomerInfo;

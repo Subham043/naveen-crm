@@ -1,5 +1,6 @@
 import { Controller, useFieldArray, useWatch } from "react-hook-form";
 import {
+  ActionIcon,
   Box,
   Button,
   Drawer,
@@ -17,6 +18,7 @@ import {
 import type { ExtendedModalProps } from "@/utils/types";
 import { useServiceTeamOrderForm } from "./useServiceTeamOrderForm";
 import TableRowNotFound from "@/components/TableRowNotFound";
+import { IconPlus, IconTrash } from "@tabler/icons-react";
 
 type Props = {
   modal: ExtendedModalProps<{ id: undefined }, { id: number }>;
@@ -207,15 +209,19 @@ export default function ServiceTeamOrderForm({
             <Paper shadow="xs" withBorder mt="md">
               <Box p="sm" pos="relative">
                 <Group justify="space-between" gap={10}>
-                  <Title order={4}>YARDS</Title>
-                  <Button
+                  <Title order={5}>YARD DETAILS</Title>
+                  <ActionIcon
                     variant="outline"
+                    color="cyan"
                     onClick={() =>
                       yardsInsert(yards.length, { yard: "", id: undefined })
                     }
                   >
-                    Add Yard
-                  </Button>
+                    <IconPlus
+                      style={{ width: "70%", height: "70%" }}
+                      stroke={1.5}
+                    />
+                  </ActionIcon>
                 </Group>
               </Box>
               <Box>
@@ -223,7 +229,7 @@ export default function ServiceTeamOrderForm({
                   <Table.Thead>
                     <Table.Tr bg={"var(--mantine-color-blue-light)"}>
                       <Table.Th>YARD</Table.Th>
-                      <Table.Th />
+                      <Table.Th w="50px" />
                     </Table.Tr>
                   </Table.Thead>
                   <Table.Tbody>
@@ -241,25 +247,29 @@ export default function ServiceTeamOrderForm({
                                   onChange={field.onChange}
                                   error={fieldState.error?.message}
                                   withAsterisk
-                                  rows={2}
+                                  rows={3}
                                 />
                               )}
                             />
                           </Table.Td>
                           <Table.Td>
-                            <Button
+                            <ActionIcon
                               variant="outline"
+                              color="red"
                               onClick={() => yardsRemove(index)}
                             >
-                              Delete
-                            </Button>
+                              <IconTrash
+                                style={{ width: "70%", height: "70%" }}
+                                stroke={1.5}
+                              />
+                            </ActionIcon>
                           </Table.Td>
                         </Table.Tr>
                       ))
                     ) : (
                       <TableRowNotFound
                         colSpan={2}
-                        message="No yard found. Please click on add yard button to add yard"
+                        message="No yard found. Please click on plus icon to add yard"
                       />
                     )}
                   </Table.Tbody>

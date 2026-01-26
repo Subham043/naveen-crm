@@ -1,22 +1,25 @@
 import { Box, Divider, Paper, SimpleGrid, Text, Title } from "@mantine/core";
-import type { SalesOrderType } from "@/utils/types";
+import type { OrderType } from "@/utils/types";
+import OrderPaymentStatus, {
+  type PaymentStatus,
+} from "@/components/Order/OrderPaymentStatus";
 
 type Props = {
-  total_price: SalesOrderType["total_price"];
-  cost_price: SalesOrderType["cost_price"];
-  shipping_cost: SalesOrderType["shipping_cost"];
-  sales_tax: SalesOrderType["sales_tax"];
-  gross_profit: SalesOrderType["gross_profit"];
-  payment_status_info: SalesOrderType["payment_status_info"];
+  total_price: OrderType["total_price"];
+  cost_price: OrderType["cost_price"];
+  shipping_cost: OrderType["shipping_cost"];
+  sales_tax: OrderType["sales_tax"];
+  gross_profit: OrderType["gross_profit"];
+  payment_status: OrderType["payment_status"];
 };
 
-function SalesOrderPaymentInfo({
+function OrderViewPaymentInfo({
   total_price,
   cost_price,
   shipping_cost,
   sales_tax,
   gross_profit,
-  payment_status_info,
+  payment_status,
 }: Props) {
   return (
     <Paper shadow="xs" mb="lg" withBorder>
@@ -52,7 +55,7 @@ function SalesOrderPaymentInfo({
           </Box>
           <Box>
             <Text fw={600} c="blue">
-              Sales Tax
+              ServiceTeam Tax
             </Text>
             <Text size="sm" c="dimmed">
               {sales_tax || "N/A"}
@@ -70,9 +73,9 @@ function SalesOrderPaymentInfo({
             <Text fw={600} c="blue">
               Payment Status
             </Text>
-            <Text size="sm" c="dimmed">
-              {payment_status_info}
-            </Text>
+            <OrderPaymentStatus
+              payment_status={payment_status as PaymentStatus}
+            />
           </Box>
         </SimpleGrid>
       </Box>
@@ -80,4 +83,4 @@ function SalesOrderPaymentInfo({
   );
 }
 
-export default SalesOrderPaymentInfo;
+export default OrderViewPaymentInfo;

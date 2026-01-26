@@ -1,12 +1,12 @@
 import { Box, Divider, Paper, SimpleGrid, Text, Title } from "@mantine/core";
-import type { ServiceTeamOrderType } from "@/utils/types";
+import type { OrderType } from "@/utils/types";
 
 type Props = {
-  yard_located: ServiceTeamOrderType["yard_located"];
-  yards: ServiceTeamOrderType["yards"];
+  yard_located: OrderType["yard_located"];
+  yards: OrderType["yards"];
 };
 
-function ServiceTeamOrderYardInfo({ yard_located, yards }: Props) {
+function OrderViewYardInfo({ yard_located, yards }: Props) {
   if (!yard_located || yards.length === 0) return null;
 
   return (
@@ -33,4 +33,4 @@ function ServiceTeamOrderYardInfo({ yard_located, yards }: Props) {
   );
 }
 
-export default ServiceTeamOrderYardInfo;
+export default OrderViewYardInfo;
