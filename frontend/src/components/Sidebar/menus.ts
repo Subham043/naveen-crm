@@ -47,6 +47,12 @@ export const menus: LinksGroupProps[] = [
     icon: IconFileSpreadsheet,
     canAccess: ["Sales-Team"],
   },
+  {
+    link: page_routes.service_team_orders.link,
+    label: page_routes.service_team_orders.name,
+    icon: IconFileSpreadsheet,
+    canAccess: ["Service-Team"],
+  },
   // {
   //   label: "Admin",
   //   icon: IconUserHexagon,

@@ -7,8 +7,6 @@ use App\Features\ServiceTeam\Requests\ServiceTeamOrderSaveRequests;
 use App\Features\ServiceTeam\Resources\ServiceTeamOrderCollection;
 use App\Features\ServiceTeam\Services\ServiceTeamOrderService;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Enums\Guards;
 
 class ServiceTeamOrderUpdateController extends Controller
 {
@@ -35,12 +33,9 @@ class ServiceTeamOrderUpdateController extends Controller
                     $this->serviceTeamOrderService->syncYards($request->yards, $updated_order);
                 }
                 if($request->has('comment')){
-                    $this->serviceTeamOrderService->createComment([
-                        'comment' => $request->comment,
-                        'service_team_id' => Auth::guard(Guards::API->value())->user()->id,
-                    ], $updated_order);
+                    $this->serviceTeamOrderService->createComment($request->comment, $updated_order);
                 }
-                return $updated_order;
+                return $updated_order->fresh();
             });
             return response()->json(["message" => "Order updated successfully.", "data" => ServiceTeamOrderCollection::make($updated_order)], 200);
         } catch (\Throwable $th) {

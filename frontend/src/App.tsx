@@ -39,6 +39,12 @@ const SalesOrder = React.lazy(() => import("@/pages/SalesOrder/index.tsx"));
 const SalesOrderView = React.lazy(
   () => import("@/pages/SalesOrder/SalesOrderViewPage/index.tsx"),
 );
+const ServiceTeamOrder = React.lazy(
+  () => import("@/pages/ServiceTeamOrder/index.tsx"),
+);
+const ServiceTeamOrderView = React.lazy(
+  () => import("@/pages/ServiceTeamOrder/ServiceTeamOrderViewPage/index.tsx"),
+);
 const OrderPublicForm = React.lazy(
   () => import("@/pages/OrderPublicForm/index.tsx"),
 );
@@ -92,6 +98,25 @@ function App() {
                     <Route
                       path={`${page_routes.sales_orders.link}/:id`}
                       element={<SalesOrderView />}
+                    />
+                  </Route>
+                  <Route
+                    element={
+                      <PermittedLayout
+                        outletType="outlet"
+                        allowedRoles={["Service-Team"]}
+                        allowLoading={true}
+                        display403={true}
+                      />
+                    }
+                  >
+                    <Route
+                      path={page_routes.service_team_orders.link}
+                      element={<ServiceTeamOrder />}
+                    />
+                    <Route
+                      path={`${page_routes.service_team_orders.link}/:id`}
+                      element={<ServiceTeamOrderView />}
                     />
                   </Route>
                   <Route

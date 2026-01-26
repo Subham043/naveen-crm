@@ -18,6 +18,8 @@ class ServiceTeamOrderYardCollection extends JsonResource
 		return [
 			'id' => $this->id,
 			'yard' => $this->yard,
+			'order_id' => $this->order_id,
+			'service_team_id' => $this->service_team_id,
 			'created_at' => $this->created_at,
 			'updated_at' => $this->updated_at,
 		];

@@ -45,6 +45,14 @@ export const api_routes = {
       submitForApproval: "/api/v1/sales/order/submit-for-approval",
     }
   },
+  serviceTeam: {
+    orders: {
+      paginate: "/api/v1/service-team/order/paginate",
+      update: "/api/v1/service-team/order/update",
+      view: "/api/v1/service-team/order/view",
+      excel: "/api/v1/service-team/order/excel",
+    }
+  },
   textEditor: {
     imageUpload: "/api/v1/admin/texteditor-image"
   }

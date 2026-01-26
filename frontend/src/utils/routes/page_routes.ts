@@ -10,5 +10,6 @@ export const page_routes = {
   orders: { link: "/orders", name: "Orders" },
   public_orders: { link: "/public/order", name: "Orders" },
   sales_orders: { link: "/sales/orders", name: "Orders" },
+  service_team_orders: { link: "/service-team/orders", name: "Orders" },
   dashboard: { link: "/", name: "Dashboard" },
 } as const;

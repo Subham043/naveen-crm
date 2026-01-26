@@ -4,6 +4,7 @@ namespace App\Features\ServiceTeam\Services;
 
 use App\Features\Order\Enums\OrderStatus;
 use App\Features\Order\Models\Order;
+use App\Features\Order\Models\Yard;
 use App\Http\Abstracts\AbstractService;
 use App\Http\Enums\Guards;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -11,6 +12,7 @@ use Spatie\QueryBuilder\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\QueryBuilder\AllowedFilter;
 use Illuminate\Support\Facades\Auth;
+
 
 class ServiceTeamOrderService extends AbstractService
 {
@@ -26,10 +28,10 @@ class ServiceTeamOrderService extends AbstractService
                 $query->select('id', 'name', 'email', 'phone');
             },
             'comments' => function($query){
-                $query->select('id', 'comment', 'created_at', 'updated_at')->where('service_team_id', Auth::guard(Guards::API->value())->user()->id);
+                $query->select('id', 'comment', 'order_id', 'service_team_id', 'created_at', 'updated_at');
             },
             'yards' => function($query){
-                $query->select('id', 'yard', 'created_at', 'updated_at');
+                $query->select('id', 'yard', 'order_id', 'service_team_id', 'created_at', 'updated_at');
             }
         ])
         ->whereHas('salesUser')
@@ -51,12 +53,28 @@ class ServiceTeamOrderService extends AbstractService
 
     public function syncYards(array $data, $order)
     {
-        $order->yards()->sync($data);
+        // 1. Prepare data
+        $yards = collect($data)->map(function ($yard) use ($order) {
+            return [
+                'id' => $yard['id'] ?? null, // important for update
+                'order_id' => $order->id,
+                'yard' => $yard['yard'],
+                'service_team_id' => Auth::guard(Guards::API->value())->user()->id,
+                'updated_at' => now(),
+                'created_at' => now(),
+            ];
+        })->toArray();
+
+        // 2. Upsert
+        $order->yards()->upsert($yards, ['id'], ['yard', 'service_team_id', 'updated_at']);
     }
 
-    public function createComment(array $data, $order)
+    public function createComment(string $comment, $order)
     {
-        $order->comments()->create($data);
+        $order->comments()->create([
+            'comment' => $comment,
+            'service_team_id' => Auth::guard(Guards::API->value())->user()->id,
+        ]);
     }
 
 }

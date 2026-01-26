@@ -90,6 +90,21 @@ export type OrderType = {
 
 export type SalesOrderType = OrderType;
 
+export type ServiceTeamOrderType = OrderType & {
+  yards: {
+    id: number;
+    yard: string;
+    created_at: string;
+    updated_at: string;
+  }[];
+  comments: {
+    id: number;
+    comment: string;
+    created_at: string;
+    updated_at: string;
+  }[];
+};
+
 export type TexteditorImageType = {
   id: number;
   image: string;
