@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Features\ServiceTeam\Resources;
+namespace App\Features\Order\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
 
-class ServiceTeamOrderCommentCollection extends JsonResource
+class OrderTimelineCollection extends JsonResource
 {
 	/**
 	 * Transform the resource collection into an array.
@@ -17,9 +17,11 @@ class ServiceTeamOrderCommentCollection extends JsonResource
 	{
 		return [
 			'id' => $this->id,
+			'message' => $this->message,
 			'comment' => $this->comment,
-			'order_id' => $this->order_id,
-			'service_team_id' => $this->service_team_id,
+			'properties' => $this->properties,
+			'user_id' => $this->user_id,
+			'done_by' => $this->user_id ? OrderUserCollection::make($this->doneBy) : null,
 			'created_at' => $this->created_at,
 			'updated_at' => $this->updated_at,
 		];

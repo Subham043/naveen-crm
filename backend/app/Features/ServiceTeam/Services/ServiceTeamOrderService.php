@@ -27,9 +27,6 @@ class ServiceTeamOrderService extends AbstractService
             'approvalBy' => function($query){
                 $query->select('id', 'name', 'email', 'phone');
             },
-            'comments' => function($query){
-                $query->select('id', 'comment', 'order_id', 'service_team_id', 'created_at', 'updated_at');
-            },
             'yards' => function($query){
                 $query->select('id', 'yard', 'order_id', 'service_team_id', 'created_at', 'updated_at');
             }
@@ -78,14 +75,6 @@ class ServiceTeamOrderService extends AbstractService
 
         // 4. Upsert
         Yard::upsert($yards, ['id'], ['yard', 'updated_at']);
-    }
-
-    public function createComment(string $comment, $order)
-    {
-        $order->comments()->create([
-            'comment' => $comment,
-            'service_team_id' => Auth::guard(Guards::API->value())->user()->id,
-        ]);
     }
 
 }

@@ -240,7 +240,6 @@ function ServiceTeamOrderTable({
                 approval_by_id={item.approval_by_id}
                 approval_by_info={item.approval_by_info}
                 approval_at={item.approval_at}
-                comments={item.comments}
                 yards={item.yards}
                 is_active={item.is_active}
                 created_at={item.created_at}

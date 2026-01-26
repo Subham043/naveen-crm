@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('timelines', function (Blueprint $table) {
             $table->id();
             $table->text('message');
+            $table->text('comment')->nullable();
             $table->json('properties')->nullable();
             $table->foreignId('order_id')->nullable()->index();
             $table->foreignId('user_id')->nullable()->index();

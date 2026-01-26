@@ -117,9 +117,4 @@ class Order extends Model
         return $this->hasMany(Yard::class, 'order_id');
     }
 
-    public function comments()
-    {
-        return $this->hasMany(Comment::class, 'order_id');
-    }
-
 }

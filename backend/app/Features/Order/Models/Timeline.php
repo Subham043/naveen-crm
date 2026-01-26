@@ -19,15 +19,17 @@ class Timeline extends Model
      */
     protected $fillable = [
         'message',
+        'comment',
         'properties',
         'order_id',
         'user_id',
     ];
 
     protected $attributes = [
+        'comment' => null,
         'order_id' => null,
         'user_id' => null,
-        'properties' => [],
+        'properties' => '[]',
     ];
 
     protected $casts = [

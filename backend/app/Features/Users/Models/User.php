@@ -5,7 +5,6 @@ namespace App\Features\Users\Models;
 use App\Features\Authentication\Notifications\ResetPasswordNotification;
 use App\Features\Authentication\Notifications\VerifyEmailNotification;
 use App\Features\Authentication\Services\AuthCache;
-use App\Features\Order\Models\Comment;
 use App\Features\Order\Models\Order;
 use App\Features\Order\Models\Timeline;
 use App\Features\Order\Models\Yard;
@@ -136,10 +135,5 @@ class User extends Authenticatable implements MustVerifyEmail, RoleTraitInterfac
     public function yards()
     {
         return $this->hasMany(Yard::class, 'service_team_id');
-    }
-
-    public function comments()
-    {
-        return $this->hasMany(Comment::class, 'service_team_id');
     }
 }

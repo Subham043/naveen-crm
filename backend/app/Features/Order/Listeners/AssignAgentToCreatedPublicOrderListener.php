@@ -19,9 +19,7 @@ class AssignAgentToCreatedPublicOrderListener implements ShouldQueue
      * Create the event listener.
      */
     public function __construct()
-    {
-        // ...
-    }
+    {}
 
     /**
      * Handle the event.
@@ -47,10 +45,38 @@ class AssignAgentToCreatedPublicOrderListener implements ShouldQueue
                 ->first();  
 
             if ($user) {
-                $order->update([
+                $order->fill([
                     'sales_user_id' => $user->id,
                     'assigned_at' => now(),
                 ]);
+                $order->timelines()->create([
+                    'comment'    => null,
+                    'properties' => json_encode([
+                        [
+                            'old' => [
+                                'field' => 'sales_user_id',
+                                'value' => null,
+                            ],
+                            'new' => [
+                                'field' => 'sales_user_id',
+                                'value' => $user->id,
+                            ],
+                        ],
+                        [
+                            'old' => [
+                                'field' => 'assigned_at',
+                                'value' => null,
+                            ],
+                            'new' => [
+                                'field' => 'assigned_at',
+                                'value' => now(),
+                            ],
+                        ],
+                    ]),
+                    'message'    => "Order#{$order->id} was auto-assigned to agent named {$user->name}<{$user->email}>",
+                    'user_id'    => $user->id,
+                ]);
+                $order->save();
             }
         });
     }
