@@ -32,6 +32,10 @@ use App\Features\SalesTeam\Controllers\SalesOrderPaginateController;
 use App\Features\SalesTeam\Controllers\SalesOrderSubmitForApprovalController;
 use App\Features\SalesTeam\Controllers\SalesOrderUpdateController;
 use App\Features\SalesTeam\Controllers\SalesOrderViewController;
+use App\Features\ServiceTeam\Controllers\ServiceTeamOrderExportController;
+use App\Features\ServiceTeam\Controllers\ServiceTeamOrderPaginateController;
+use App\Features\ServiceTeam\Controllers\ServiceTeamOrderUpdateController;
+use App\Features\ServiceTeam\Controllers\ServiceTeamOrderViewController;
 use App\Http\Enums\Guards;
 use App\Http\Enums\Throttle;
 use Illuminate\Support\Facades\Route;
@@ -82,6 +86,16 @@ Route::prefix('v1')->middleware([Throttle::API->middleware()])->group(function (
                 Route::get('/paginate', [OrderPaginateController::class, 'index']);
                 Route::get('/view/{id}', [OrderViewController::class, 'index']);
                 Route::post('/approval/{id}', [OrderApprovalController::class, 'index']);
+            });
+        });
+
+        //Service Team Routes
+        Route::prefix('service-team')->middleware([Roles::Service->middleware()])->group(function () {
+            Route::prefix('order')->group(function () {
+                Route::get('/excel', [ServiceTeamOrderExportController::class, 'index']);
+                Route::get('/paginate', [ServiceTeamOrderPaginateController::class, 'index']);
+                Route::post('/update/{id}', [ServiceTeamOrderUpdateController::class, 'index']);
+                Route::get('/view/{id}', [ServiceTeamOrderViewController::class, 'index']);
             });
         });
 

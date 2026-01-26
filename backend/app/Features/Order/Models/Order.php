@@ -83,11 +83,6 @@ class Order extends Model
 
     protected $appends = ['sales_tax', 'gross_profit'];
 
-    // public function cities()
-    // {
-    //     return $this->hasMany(City::class, 'state_id');
-    // }
-
     public function salesTax(): Attribute
     {
         return Attribute::make(
@@ -110,6 +105,21 @@ class Order extends Model
     public function approvalBy()
     {
         return $this->belongsTo(User::class, 'approval_by_id')->withDefault();
+    }
+
+    public function timelines()
+    {
+        return $this->hasMany(Timeline::class, 'order_id');
+    }
+
+    public function yards()
+    {
+        return $this->hasMany(Yard::class, 'order_id');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'order_id');
     }
 
 }
