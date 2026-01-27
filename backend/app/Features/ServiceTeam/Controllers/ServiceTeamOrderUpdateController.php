@@ -54,7 +54,7 @@ class ServiceTeamOrderUpdateController extends Controller
             });
             return response()->json(["message" => "Order updated successfully.", "data" => ServiceTeamOrderCollection::make($updated_order)], 200);
         } catch (\Throwable $th) {
-            throw $th;
+            // throw $th;
             return response()->json(["message" => "Something went wrong. Please try again"], 400);
         }
 
