@@ -2,6 +2,7 @@
 
 namespace App\Features\Authentication\Controllers;
 
+use App\Features\Authentication\DTO\RegisterDTO;
 use App\Features\Authentication\Requests\RegisterPostRequest;
 use App\Features\Authentication\Resources\AuthCollection;
 use App\Features\Authentication\Services\AuthService;
@@ -17,7 +18,7 @@ class RegisterController extends Controller
         try {
             //code...
             $user = DB::transaction(function () use ($request) {
-                return $this->authService->register([...$request->safe()->except(['captcha'])]);
+                return $this->authService->register(RegisterDTO::fromRequest($request));
             });
             event(new Registered($user));
             return response()->json([

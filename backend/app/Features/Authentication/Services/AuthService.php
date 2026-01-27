@@ -2,7 +2,11 @@
 
 namespace App\Features\Authentication\Services;
 
+use App\Features\Authentication\DTO\LoginDTO;
+use App\Features\Authentication\DTO\RegisterDTO;
 use App\Features\Roles\Enums\Roles;
+use App\Features\Users\DTO\UserCreateDTO;
+use App\Features\Users\DTO\UserRoleDTO;
 use App\Features\Users\Models\User;
 use App\Features\Users\Services\UserService;
 use Illuminate\Support\Facades\Auth;
@@ -11,17 +15,24 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 class AuthService
 {
 
-    public function register(array $data): User
+    public function register(RegisterDTO $data): User
     {
-        $user = (new UserService)->create($data);
-        (new UserService)->syncRoles([Roles::Sales->value()], $user);
+		$userDTo = new UserCreateDTO(
+			name: $data->name,
+			email: $data->email,
+			password: $data->password,
+			phone: $data->phone,
+			is_blocked: false,
+		);
+        $user = (new UserService)->create($userDTo);
+        (new UserService)->syncRoles($user, [new UserRoleDTO(role: Roles::Sales->value())]);
         $user->refresh();
         return $user;
     }
 
-    public function login(array $credentials, string $guard)
+    public function login(LoginDTO $credentials, string $guard)
 	{
-		return Auth::guard($guard)->attempt($credentials);
+		return Auth::guard($guard)->attempt($credentials->toArray());
 	}
 
 	public function set_cookie(string $token): \Symfony\Component\HttpFoundation\Cookie

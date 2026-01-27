@@ -2,6 +2,7 @@
 
 namespace App\Features\Authentication\Controllers;
 
+use App\Features\Authentication\DTO\LoginDTO;
 use App\Features\Authentication\Requests\LoginPostRequest;
 use App\Features\Authentication\Resources\AuthCollection;
 use App\Features\Authentication\Services\AuthService;
@@ -14,7 +15,7 @@ class LoginController extends Controller
 
     public function index(LoginPostRequest $request){
 
-        $token = $this->authService->login([...$request->safe()->except(['captcha']), 'is_blocked' => 0], Guards::API->value());
+        $token = $this->authService->login(LoginDTO::fromRequest($request), Guards::API->value());
 
         if ($token) {
             $user = $this->authService->profile(Guards::API->value());
