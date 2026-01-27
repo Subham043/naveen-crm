@@ -2,6 +2,8 @@
 
 namespace App\Features\ServiceTeam\Controllers;
 
+use App\Features\ServiceTeam\DTO\ServiceTeamOrderSaveDTO;
+use App\Features\ServiceTeam\DTO\YardDTO;
 use App\Features\Timeline\Services\TimelineService;
 use App\Http\Controllers\Controller;
 use App\Features\ServiceTeam\Requests\ServiceTeamOrderSaveRequests;
@@ -27,23 +29,25 @@ class ServiceTeamOrderUpdateController extends Controller
         try {
             //code...
             $updated_order = DB::transaction(function () use ($request, $order) {
-                $data = $request->safe()->except(['yards', 'comment']);
-                $order->fill($data);
+                $order->fill(ServiceTeamOrderSaveDTO::fromRequest($request)->toArray());
 
                 // ---- PREPARE yard changes BEFORE saving ----
-                $yardChanges = [];
+                // $yardChanges = [];
 
                 if ($request->yard_located && $request->has('yards')) {
-                    $yardChanges = $this->timelineService->prepareYardChanges($order, $request->yards);
+                    $yards_collection = collect($request->yards)->map(function ($yard) {
+                        return new YardDTO($yard['yard'], $yard['id'] ?? null);
+                    }); 
+                    // $yardChanges = $this->timelineService->prepareYardChanges($order, $request->yards);
+                    $this->serviceTeamOrderService->syncYards(
+                        $yards_collection->toArray(), 
+                        $order
+                    );
                 }
 
-                if($request->yard_located && $request->has('yards')){
-                    $this->serviceTeamOrderService->syncYards($request->yards, $order);
-                }
-
-                if($request->has('comment')){
-                    $this->timelineService->createTimelineFromRequest($request, $order, $yardChanges, 'update', null);
-                }
+                // if($request->has('comment')){
+                //     $this->timelineService->createTimelineFromRequest($request, $order, $yardChanges, 'update', null);
+                // }
 
                 $order->save();
                 return $order->fresh();

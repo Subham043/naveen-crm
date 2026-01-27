@@ -14,7 +14,7 @@ class LogoutController extends Controller
 
     public function index(){
 
-        $this->authService->logout(Guards::API->value());
+        $this->authService->logout(Guards::API);
         return response()->json([
             'message' => 'Logged out successfully.',
         ], 200)->withoutCookie(config('session.cookie'));

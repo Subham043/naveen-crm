@@ -2,6 +2,7 @@
 
 namespace App\Features\Order\Controllers;
 
+use App\Features\Order\DTO\OrderPublicCreateDTO;
 use App\Features\Order\Enums\LeadSource;
 use App\Features\Order\Events\PublicOrderCreated;
 use App\Http\Controllers\Controller;
@@ -25,7 +26,7 @@ class OrderPublicCreateController extends Controller
         try {
             $order = DB::transaction(function () use ($request) {
                 return $this->orderService->create([
-                    ...$request->validated(),
+                    ...OrderPublicCreateDTO::fromRequest($request)->toArray(),
                     'is_active' => false,
                     'is_created_by_agent' => false,
                     'lead_source' => LeadSource::Website->value(),

@@ -9,6 +9,7 @@ use App\Features\Users\DTO\UserCreateDTO;
 use App\Features\Users\DTO\UserRoleDTO;
 use App\Features\Users\Models\User;
 use App\Features\Users\Services\UserService;
+use App\Http\Enums\Guards;
 use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -30,9 +31,9 @@ class AuthService
         return $user;
     }
 
-    public function login(LoginDTO $credentials, string $guard)
+    public function login(LoginDTO $credentials, Guards $guard)
 	{
-		return Auth::guard($guard)->attempt($credentials->toArray());
+		return Auth::guard($guard->value())->attempt($credentials->toArray());
 	}
 
 	public function set_cookie(string $token): \Symfony\Component\HttpFoundation\Cookie
@@ -62,15 +63,15 @@ class AuthService
 		return JWTAuth::refresh($token);
 	}
 
-	public function profile(string $guard): User
+	public function profile(Guards $guard): User
 	{
 		return AuthCache::getCachedUser($guard);
 	}
 
-	public function logout(string $guard): void
+	public function logout(Guards $guard): void
 	{
-		AuthCache::forget(Auth::guard($guard)->id());
-		Auth::guard($guard)->logout(true);
+		AuthCache::forget(Auth::guard($guard->value())->id());
+		Auth::guard($guard->value())->logout(true);
 	}
 
 }

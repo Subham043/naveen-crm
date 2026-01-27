@@ -2,6 +2,7 @@
 
 namespace App\Features\SalesTeam\Controllers;
 
+use App\Features\SalesTeam\DTO\SalesOrderSaveDTO;
 use App\Http\Controllers\Controller;
 use App\Features\SalesTeam\Requests\SalesOrderSaveRequests;
 use App\Features\SalesTeam\Resources\SalesOrderCollection;
@@ -27,7 +28,7 @@ class SalesOrderCreateController extends Controller
             //code...
             $order = DB::transaction(function () use ($request) {
                 return $this->salesOrderService->create([
-                    ...$request->validated(),
+                    ...SalesOrderSaveDTO::fromRequest($request)->toArray(),
                     'sales_user_id' => Auth::guard(Guards::API->value())->user()->id,
                     'is_created_by_agent' => true,
                 ]);

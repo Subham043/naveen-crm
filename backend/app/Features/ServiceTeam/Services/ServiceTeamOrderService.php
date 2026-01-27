@@ -5,6 +5,7 @@ namespace App\Features\ServiceTeam\Services;
 use App\Features\Order\Enums\OrderStatus;
 use App\Features\Order\Models\Order;
 use App\Features\Order\Models\Yard;
+use App\Features\ServiceTeam\DTO\YardDTO;
 use App\Http\Abstracts\AbstractService;
 use App\Http\Enums\Guards;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -48,10 +49,18 @@ class ServiceTeamOrderService extends AbstractService
     }
 
 
+    /**
+	 * @param YardDTO[] $yards
+	 * @param Order $order
+	 */
     public function syncYards(array $data, $order)
     {
+        $yard_array = array_map(
+			static fn (YardDTO $dto) => $dto->toArray(),
+			$data
+		);
         // 1. Collect incoming IDs
-        $incomingIds = collect($data)
+        $incomingIds = collect($yard_array)
             ->pluck('id')
             ->filter()
             ->values();
@@ -62,7 +71,7 @@ class ServiceTeamOrderService extends AbstractService
             ->delete();
 
         // 3. Prepare data
-        $yards = collect($data)->map(function ($yard) use ($order) {
+        $yards = collect($yard_array)->map(function ($yard) use ($order) {
             return [
                 'id' => $yard['id'] ?? null, // important for update
                 'order_id' => $order->id,

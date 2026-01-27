@@ -2,6 +2,7 @@
 
 namespace App\Features\SalesTeam\Controllers;
 
+use App\Features\SalesTeam\DTO\SalesOrderSaveDTO;
 use App\Http\Controllers\Controller;
 use App\Features\SalesTeam\Requests\SalesOrderSaveRequests;
 use App\Features\SalesTeam\Resources\SalesOrderCollection;
@@ -26,7 +27,7 @@ class SalesOrderUpdateController extends Controller
             //code...
             $updated_order = DB::transaction(function () use ($request, $order) {
                 return $this->salesOrderService->update(
-                    [...$request->validated()],
+                    SalesOrderSaveDTO::fromRequest($request)->toArray(),
                     $order
                 );
             });

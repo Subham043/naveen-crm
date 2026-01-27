@@ -2,6 +2,7 @@
 
 namespace App\Features\Order\Controllers;
 
+use App\Features\Order\DTO\OrderApprovalDTO;
 use App\Features\Order\Enums\OrderStatus;
 use App\Features\Order\Requests\OrderApprovalRequests;
 use App\Http\Controllers\Controller;
@@ -28,7 +29,7 @@ class OrderApprovalController extends Controller
             //code...
             DB::transaction(function () use ($request, $order) {
                 $this->orderService->update(
-                    [...$request->validated(), 'approval_by_id' => Auth::guard(Guards::API->value())->user()->id, 'approval_at' => now()],
+                    [...OrderApprovalDTO::fromRequest($request)->toArray(), 'approval_by_id' => Auth::guard(Guards::API->value())->user()->id, 'approval_at' => now()],
                     $order
                 );
             });

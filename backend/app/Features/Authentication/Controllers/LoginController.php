@@ -15,10 +15,10 @@ class LoginController extends Controller
 
     public function index(LoginPostRequest $request){
 
-        $token = $this->authService->login(LoginDTO::fromRequest($request), Guards::API->value());
+        $token = $this->authService->login(LoginDTO::fromRequest($request), Guards::API);
 
         if ($token) {
-            $user = $this->authService->profile(Guards::API->value());
+            $user = $this->authService->profile(Guards::API);
             $cookie = $this->authService->set_cookie($token);
             return response()->json([
                 'message' => 'Logged in successfully.',
