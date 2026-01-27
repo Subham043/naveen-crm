@@ -6,7 +6,7 @@ use App\Features\Authentication\Notifications\ResetPasswordNotification;
 use App\Features\Authentication\Notifications\VerifyEmailNotification;
 use App\Features\Authentication\Services\AuthCache;
 use App\Features\Order\Models\Order;
-use App\Features\Order\Models\Timeline;
+use App\Features\Timeline\Models\Timeline;
 use App\Features\Order\Models\Yard;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Features\Roles\Interfaces\RoleTraitInterface;

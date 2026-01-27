@@ -28,7 +28,7 @@ class UserToggleStatusController extends Controller
         try {
             //code...
             $updated_user = DB::transaction(function () use ($user) {
-                return $this->userService->update(['is_blocked'=>!$user->is_blocked], $user);
+                return $this->userService->toggleBlock($user);
             });
             if($updated_user->is_blocked){
                 return response()->json(["message" => "User blocked successfully.", "data" => UserCollection::make($updated_user)], 200);

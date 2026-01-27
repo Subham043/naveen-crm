@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Features\Order\Models;
+namespace App\Features\Timeline\Models;
 
+use App\Features\Order\Models\Order;
 use App\Features\Users\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Features\Order\Controllers;
+namespace App\Features\Timeline\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Features\Order\Resources\OrderTimelineCollection;
-use App\Features\Order\Services\TimelineService;
+use App\Features\Timeline\Resources\TimelineCollection;
+use App\Features\Timeline\Services\TimelineService;
 use Illuminate\Http\Request;
 
-class OrderTimelinePaginateController extends Controller
+class TimelinePaginateController extends Controller
 {
     public function __construct(private TimelineService $timelineService){}
 
@@ -15,11 +15,11 @@ class OrderTimelinePaginateController extends Controller
      * Returns a paginated collection of users.
      *
      * @param Request $request
-     * @return OrderTimelineCollection
+     * @return TimelineCollection
      */
     public function index(Request $request, $order_id){
         $data = $this->timelineService->paginate($order_id, $request->total ?? 10);
-        return OrderTimelineCollection::collection($data);
+        return TimelineCollection::collection($data);
     }
 
 }

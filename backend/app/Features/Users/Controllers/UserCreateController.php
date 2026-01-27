@@ -2,6 +2,8 @@
 
 namespace App\Features\Users\Controllers;
 
+use App\Features\Users\DTO\UserCreateDTO;
+use App\Features\Users\DTO\UserRoleDTO;
 use App\Features\Users\Notifications\AdminVerifyEmailNotification;
 use App\Http\Controllers\Controller;
 use App\Features\Users\Requests\UserCreatePostRequest;
@@ -26,11 +28,9 @@ class UserCreateController extends Controller
             //code...
             $user = DB::transaction(function () use ($request) {
                 $user = $this->userService->create(
-                    [
-                        ...$request->except('role'),
-                    ]
+                    UserCreateDTO::fromRequest($request)
                 );
-                $this->userService->syncRoles([$request->role], $user);
+                $this->userService->syncRoles($user, [UserRoleDTO::fromRequest($request)]);
                 return $user->fresh();
             });
             $user->notify(new AdminVerifyEmailNotification(

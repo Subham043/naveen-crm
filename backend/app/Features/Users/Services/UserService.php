@@ -3,6 +3,9 @@
 namespace App\Features\Users\Services;
 
 use App\Features\Authentication\Services\AuthCache;
+use App\Features\Users\DTO\UserCreateDTO;
+use App\Features\Users\DTO\UserRoleDTO;
+use App\Features\Users\DTO\UserUpdateDTO;
 use App\Features\Users\Models\User;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\Filters\Filter;
@@ -56,22 +59,37 @@ class UserService
 		return $this->model()->where('phone', $phone)->firstOrFail();
 	}
 
-	public function create(array $data): User
+	public function create(UserCreateDTO $data): User
 	{
-		$user = $this->model()->create([...$data]);
+		$user = $this->model()->create($data->toArray());
 		return $user;
 	}
 
-	public function update(array $data, $user): User
+	public function update(UserUpdateDTO $data, $user): User
 	{
-		$user->update($data);
+		$user->update($data->toArray());
+		$user->refresh();
+		return $user;
+	}
+	
+	public function toggleBlock($user): User
+	{
+		$user->update(['is_blocked' => !$user->is_blocked]);
 		$user->refresh();
 		return $user;
 	}
 
-	public function syncRoles(array $roles = [], $user): void
+	/**
+	 * @param User $user
+	 * @param UserRoleDTO[] $roles
+	 */
+	public function syncRoles(User $user, array $roles = []): void
 	{
-		$user->syncRoles($roles);
+		$roleNames = array_map(
+			static fn (UserRoleDTO $dto) => $dto->role,
+			$roles
+		);
+		$user->syncRoles($roleNames);
 		AuthCache::forget($user->id);
 		app()->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
 	}

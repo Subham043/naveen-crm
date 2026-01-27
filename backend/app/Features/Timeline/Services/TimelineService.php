@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Features\Order\Services;
+namespace App\Features\Timeline\Services;
 
 use App\Features\Order\Models\Order;
-use App\Features\Order\Models\Timeline;
+use App\Features\Timeline\Collections\TimelineChangeCollection;
+use App\Features\Timeline\DTO\TimelineChange;
+use App\Features\Timeline\Models\Timeline;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
@@ -45,14 +47,15 @@ class TimelineService
             ->appends(request()->query());
     }
 
-    public function createTimeline(FormRequest $request, Order $order, $yard = null, ?string $event_type = 'update', ?string $message = null)
+    public function createTimelineFromRequest(FormRequest $request, Order $order, $yard = null, ?string $event_type = 'update', ?string $message = null)
     {
         $user = Auth::guard(Guards::API->value())->user();
 
         // Fields actually sent in request (validated only)
         $requestedFields = array_keys($request->validated());
 
-        $changes = collect();
+        // $changes = collect();
+        $changes = new TimelineChangeCollection();
 
         // ---- Order changes ----
         foreach ($order->getDirty() as $field => $newValue) {
@@ -60,31 +63,17 @@ class TimelineService
                 continue;
             }
 
-            $changes->push([
-                'old' => [
-                    'field' => $field,
-                    'value' => $order->getOriginal($field),
-                ],
-                'new' => [
-                    'field' => $field,
-                    'value' => $newValue,
-                ],
-            ]);
+            $changes->pushChange(
+                new TimelineChange($field, $order->getOriginal($field), $newValue)
+            );
         }
 
         // ---- Yard changes (if exists) ----
         if (is_array($yard)) {
             foreach ($yard as $yard) {
-                $changes->push([
-                    'old' => [
-                        'field' => 'yard',
-                        'value' => $yard['old'],
-                    ],
-                    'new' => [
-                        'field' => 'yard',
-                        'value' => $yard['new'],
-                    ],
-                ]);
+                $changes->pushChange(
+                    new TimelineChange('yard', $yard['old'], $yard['new'])
+                );
             }
         }
 
@@ -95,17 +84,12 @@ class TimelineService
 
         $timeline_message = $message ? $message : "Order#{$order->id} was {$event_type} by {$user->name}<{$user->email}>";
 
-        $order->timelines()->create([
-            'comment'    => $request->comment ?? null,
-            'properties' => json_encode($changes->values()->all()),
-            'message'    => $timeline_message,
-            'user_id'    => $user->id,
-        ]);
+        $this->createTimeline($order, $changes, $timeline_message, $request->comment, $user->id);
     }
 
-    public function prepareYardChanges(Order $order, array $incomingYards): array
+    public function prepareYardChanges(Order $order, array $incomingYards): TimelineChangeCollection
     {
-        $changes = [];
+        $changes = new TimelineChangeCollection();
 
         // Existing yards from DB
         $existing = $order->yards->mapWithKeys(fn ($y) => [
@@ -123,10 +107,9 @@ class TimelineService
 
             // REMOVED
             if (!$incomingRow) {
-                $changes[] = [
-                    'old' => $oldValue,
-                    'new' => null,
-                ];
+                $changes->pushChange(
+                    new TimelineChange('yard', $oldValue, null)
+                );
                 continue;
             }
 
@@ -134,10 +117,9 @@ class TimelineService
             $newValue = trim((string) $incomingRow['yard']);
 
             if ($oldValue !== $newValue) {
-                $changes[] = [
-                    'old' => $oldValue,
-                    'new' => $newValue,
-                ];
+                $changes->pushChange(
+                    new TimelineChange('yard', $oldValue, $newValue)
+                );
             }
         }
 
@@ -146,14 +128,22 @@ class TimelineService
          */
         foreach ($incoming as $row) {
             if (empty($row['id'])) {
-                $changes[] = [
-                    'old' => null,
-                    'new' => trim((string) $row['yard']),
-                ];
+                $changes->pushChange(
+                    new TimelineChange('yard', null, trim((string) $row['yard']))
+                );
             }
         }
 
         return $changes;
+    }
+
+    public function createTimeline(Order $order, TimelineChangeCollection $changes, string $timeline_message, ?string $comment = null, ?int $user_id = null){
+        $order->timelines()->create([
+            'comment'    => $comment ?? null,
+            'properties' => json_encode($changes->toArray()),
+            'message'    => $timeline_message,
+            'user_id'    => $user_id,
+        ]);
     }
 }
 

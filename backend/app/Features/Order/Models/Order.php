@@ -2,6 +2,7 @@
 
 namespace App\Features\Order\Models;
 
+use App\Features\Timeline\Models\Timeline;
 use App\Features\Users\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

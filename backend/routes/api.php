@@ -15,7 +15,6 @@ use App\Features\Order\Controllers\OrderApprovalController;
 use App\Features\Order\Controllers\OrderExportController;
 use App\Features\Order\Controllers\OrderPaginateController;
 use App\Features\Order\Controllers\OrderPublicCreateController;
-use App\Features\Order\Controllers\OrderTimelinePaginateController;
 use App\Features\Order\Controllers\OrderViewController;
 use App\Features\Roles\Controllers\RoleAllController;
 use App\Features\Roles\Enums\Roles;
@@ -37,6 +36,7 @@ use App\Features\ServiceTeam\Controllers\ServiceTeamOrderExportController;
 use App\Features\ServiceTeam\Controllers\ServiceTeamOrderPaginateController;
 use App\Features\ServiceTeam\Controllers\ServiceTeamOrderUpdateController;
 use App\Features\ServiceTeam\Controllers\ServiceTeamOrderViewController;
+use App\Features\Timeline\Controllers\TimelinePaginateController;
 use App\Http\Enums\Guards;
 use App\Http\Enums\Throttle;
 use Illuminate\Support\Facades\Route;
@@ -87,7 +87,7 @@ Route::prefix('v1')->middleware([Throttle::API->middleware()])->group(function (
                 Route::get('/paginate', [OrderPaginateController::class, 'index']);
                 Route::get('/view/{id}', [OrderViewController::class, 'index']);
                 Route::post('/approval/{id}', [OrderApprovalController::class, 'index']);
-                Route::get('/timeline/{order_id}', [OrderTimelinePaginateController::class, 'index']);
+                Route::get('/timeline/{order_id}', [TimelinePaginateController::class, 'index']);
             });
         });
 

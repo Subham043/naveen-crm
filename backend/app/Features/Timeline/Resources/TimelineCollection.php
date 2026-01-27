@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Features\Order\Resources;
+namespace App\Features\Timeline\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
 
-class OrderTimelineCollection extends JsonResource
+class TimelineCollection extends JsonResource
 {
 	/**
 	 * Transform the resource collection into an array.
@@ -21,7 +21,7 @@ class OrderTimelineCollection extends JsonResource
 			'comment' => $this->comment,
 			'properties' => $this->properties,
 			'user_id' => $this->user_id,
-			'done_by' => $this->user_id ? OrderUserCollection::make($this->doneBy) : null,
+			'done_by' => $this->user_id ? TimelineUserCollection::make($this->doneBy) : null,
 			'created_at' => $this->created_at,
 			'updated_at' => $this->updated_at,
 		];

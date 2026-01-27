@@ -2,7 +2,7 @@
 
 namespace App\Features\ServiceTeam\Controllers;
 
-use App\Features\Order\Services\TimelineService;
+use App\Features\Timeline\Services\TimelineService;
 use App\Http\Controllers\Controller;
 use App\Features\ServiceTeam\Requests\ServiceTeamOrderSaveRequests;
 use App\Features\ServiceTeam\Resources\ServiceTeamOrderCollection;
@@ -42,7 +42,7 @@ class ServiceTeamOrderUpdateController extends Controller
                 }
 
                 if($request->has('comment')){
-                    $this->timelineService->createTimeline($request, $order, $yardChanges, 'update', null);
+                    $this->timelineService->createTimelineFromRequest($request, $order, $yardChanges, 'update', null);
                 }
 
                 $order->save();
@@ -50,6 +50,7 @@ class ServiceTeamOrderUpdateController extends Controller
             });
             return response()->json(["message" => "Order updated successfully.", "data" => ServiceTeamOrderCollection::make($updated_order)], 200);
         } catch (\Throwable $th) {
+            throw $th;
             return response()->json(["message" => "Something went wrong. Please try again"], 400);
         }
 

@@ -23,10 +23,8 @@ class UserDeleteController extends Controller
         try {
             //code...
             DB::transaction(function () use ($user) {
-                $this->userService->delete(
-                    $user
-                );
-                $this->userService->syncRoles([], $user);
+                $this->userService->delete($user);
+                $this->userService->syncRoles($user, []);
             });
             return response()->json(["message" => "User deleted successfully.", "data" => UserCollection::make($user)], 200);
         } catch (\Throwable $th) {

@@ -2,6 +2,8 @@
 
 namespace App\Features\Users\Controllers;
 
+use App\Features\Users\DTO\UserRoleDTO;
+use App\Features\Users\DTO\UserUpdateDTO;
 use App\Http\Controllers\Controller;
 use App\Features\Users\Requests\UserUpdatePostRequest;
 use App\Features\Users\Resources\UserCollection;
@@ -26,10 +28,10 @@ class UserUpdateController extends Controller
             //code...
             $updated_user = DB::transaction(function () use ($request, $user) {
                 $updated_user = $this->userService->update(
-                    [...$request->except(['role'])],
+                    UserUpdateDTO::fromRequest($request),
                     $user
                 );
-                $this->userService->syncRoles([$request->role], $updated_user);
+                $this->userService->syncRoles($updated_user, [UserRoleDTO::fromRequest($request)]);
                 return $updated_user->fresh();
             });
             return response()->json(["message" => "User updated successfully.", "data" => UserCollection::make($updated_user)], 200);
