@@ -98,6 +98,24 @@ export type SalesOrderType = OrderType;
 
 export type ServiceTeamOrderType = OrderType;
 
+export type OrderTimelineType = {
+  id: number;
+  order_id: number;
+  comment?: string;
+  message: string;
+  properties: any;
+  user_id: number;
+  done_by: {
+    id: number;
+    name: string;
+    email: string;
+    phone?: string;
+    role: AvailableRoles;
+  };
+  created_at: string;
+  updated_at: string;
+}
+
 export type TexteditorImageType = {
   id: number;
   image: string;
