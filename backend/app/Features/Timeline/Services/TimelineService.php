@@ -3,6 +3,7 @@
 namespace App\Features\Timeline\Services;
 
 use App\Features\Order\Models\Order;
+use App\Features\Timeline\Collections\YardTimelineDTOCollection;
 use App\Features\Timeline\Collections\TimelineChangeCollection;
 use App\Features\Timeline\DTO\TimelineChange;
 use App\Features\Timeline\Models\Timeline;
@@ -47,14 +48,21 @@ class TimelineService
             ->appends(request()->query());
     }
 
-    public function createTimelineFromRequest(FormRequest $request, Order $order, $yard = null, ?string $event_type = 'update', ?string $message = null)
+    /**
+     * Create a timeline from a request
+     * @param FormRequest $request
+     * @param Order $order
+     * @param string|null $event_type
+     * @param string|null $message
+     * @return void
+     */
+    public function createTimelineFromRequest(FormRequest $request, Order $order, ?string $event_type = 'update', ?string $message = null)
     {
         $user = Auth::guard(Guards::API->value())->user();
 
         // Fields actually sent in request (validated only)
-        $requestedFields = array_keys($request->validated());
+        $requestedFields = array_keys($request->safe()->except(['comment', 'yards']));
 
-        // $changes = collect();
         $changes = new TimelineChangeCollection();
 
         // ---- Order changes ----
@@ -69,12 +77,14 @@ class TimelineService
         }
 
         // ---- Yard changes (if exists) ----
-        if (is_array($yard)) {
-            foreach ($yard as $yard) {
-                $changes->pushChange(
-                    new TimelineChange('yard', $yard['old'], $yard['new'])
-                );
-            }
+        $yardsInput = $request->safe()->input('yards');
+        
+        if (is_array($yardsInput) && count($yardsInput) > 0) {
+            $yards = YardTimelineDTOCollection::fromRequest($yardsInput);
+            $yard_changes = $this->prepareYardChanges($order, $yards);
+            $yard_changes->each(function ($change) use ($changes) {
+                $changes->pushChange($change);
+            });
         }
 
         // If nothing changed and no comment, skip timeline
@@ -84,12 +94,18 @@ class TimelineService
 
         $timeline_message = $message ? $message : "Order#{$order->id} was {$event_type} by {$user->name}<{$user->email}>";
 
-        $this->createTimeline($order, $changes, $timeline_message, $request->comment, $user->id);
+        $this->createTimeline($order, $changes, $timeline_message, $request->comment ?? null, $user->id);
     }
 
-    public function prepareYardChanges(Order $order, array $incomingYards): TimelineChangeCollection
+    /**
+	 * @param Order $order
+	 * @param YardTimelineDTOCollection $incomingYards
+	 */
+    public function prepareYardChanges(Order $order, YardTimelineDTOCollection $incomingYards): TimelineChangeCollection
     {
         $changes = new TimelineChangeCollection();
+
+        $yard_array = $incomingYards->toDatabaseArray();
 
         // Existing yards from DB
         $existing = $order->yards->mapWithKeys(fn ($y) => [
@@ -97,7 +113,7 @@ class TimelineService
         ]);
 
         // Incoming yards (keep index, not keyBy id)
-        $incoming = collect($incomingYards);
+        $incoming = collect($yard_array);
 
         /**
          * UPDATED + REMOVED

@@ -8,6 +8,9 @@ use Illuminate\Queue\InteractsWithQueue;
 use App\Features\Users\Models\User;
 use Illuminate\Support\Facades\DB;
 use App\Features\Roles\Enums\Roles;
+use App\Features\Timeline\Collections\TimelineChangeCollection;
+use App\Features\Timeline\DTO\TimelineChange;
+use App\Features\Timeline\Services\TimelineService;
 
 class AssignAgentToCreatedPublicOrderListener implements ShouldQueue
 {
@@ -18,7 +21,7 @@ class AssignAgentToCreatedPublicOrderListener implements ShouldQueue
     /**
      * Create the event listener.
      */
-    public function __construct()
+    public function __construct(private TimelineService $timelineService)
     {}
 
     /**
@@ -49,33 +52,14 @@ class AssignAgentToCreatedPublicOrderListener implements ShouldQueue
                     'sales_user_id' => $user->id,
                     'assigned_at' => now(),
                 ]);
-                $order->timelines()->create([
-                    'comment'    => null,
-                    'properties' => json_encode([
-                        [
-                            'old' => [
-                                'field' => 'sales_user_id',
-                                'value' => null,
-                            ],
-                            'new' => [
-                                'field' => 'sales_user_id',
-                                'value' => $user->id,
-                            ],
-                        ],
-                        [
-                            'old' => [
-                                'field' => 'assigned_at',
-                                'value' => null,
-                            ],
-                            'new' => [
-                                'field' => 'assigned_at',
-                                'value' => now(),
-                            ],
-                        ],
-                    ]),
-                    'message'    => "Order#{$order->id} was auto-assigned to agent named {$user->name}<{$user->email}>",
-                    'user_id'    => $user->id,
+
+                $changes = new TimelineChangeCollection([
+                    new TimelineChange('sales_user_id', null, $user->id),
+                    new TimelineChange('assigned_at', null, now()),
                 ]);
+                
+                $this->timelineService->createTimeline($order, $changes, "Order#{$order->id} was auto-assigned to agent named {$user->name}<{$user->email}>", null, $user->id);
+                
                 $order->save();
             }
         });

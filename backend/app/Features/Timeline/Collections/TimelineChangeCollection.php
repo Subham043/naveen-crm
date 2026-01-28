@@ -39,4 +39,9 @@ final class TimelineChangeCollection extends Collection
             $this->items
         );
     }
+
+    public function merge($items)
+    {
+        return new static(array_merge($this->items, $items));
+    }
 }

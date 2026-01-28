@@ -5,7 +5,7 @@ namespace App\Features\ServiceTeam\Services;
 use App\Features\Order\Enums\OrderStatus;
 use App\Features\Order\Models\Order;
 use App\Features\Order\Models\Yard;
-use App\Features\ServiceTeam\DTO\YardDTO;
+use App\Features\Timeline\Collections\YardTimelineDTOCollection;
 use App\Http\Abstracts\AbstractService;
 use App\Http\Enums\Guards;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -50,15 +50,12 @@ class ServiceTeamOrderService extends AbstractService
 
 
     /**
-	 * @param YardDTO[] $yards
+	 * @param YardTimelineDTOCollection $data
 	 * @param Order $order
 	 */
-    public function syncYards(array $data, $order)
+    public function syncYards(YardTimelineDTOCollection $data, $order)
     {
-        $yard_array = array_map(
-			static fn (YardDTO $dto) => $dto->toArray(),
-			$data
-		);
+        $yard_array = $data->toDatabaseArray();
         // 1. Collect incoming IDs
         $incomingIds = collect($yard_array)
             ->pluck('id')
