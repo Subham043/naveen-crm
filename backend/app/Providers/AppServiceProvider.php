@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
+use App\Features\Order\Events\OrderApproval;
 use App\Features\Order\Events\PublicOrderCreated;
 use App\Features\Order\Listeners\AssignAgentToCreatedPublicOrderListener;
 use App\Features\Order\Listeners\CreateTimelineForCreatedPublicOrderListener;
+use App\Features\Order\Listeners\CreateTimelineForOrderApprovalListener;
 use App\Features\Roles\Enums\Roles;
 use App\Features\SalesTeam\Events\SalesOrderCreated;
 use App\Features\SalesTeam\Events\SalesOrderSubmittedForApproval;
@@ -94,6 +96,11 @@ class AppServiceProvider extends ServiceProvider
         Event::listen(
             SalesOrderSubmittedForApproval::class,
             CreateTimelineForSalesOrderSubmittedForApprovalListener::class,
+        );
+        
+        Event::listen(
+            OrderApproval::class,
+            CreateTimelineForOrderApprovalListener::class,
         );
 
         //global rate limiter for all api requests
