@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Features\Order\Events\PublicOrderCreated;
 use App\Features\Order\Listeners\AssignAgentToCreatedPublicOrderListener;
+use App\Features\Order\Listeners\CreateTimelineForCreatedPublicOrderListener;
 use App\Features\Roles\Enums\Roles;
 use App\Features\SalesTeam\Events\SalesOrderCreated;
 use App\Features\SalesTeam\Events\SalesOrderSubmittedForApproval;
@@ -70,6 +71,11 @@ class AppServiceProvider extends ServiceProvider
         });
 
         //event listeners
+        Event::listen(
+            PublicOrderCreated::class,
+            CreateTimelineForCreatedPublicOrderListener::class,
+        );
+        
         Event::listen(
             PublicOrderCreated::class,
             AssignAgentToCreatedPublicOrderListener::class,

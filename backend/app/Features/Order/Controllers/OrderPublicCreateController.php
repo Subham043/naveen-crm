@@ -24,15 +24,16 @@ class OrderPublicCreateController extends Controller
     
     public function index(OrderPublicCreateRequests $request){
         try {
-            $order = DB::transaction(function () use ($request) {
+            $dto = OrderPublicCreateDTO::fromRequest($request);
+            $order = DB::transaction(function () use ($dto) {
                 return $this->orderService->create([
-                    ...OrderPublicCreateDTO::fromRequest($request)->toArray(),
+                    ...$dto->toArray(),
                     'is_active' => false,
                     'is_created_by_agent' => false,
                     'lead_source' => LeadSource::Website->value(),
                 ]);
             });
-            event(new PublicOrderCreated($order));
+            event(new PublicOrderCreated($order, $dto));
             return response()->json([
                 "message" => "Order created successfully.",
             ], 201);

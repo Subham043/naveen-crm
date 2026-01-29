@@ -2,6 +2,7 @@
 
 namespace App\Features\Order\Events;
 
+use App\Features\Order\DTO\OrderPublicCreateDTO;
 use App\Features\Order\Models\Order;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Events\ShouldDispatchAfterCommit;
@@ -17,6 +18,7 @@ class PublicOrderCreated implements ShouldDispatchAfterCommit
      */
     public function __construct(
         public Order $order,
+        public OrderPublicCreateDTO $orderPublicCreateDTO,
     ) {
     }
 }
