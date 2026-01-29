@@ -3,6 +3,7 @@
 namespace App\Features\SalesTeam\Controllers;
 
 use App\Features\SalesTeam\DTO\SalesOrderSaveDTO;
+use App\Features\SalesTeam\Events\SalesOrderCreated;
 use App\Http\Controllers\Controller;
 use App\Features\SalesTeam\Requests\SalesOrderSaveRequests;
 use App\Features\SalesTeam\Resources\SalesOrderCollection;
@@ -26,13 +27,16 @@ class SalesOrderCreateController extends Controller
     public function index(SalesOrderSaveRequests $request){
         try {
             //code...
-            $order = DB::transaction(function () use ($request) {
+            $dto = SalesOrderSaveDTO::fromRequest($request);
+            $user = Auth::guard(Guards::API->value())->user();
+            $order = DB::transaction(function () use ($dto, $user) {
                 return $this->salesOrderService->create([
-                    ...SalesOrderSaveDTO::fromRequest($request)->toArray(),
-                    'sales_user_id' => Auth::guard(Guards::API->value())->user()->id,
+                    ...$dto->toArray(),
+                    'sales_user_id' => $user->id,
                     'is_created_by_agent' => true,
                 ]);
             });
+            event(new SalesOrderCreated($order, $dto, $user->id, $user->name, $user->email));
             return response()->json([
                 "message" => $request->is_active ? "Order saved successfully." : "Order saved as draft successfully.",
                 "data" => SalesOrderCollection::make($order),

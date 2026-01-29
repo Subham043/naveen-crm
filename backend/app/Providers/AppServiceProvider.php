@@ -5,6 +5,8 @@ namespace App\Providers;
 use App\Features\Order\Events\PublicOrderCreated;
 use App\Features\Order\Listeners\AssignAgentToCreatedPublicOrderListener;
 use App\Features\Roles\Enums\Roles;
+use App\Features\SalesTeam\Events\SalesOrderCreated;
+use App\Features\SalesTeam\Listeners\CreateTimelineForCreatedSalesOrderListener;
 use App\Features\Users\Models\User;
 use App\Http\Enums\Throttle;
 use Illuminate\Support\ServiceProvider;
@@ -67,6 +69,11 @@ class AppServiceProvider extends ServiceProvider
         Event::listen(
             PublicOrderCreated::class,
             AssignAgentToCreatedPublicOrderListener::class,
+        );
+        
+        Event::listen(
+            SalesOrderCreated::class,
+            CreateTimelineForCreatedSalesOrderListener::class,
         );
 
         //global rate limiter for all api requests
