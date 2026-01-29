@@ -33,6 +33,9 @@ class CreateTimelineForCreatedSalesOrderListener implements ShouldQueue
             $event->salesOrderSaveDTO
             ->toCollection()
             ->each(function ($value, $key) use ($changes) {
+                if($value == null){
+                    return;
+                }
                 $changes->pushChange(
                     new TimelineChange(
                         field: $key,
@@ -41,6 +44,10 @@ class CreateTimelineForCreatedSalesOrderListener implements ShouldQueue
                     )
                 );
             });
+            
+            if($changes->isEmpty()){
+                return;
+            }
             
             $this->timelineService->createTimeline($event->order, $changes, "Order#{$event->order->id} was created by agent named {$event->userName}<{$event->userEmail}>", null, $event->userId);
         });
