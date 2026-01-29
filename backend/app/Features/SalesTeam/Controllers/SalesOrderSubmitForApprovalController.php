@@ -2,10 +2,13 @@
 
 namespace App\Features\SalesTeam\Controllers;
 
+use App\Features\SalesTeam\Events\SalesOrderSubmittedForApproval;
 use App\Http\Controllers\Controller;
 use App\Features\SalesTeam\Resources\SalesOrderCollection;
 use App\Features\SalesTeam\Services\SalesOrderService;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Enums\Guards;
 
 class SalesOrderSubmitForApprovalController extends Controller
 {
@@ -25,12 +28,14 @@ class SalesOrderSubmitForApprovalController extends Controller
         }
         try {
             //code...
+            $user = Auth::guard(Guards::API->value())->user();
             $updated_order = DB::transaction(function () use ($order) {
                 return $this->salesOrderService->update(
                     ['is_active' => 1],
                     $order
                 );
             });
+            event(new SalesOrderSubmittedForApproval($updated_order, $user->id, $user->name, $user->email));
             return response()->json(["message" => "Order submitted for approval successfully.", "data" => SalesOrderCollection::make($updated_order)], 200);
         } catch (\Throwable $th) {
             return response()->json(["message" => "Something went wrong. Please try again"], 400);

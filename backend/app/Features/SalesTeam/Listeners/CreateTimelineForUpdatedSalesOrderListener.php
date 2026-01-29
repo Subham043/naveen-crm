@@ -45,8 +45,14 @@ class CreateTimelineForUpdatedSalesOrderListener implements ShouldQueue
             if($changes->isEmpty()){
                 return;
             }
+
+            $message = "Order#{$event->order->id} was updated by agent named {$event->userName}<{$event->userEmail}>";
             
-            $this->timelineService->createTimeline($event->order, $changes, "Order#{$event->order->id} was updated by agent named {$event->userName}<{$event->userEmail}>", null, $event->userId);
+            if($event->dto->is_active && $event->oldValues['is_active'] == 0){
+                $message = "Order#{$event->order->id} was updated and submitted for approval by agent named {$event->userName}<{$event->userEmail}>";
+            }
+            
+            $this->timelineService->createTimeline($event->order, $changes, $message, null, $event->userId);
         });
     }
 }

@@ -8,8 +8,6 @@ use App\Http\Controllers\Controller;
 use App\Features\SalesTeam\Requests\SalesOrderSaveRequests;
 use App\Features\SalesTeam\Resources\SalesOrderCollection;
 use App\Features\SalesTeam\Services\SalesOrderService;
-use App\Features\Timeline\Collections\TimelineChangeCollection;
-use App\Features\Timeline\DTO\TimelineChange;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Enums\Guards;
