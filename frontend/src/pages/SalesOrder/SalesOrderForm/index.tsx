@@ -109,21 +109,6 @@ export default function SalesOrderForm({ modal, handleModalClose }: Props) {
           />
           <Controller
             control={form.control}
-            name="billing_address"
-            render={({ field, fieldState }) => (
-              <Textarea
-                label="Billing Address"
-                value={field.value ? field.value : ""}
-                onChange={field.onChange}
-                error={fieldState.error?.message}
-                withAsterisk={isActive === 1}
-                rows={5}
-                mt="md"
-              />
-            )}
-          />
-          <Controller
-            control={form.control}
             name="part_name"
             render={({ field, fieldState }) => (
               <TextInput
@@ -142,6 +127,21 @@ export default function SalesOrderForm({ modal, handleModalClose }: Props) {
             render={({ field, fieldState }) => (
               <Textarea
                 label="Part Description"
+                value={field.value ? field.value : ""}
+                onChange={field.onChange}
+                error={fieldState.error?.message}
+                withAsterisk={isActive === 1}
+                rows={5}
+                mt="md"
+              />
+            )}
+          />
+          <Controller
+            control={form.control}
+            name="billing_address"
+            render={({ field, fieldState }) => (
+              <Textarea
+                label="Billing Address"
                 value={field.value ? field.value : ""}
                 onChange={field.onChange}
                 error={fieldState.error?.message}

@@ -8,6 +8,7 @@ import {
   Image,
   Input,
   Paper,
+  SimpleGrid,
   Text,
   Textarea,
   TextInput,
@@ -39,69 +40,87 @@ export default function OrderPublicForm() {
 
       <form onSubmit={onSubmit}>
         <Paper withBorder shadow="md" p={30} radius="md" mt="xl">
-          <Controller
-            control={form.control}
-            name="name"
-            render={({ field, fieldState }) => (
-              <TextInput
-                label="Name"
-                placeholder="Name"
-                value={field.value}
-                onChange={field.onChange}
-                error={fieldState.error?.message}
-                withAsterisk
-                data-autofocus
-              />
-            )}
-          />
-          <Controller
-            control={form.control}
-            name="email"
-            render={({ field, fieldState }) => (
-              <TextInput
-                label="Email"
-                placeholder="me@company.dev"
-                type="email"
-                value={field.value}
-                onChange={field.onChange}
-                error={fieldState.error?.message}
-                withAsterisk
-                mt="sm"
-              />
-            )}
-          />
-          <Controller
-            control={form.control}
-            name="phone_number"
-            render={({ field, fieldState }) => (
-              <Input.Wrapper
-                label="Phone Number"
-                error={fieldState.error?.message}
-                withAsterisk
-                mt="sm"
-              >
-                <PhoneInput
-                  defaultCountry="in"
+          <SimpleGrid cols={{ base: 1, sm: 2 }}>
+            <Controller
+              control={form.control}
+              name="name"
+              render={({ field, fieldState }) => (
+                <TextInput
+                  label="Name"
+                  placeholder="Name"
                   value={field.value}
-                  disableFormatting={true}
-                  onChange={(phoneNumber, meta) => {
-                    const [countryCode, phone] = meta.inputValue.split(" ");
-                    field.onChange(phoneNumber);
-                    form.setValue("country_code", countryCode);
-                    form.setValue("phone", phone);
-                  }}
-                  inputStyle={{ width: "100%" }}
+                  onChange={field.onChange}
+                  error={fieldState.error?.message}
+                  withAsterisk
+                  data-autofocus
                 />
-              </Input.Wrapper>
-            )}
-          />
+              )}
+            />
+            <Controller
+              control={form.control}
+              name="email"
+              render={({ field, fieldState }) => (
+                <TextInput
+                  label="Email"
+                  placeholder="me@company.dev"
+                  type="email"
+                  value={field.value}
+                  onChange={field.onChange}
+                  error={fieldState.error?.message}
+                  withAsterisk
+                />
+              )}
+            />
+          </SimpleGrid>
+          <SimpleGrid cols={{ base: 1, sm: 2 }}>
+            <Controller
+              control={form.control}
+              name="phone_number"
+              render={({ field, fieldState }) => (
+                <Input.Wrapper
+                  label="Phone Number"
+                  error={fieldState.error?.message}
+                  withAsterisk
+                  mt="sm"
+                >
+                  <PhoneInput
+                    defaultCountry="in"
+                    value={field.value}
+                    disableFormatting={true}
+                    onChange={(phoneNumber, meta) => {
+                      const [countryCode, phone] = meta.inputValue.split(" ");
+                      field.onChange(phoneNumber);
+                      form.setValue("country_code", countryCode);
+                      form.setValue("phone", phone);
+                    }}
+                    inputStyle={{ width: "100%" }}
+                  />
+                </Input.Wrapper>
+              )}
+            />
+            <Controller
+              control={form.control}
+              name="part_name"
+              render={({ field, fieldState }) => (
+                <TextInput
+                  label="Part Name"
+                  placeholder="Part Name"
+                  value={field.value ? field.value : ""}
+                  onChange={field.onChange}
+                  error={fieldState.error?.message}
+                  withAsterisk
+                  mt="sm"
+                />
+              )}
+            />
+          </SimpleGrid>
           <Controller
             control={form.control}
-            name="billing_address"
+            name="part_description"
             render={({ field, fieldState }) => (
               <Textarea
-                label="Billing Address"
-                placeholder="Billing Address"
+                label="Part Description"
+                placeholder="Part Description"
                 value={field.value ? field.value : ""}
                 onChange={field.onChange}
                 error={fieldState.error?.message}
@@ -113,26 +132,11 @@ export default function OrderPublicForm() {
           />
           <Controller
             control={form.control}
-            name="part_name"
-            render={({ field, fieldState }) => (
-              <TextInput
-                label="Part Name"
-                placeholder="Part Name"
-                value={field.value ? field.value : ""}
-                onChange={field.onChange}
-                error={fieldState.error?.message}
-                withAsterisk
-                mt="sm"
-              />
-            )}
-          />
-          <Controller
-            control={form.control}
-            name="part_description"
+            name="billing_address"
             render={({ field, fieldState }) => (
               <Textarea
-                label="Part Description"
-                placeholder="Part Description"
+                label="Billing Address"
+                placeholder="Billing Address"
                 value={field.value ? field.value : ""}
                 onChange={field.onChange}
                 error={fieldState.error?.message}

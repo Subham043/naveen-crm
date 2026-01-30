@@ -42,11 +42,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     try {
       nprogress.start();
       await logoutHandler();
-      get().removeAuth();
-    } catch (error) {
-      throw error;
     } finally {
       nprogress.complete();
+      get().removeAuth();
     }
   },
 
