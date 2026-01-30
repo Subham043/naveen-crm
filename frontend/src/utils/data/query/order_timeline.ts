@@ -2,8 +2,6 @@ import { useAuthStore } from "@/stores/auth.store";
 import type { PaginationQueryType, PaginationType, OrderTimelineType } from "@/utils/types";
 import { useQuery, type UseQueryResult } from "@tanstack/react-query";
 import { getOrderTimelineHandler } from "../dal/order_timeline";
-import { usePaginationQueryParam } from "@/hooks/usePaginationQueryParam";
-import { useSearchQueryParam } from "@/hooks/useSearchQueryParam";
 
 export const OrderTimelineQueryKey = (id: number, query: PaginationQueryType) => {
     const { page = 1, total = 10, search = "" } = query;
@@ -17,18 +15,15 @@ export const OrderTimelineQueryFn = async ({ id, query, signal }: { id: number, 
 /*
    Order Timeline Query Hook Function: This hook is used to fetch information of all the users
 */
-export const useOrderTimelineQuery: (id: number) => UseQueryResult<
+export const useOrderTimelineQuery: (id: number, query?: PaginationQueryType) => UseQueryResult<
     PaginationType<OrderTimelineType> | undefined,
     unknown
-> = (id) => {
+> = (id, query = { page: 1, total: 10, search: "" }) => {
     const authToken = useAuthStore((state) => state.authToken)
-    const { page, total } = usePaginationQueryParam();
-    const { search } = useSearchQueryParam();
-    const query: PaginationQueryType = { page, total, search };
 
     return useQuery({
         queryKey: OrderTimelineQueryKey(id, query),
         queryFn: () => OrderTimelineQueryFn({ id, query }),
-        enabled: authToken !== null,
+        enabled: authToken !== null && id !== undefined && !isNaN(id),
     });
 };

@@ -30,11 +30,10 @@ class Timeline extends Model
         'comment' => null,
         'order_id' => null,
         'user_id' => null,
-        'properties' => '[]',
     ];
 
     protected $casts = [
-        'properties' => 'collection',
+        'properties' => 'array',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];

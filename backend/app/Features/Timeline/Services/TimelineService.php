@@ -104,7 +104,7 @@ class TimelineService
     public function createTimeline(Order $order, TimelineChangeCollection $changes, string $timeline_message, ?string $comment = null, ?int $user_id = null){
         $order->timelines()->create([
             'comment'    => $comment ?? null,
-            'properties' => json_encode($changes->toArray()),
+            'properties' => $changes->toArray(),
             'message'    => $timeline_message,
             'user_id'    => $user_id,
         ]);

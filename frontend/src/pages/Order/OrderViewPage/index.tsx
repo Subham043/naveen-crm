@@ -10,6 +10,7 @@ import OrderViewAgentInfo from "@/components/Order/OrderView/OrderViewAgentInfo"
 import OrderViewPaymentInfo from "@/components/Order/OrderView/OrderViewPaymentInfo";
 import OrderViewYardInfo from "@/components/Order/OrderView/OrderViewYardInfo";
 import OrderViewLogisticInfo from "@/components/Order/OrderView/OrderViewLogisticInfo";
+import OrderViewTimeline from "./OrderViewTimeline";
 
 export default function OrderView() {
   const { id } = useParams<{ id: string }>();
@@ -111,6 +112,8 @@ export default function OrderView() {
             invoice_status={data.invoice_status}
             shipment_status={data.shipment_status}
           />
+
+          <OrderViewTimeline id={data.id} />
         </>
       )}
     </Box>

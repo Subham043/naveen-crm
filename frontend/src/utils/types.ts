@@ -103,7 +103,7 @@ export type OrderTimelineType = {
   order_id: number;
   comment?: string;
   message: string;
-  properties: any;
+  properties: Record<string, { old: string | number | boolean | null, new: string | number | boolean | null }>[];
   user_id: number;
   done_by: {
     id: number;
