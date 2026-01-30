@@ -11,7 +11,6 @@ use App\Features\Users\Models\User;
 use App\Features\Users\Services\UserService;
 use App\Http\Enums\Guards;
 use Illuminate\Support\Facades\Auth;
-use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthService
 {
@@ -39,28 +38,24 @@ class AuthService
 	public function set_cookie(string $token): \Symfony\Component\HttpFoundation\Cookie
 	{
 		$cookie = cookie(
-			config('session.cookie'),
+			config('session.cookie', 'CRM_AUTH'),
 			$token,
 			(int) config('session.lifetime'), // minutes
 			config('session.path'),
 			config('session.domain'),
 			app()->environment('production'),  // Secure (only over HTTPS)
 			true,  // HttpOnly (not accessible via JS)
-			false,
+			(bool) !config('session.encrypt'),
 			'Strict'
 		);
 		return $cookie;
 	}
 
-	public function refresh_token(): string
+	public function refresh_token(?Guards $guard = Guards::API): string
 	{
-		$token = JWTAuth::getToken();
-
-		if (! $token) {
-			throw new \Exception('Token not found');
-		}
-
-		return JWTAuth::refresh($token);
+		/** @var \Tymon\JWTAuth\JWTGuard $guard */
+		$guard = Auth::guard($guard->value());
+		return $guard->refresh();
 	}
 
 	public function profile(Guards $guard): User
