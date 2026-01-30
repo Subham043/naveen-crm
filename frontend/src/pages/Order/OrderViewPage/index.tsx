@@ -112,10 +112,10 @@ export default function OrderView() {
             invoice_status={data.invoice_status}
             shipment_status={data.shipment_status}
           />
-
-          <OrderViewTimeline id={data.id} />
         </>
       )}
+
+      <OrderViewTimeline id={data.id} />
     </Box>
   );
 }

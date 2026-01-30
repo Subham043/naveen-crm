@@ -24,7 +24,6 @@ class RefreshTokenController extends Controller
                 'expires_in' =>(int) config('jwt.ttl') * 60,
             ], 200)->cookie($cookie);
         } catch (\Throwable $th) {
-            //throw $th;
             return response()->json([
                 'message' => 'Unauthorized',
                 'error' => $th->getMessage(),

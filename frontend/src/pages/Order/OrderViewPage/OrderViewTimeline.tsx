@@ -8,20 +8,52 @@ import {
   Alert,
   List,
   Kbd,
+  Group,
+  Select,
+  Pagination,
 } from "@mantine/core";
 import type { OrderType } from "@/utils/types";
 import { useOrderTimelineQuery } from "@/utils/data/query/order_timeline";
 import CustomLoading from "@/components/CustomLoading";
 import Datetime from "@/components/Datetime";
 import { IconMessage } from "@tabler/icons-react";
+import { useCallback, useMemo, useState } from "react";
 
 type Props = {
   id: OrderType["id"];
 };
 
 function OrderViewTimeline({ id }: Props) {
-  const { data, isLoading, isFetching, isRefetching } =
-    useOrderTimelineQuery(id);
+  const [page, setPage] = useState<number>(1);
+  const [total, setTotal] = useState<number>(10);
+
+  const { data, isLoading, isFetching, isRefetching } = useOrderTimelineQuery(
+    id,
+    {
+      page,
+      total,
+    },
+  );
+
+  const onLimitChange = useCallback(
+    (value: string | null) => {
+      setTotal(value ? Number(value) : 10);
+      setPage(1);
+    },
+    [setTotal],
+  );
+
+  const onPageChange = useCallback(
+    (value: number) => {
+      setPage(value);
+    },
+    [setPage],
+  );
+
+  const totalPages = useMemo(() => {
+    return Math.ceil((data ? data.meta.total : 0) / Number(total));
+  }, [data, total]);
+
   return (
     <Paper shadow="xs" mb="lg" withBorder>
       <Box p="sm" pos="relative">
@@ -79,6 +111,28 @@ function OrderViewTimeline({ id }: Props) {
           </Text>
         )}
       </Box>
+      {data && data.data.length > 0 && (
+        <>
+          <Divider />
+          <Box p="sm">
+            <Group justify="center">
+              <Select
+                data={["10", "20", "30"]}
+                placeholder="Items Per Page"
+                w={80}
+                value={total.toString()}
+                onChange={onLimitChange}
+              />
+              <Pagination
+                boundaries={2}
+                total={totalPages}
+                value={page}
+                onChange={onPageChange}
+              />
+            </Group>
+          </Box>
+        </>
+      )}
     </Paper>
   );
 }
