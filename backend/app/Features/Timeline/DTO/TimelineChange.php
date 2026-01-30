@@ -21,13 +21,9 @@ final class TimelineChange
     public function toArray(): array
     {
         return [
-            'old' => [
-                'field' => $this->field,
-                'value' => $this->old,
-            ],
-            'new' => [
-                'field' => $this->field,
-                'value' => $this->new,
+            $this->field => [
+                'old' => $this->old,
+                'new' => $this->new,
             ],
         ];
     }
