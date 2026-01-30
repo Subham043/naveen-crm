@@ -151,26 +151,36 @@ export default function SalesOrderForm({ modal, handleModalClose }: Props) {
               />
             )}
           />
-          <Controller
-            control={form.control}
-            name="lead_source"
-            render={({ field, fieldState }) => (
-              <Select
-                label="Lead Source"
-                value={field.value ? field.value.toString() : ""}
-                onChange={(val) =>
-                  field.onChange(val ? Number(val) : undefined)
-                }
-                error={fieldState.error?.message}
-                withAsterisk
-                data={[
-                  { value: "2", label: "Lead" },
-                  { value: "3", label: "Call" },
-                ]}
-                mt="md"
-              />
-            )}
-          />
+          {modal.show && modal.type === "update" ? (
+            <TextInput
+              label="Lead Source"
+              value="Website"
+              readOnly
+              withAsterisk
+              mt="md"
+            />
+          ) : (
+            <Controller
+              control={form.control}
+              name="lead_source"
+              render={({ field, fieldState }) => (
+                <Select
+                  label="Lead Source"
+                  value={field.value ? field.value.toString() : ""}
+                  onChange={(val) =>
+                    field.onChange(val ? Number(val) : undefined)
+                  }
+                  error={fieldState.error?.message}
+                  withAsterisk
+                  data={[
+                    { value: "2", label: "Lead" },
+                    { value: "3", label: "Call" },
+                  ]}
+                  mt="md"
+                />
+              )}
+            />
+          )}
           <Controller
             name="is_active"
             control={form.control}

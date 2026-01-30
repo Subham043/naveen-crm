@@ -79,7 +79,7 @@ export const salesOrderSchema = yup
         lead_source: yup
             .number()
             .typeError("Lead Source must be a number")
-            .oneOf([2, 3], "Lead Source must be 2 or 3")
+            .oneOf([1, 2, 3], "Lead Source must be 1, 2 or 3")
             .required(),
     })
     .required();
