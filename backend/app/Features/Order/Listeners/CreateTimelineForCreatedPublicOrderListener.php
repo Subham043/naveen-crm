@@ -49,7 +49,7 @@ class CreateTimelineForCreatedPublicOrderListener implements ShouldQueue
                 return;
             }
 
-            $message = "Order#{$event->order->id} was submiited by website form";
+            $message = "Order#{$event->order->id} was submitted from website form";
             
             $this->timelineService->createTimeline($event->order, $changes, $message, null, null);
         });

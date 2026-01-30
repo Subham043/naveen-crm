@@ -24,7 +24,7 @@ class TimelineService
                     $query->select('id', 'name', 'email', 'phone')->with(['roles', 'permissions']);
                 }
             ])
-            ->whereHas('doneBy')
+            // ->whereHas('doneBy')
             ->where('order_id', $order_id);
     }
 
