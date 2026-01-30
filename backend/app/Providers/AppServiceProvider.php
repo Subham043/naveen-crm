@@ -14,6 +14,8 @@ use App\Features\SalesTeam\Events\SalesOrderUpdated;
 use App\Features\SalesTeam\Listeners\CreateTimelineForCreatedSalesOrderListener;
 use App\Features\SalesTeam\Listeners\CreateTimelineForSalesOrderSubmittedForApprovalListener;
 use App\Features\SalesTeam\Listeners\CreateTimelineForUpdatedSalesOrderListener;
+use App\Features\ServiceTeam\Events\ServiceTeamOrderUpdated;
+use App\Features\ServiceTeam\Listeners\CreateTimelineForUpdatedServiceTeamOrderListener;
 use App\Features\Users\Models\User;
 use App\Http\Enums\Throttle;
 use Illuminate\Support\ServiceProvider;
@@ -96,6 +98,11 @@ class AppServiceProvider extends ServiceProvider
         Event::listen(
             SalesOrderSubmittedForApproval::class,
             CreateTimelineForSalesOrderSubmittedForApprovalListener::class,
+        );
+
+        Event::listen(
+            ServiceTeamOrderUpdated::class,
+            CreateTimelineForUpdatedServiceTeamOrderListener::class,
         );
         
         Event::listen(

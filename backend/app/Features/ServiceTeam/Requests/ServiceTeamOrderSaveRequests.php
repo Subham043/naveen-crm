@@ -9,6 +9,7 @@ use App\Http\Enums\Guards;
 use App\Http\Requests\InputRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\Enum;
+use Illuminate\Validation\Rule;
 
 class ServiceTeamOrderSaveRequests extends InputRequest
 {
@@ -35,8 +36,8 @@ class ServiceTeamOrderSaveRequests extends InputRequest
             'shipping_cost' => 'nullable|numeric',
             'tracking_details' => 'nullable|string',
             'yard_located' => 'required|boolean',
-            'yards' => ['required_if:yard_located,1', 'array', 'min:1'],
-            'yards.*.yard' => ['required_if:yard_located,1', 'string'],
+            'yards' => [Rule::excludeIf(fn() => $this->yard_located == 0), 'array', 'min:1'],
+            'yards.*.yard' => [Rule::excludeIf(fn() => $this->yard_located == 0), 'string'],
             'yards.*.id' => ['nullable', 'numeric', 'exists:yards,id'],
             'payment_status' => ['required', 'numeric', new Enum(PaymentStatus::class)],
             'invoice_status' => ['required', 'numeric', new Enum(InvoiceStatus::class)],

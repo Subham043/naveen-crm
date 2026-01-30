@@ -9,14 +9,13 @@ use App\Features\Order\Requests\OrderApprovalRequests;
 use App\Http\Controllers\Controller;
 use App\Features\Order\Resources\OrderCollection;
 use App\Features\Order\Services\OrderService;
-use App\Features\Timeline\Services\TimelineService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Enums\Guards;
 
 class OrderApprovalController extends Controller
 {
-    public function __construct(private OrderService $orderService, private TimelineService $timelineService){}
+    public function __construct(private OrderService $orderService){}
 
     /**
      * Update an user

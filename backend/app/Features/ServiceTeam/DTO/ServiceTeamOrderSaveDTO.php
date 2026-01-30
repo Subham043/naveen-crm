@@ -12,7 +12,6 @@ final class ServiceTeamOrderSaveDTO
         public readonly int $payment_status,
         public readonly int $invoice_status,
         public readonly int $shipment_status,
-        public readonly string $comment,
         public readonly ?int $total_price,
         public readonly ?int $cost_price,
         public readonly ?int $shipping_cost,
@@ -26,7 +25,6 @@ final class ServiceTeamOrderSaveDTO
     public static function fromRequest(ServiceTeamOrderSaveRequests $request): self
     {
         return new self(
-            comment: $request->validated('comment'),
             yard_located: $request->validated('yard_located'),
             payment_status: $request->validated('payment_status'),
             invoice_status: $request->validated('invoice_status'),
@@ -44,7 +42,6 @@ final class ServiceTeamOrderSaveDTO
     public function toArray(): array
     {
         $data = [
-            'comment' => $this->comment,
             'yard_located' => $this->yard_located,
             'payment_status' => $this->payment_status,
             'invoice_status' => $this->invoice_status,
