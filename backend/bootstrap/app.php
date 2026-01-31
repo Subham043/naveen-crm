@@ -30,6 +30,9 @@ return Application::configure(basePath: dirname(__DIR__))
             JwtCookieParser::class,
             CacheAuthenticatedUser::class,
         ]);
+        $middleware->encryptCookies(except: [
+            config('session.cookie', 'CRM_AUTH'),
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->render(function (NotFoundHttpException $e, Request $request) {
