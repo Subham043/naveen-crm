@@ -5,14 +5,15 @@ import type { UserCreateFormValuesType, UserUpdateFormValuesType } from "../sche
 import { createUserHandler, deleteUserHandler, toggleUserStatusHandler, updateUserHandler, verifyUserHandler } from "../dal/users";
 import { usePaginationQueryParam } from "@/hooks/usePaginationQueryParam";
 import { useSearchQueryParam } from "@/hooks/useSearchQueryParam";
-import type { PaginationQueryType, PaginationType, UserType } from "@/utils/types";
+import type { PaginationType, UserType } from "@/utils/types";
 import { UserQueryKey, UsersQueryKey } from "../query/user";
+import { useSearchParams } from "react-router";
 
 export const useUserCreateMutation = () => {
     const { toastSuccess } = useToast();
+    const [params] = useSearchParams();
     const { page, total } = usePaginationQueryParam();
     const { search } = useSearchQueryParam();
-    const query: PaginationQueryType = { page, total, search };
 
     return useMutation({
         mutationFn: async (val: UserCreateFormValuesType) => {
@@ -22,7 +23,7 @@ export const useUserCreateMutation = () => {
         onSuccess: (data, __, ___, context) => {
             toastSuccess("User created successfully");
             if (page === 1 && !search) {
-                context.client.setQueryData(UsersQueryKey(query), (oldData: PaginationType<UserType> | undefined) => {
+                context.client.setQueryData(UsersQueryKey(params), (oldData: PaginationType<UserType> | undefined) => {
                     if (!oldData) return oldData;
                     if (oldData.data.length < total) {
                         return {
@@ -47,7 +48,7 @@ export const useUserCreateMutation = () => {
                     }
                 });
             } else {
-                context.client.invalidateQueries({ queryKey: UsersQueryKey(query) });
+                context.client.invalidateQueries({ queryKey: UsersQueryKey(params) });
             }
         },
         onSettled: () => {
@@ -58,9 +59,7 @@ export const useUserCreateMutation = () => {
 
 export const useUserUpdateMutation = (id: number) => {
     const { toastSuccess } = useToast();
-    const { page, total } = usePaginationQueryParam();
-    const { search } = useSearchQueryParam();
-    const query: PaginationQueryType = { page, total, search };
+    const [params] = useSearchParams();
 
     return useMutation({
         mutationFn: async (val: UserUpdateFormValuesType) => {
@@ -69,7 +68,7 @@ export const useUserUpdateMutation = (id: number) => {
         },
         onSuccess: (data, __, ___, context) => {
             toastSuccess("User updated successfully");
-            context.client.setQueryData(UsersQueryKey(query), (oldData: PaginationType<UserType> | undefined) => {
+            context.client.setQueryData(UsersQueryKey(params), (oldData: PaginationType<UserType> | undefined) => {
                 if (!oldData) return oldData;
                 const oldUserDataIndex = oldData.data.findIndex((user) => user.id === id);
                 if (oldUserDataIndex !== -1) {
@@ -93,9 +92,7 @@ export const useUserUpdateMutation = (id: number) => {
 
 export const useUserDeleteMutation = (id: number) => {
     const { toastSuccess, toastError } = useToast();
-    const { page, total } = usePaginationQueryParam();
-    const { search } = useSearchQueryParam();
-    const query: PaginationQueryType = { page, total, search };
+    const [params] = useSearchParams();
 
     return useMutation({
         mutationFn: async () => {
@@ -104,7 +101,7 @@ export const useUserDeleteMutation = (id: number) => {
         },
         onSuccess: (_, __, ___, context) => {
             toastSuccess("User deleted successfully");
-            context.client.invalidateQueries({ queryKey: UsersQueryKey(query) });
+            context.client.invalidateQueries({ queryKey: UsersQueryKey(params) });
             context.client.setQueryData(UserQueryKey(id), undefined);
             context.client.setQueryData(UserQueryKey(id, true), undefined);
         },
@@ -119,9 +116,7 @@ export const useUserDeleteMutation = (id: number) => {
 
 export const useUserVerifyMutation = (id: number) => {
     const { toastSuccess, toastError } = useToast();
-    const { page, total } = usePaginationQueryParam();
-    const { search } = useSearchQueryParam();
-    const query: PaginationQueryType = { page, total, search };
+    const [params] = useSearchParams();
 
     return useMutation({
         mutationFn: async () => {
@@ -130,7 +125,7 @@ export const useUserVerifyMutation = (id: number) => {
         },
         onSuccess: (_, __, ___, context) => {
             toastSuccess("User verified successfully");
-            context.client.setQueryData(UsersQueryKey(query), (oldData: PaginationType<UserType> | undefined) => {
+            context.client.setQueryData(UsersQueryKey(params), (oldData: PaginationType<UserType> | undefined) => {
                 if (!oldData) return oldData;
                 return {
                     ...oldData,
@@ -157,9 +152,7 @@ export const useUserVerifyMutation = (id: number) => {
 
 export const useUserToggleStatusMutation = (id: number) => {
     const { toastSuccess, toastError } = useToast();
-    const { page, total } = usePaginationQueryParam();
-    const { search } = useSearchQueryParam();
-    const query: PaginationQueryType = { page, total, search };
+    const [params] = useSearchParams();
 
     return useMutation({
         mutationFn: async () => {
@@ -168,7 +161,7 @@ export const useUserToggleStatusMutation = (id: number) => {
         },
         onSuccess: (data, _, ___, context) => {
             toastSuccess("User status toggled successfully");
-            context.client.setQueryData(UsersQueryKey(query), (oldData: PaginationType<UserType> | undefined) => {
+            context.client.setQueryData(UsersQueryKey(params), (oldData: PaginationType<UserType> | undefined) => {
                 if (!oldData) return oldData;
                 return {
                     ...oldData,

@@ -37,6 +37,7 @@ use App\Features\ServiceTeam\Controllers\ServiceTeamOrderPaginateController;
 use App\Features\ServiceTeam\Controllers\ServiceTeamOrderUpdateController;
 use App\Features\ServiceTeam\Controllers\ServiceTeamOrderViewController;
 use App\Features\Timeline\Controllers\TimelinePaginateController;
+use App\Features\Users\Controllers\SalesTeamUserPaginateController;
 use App\Http\Enums\Guards;
 use App\Http\Enums\Throttle;
 use Illuminate\Support\Facades\Route;
@@ -88,6 +89,13 @@ Route::prefix('v1')->middleware([Throttle::API->middleware()])->group(function (
                 Route::get('/view/{id}', [OrderViewController::class, 'index']);
                 Route::post('/approval/{id}', [OrderApprovalController::class, 'index']);
                 Route::get('/timeline/{order_id}', [TimelinePaginateController::class, 'index']);
+            });
+        });
+
+        //Admin && Service Team Routes
+        Route::middleware([Roles::SuperAdmin->middleware(), Roles::Service->middleware()])->group(function () {
+            Route::prefix('users')->group(function () {
+                Route::get('/sales-team/paginate', [SalesTeamUserPaginateController::class, 'index']);
             });
         });
 

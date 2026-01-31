@@ -45,14 +45,8 @@ class ServiceTeamOrderService extends AbstractService
                 ->allowedSorts('id', 'name')
                 ->allowedFilters([
                     AllowedFilter::custom('search', new CommonFilter, null, false),
-                    AllowedFilter::callback('is_created_by_agent', function (Builder $query, $value) {
-                        $query->where('is_created_by_agent', $value);
-                    }),
                     AllowedFilter::callback('payment_status', function (Builder $query, $value) {
                         $query->where('payment_status', $value);
-                    }),
-                    AllowedFilter::callback('yard_located', function (Builder $query, $value) {
-                        $query->where('yard_located', $value);
                     }),
                     AllowedFilter::callback('invoice_status', function (Builder $query, $value) {
                         $query->where('invoice_status', $value);
@@ -63,11 +57,8 @@ class ServiceTeamOrderService extends AbstractService
                     AllowedFilter::callback('order_status', function (Builder $query, $value) {
                         $query->where('order_status', $value);
                     }),
-                    AllowedFilter::callback('sales_user_id', function (Builder $query, $value) {
-                        $query->where('sales_user_id', $value)
-                            ->whereHas('salesUser', function($q) use($value){
-                                $q->where('id', $value);
-                            });
+                    AllowedFilter::callback('lead_source', function (Builder $query, $value) {
+                        $query->where('lead_source', $value);
                     }),
                 ]);
     }
@@ -118,8 +109,11 @@ class CommonFilter implements Filter
             ->orWhere('email', 'LIKE', '%' . $value . '%')
             ->orWhere('phone', 'LIKE', '%' . $value . '%')
             ->orWhere('part_name', 'LIKE', '%' . $value . '%')
-            ->orWhere('part_description', 'LIKE', '%' . $value . '%')
-            ->orWhere('billing_address', 'LIKE', '%' . $value . '%');
+            ->orWhereHas('salesUser', function($q) use($value){
+                $q->where('name', 'LIKE', '%' . $value . '%')
+                ->orWhere('email', 'LIKE', '%' . $value . '%')
+                ->orWhere('phone', 'LIKE', '%' . $value . '%');
+            });
         });
     }
 }

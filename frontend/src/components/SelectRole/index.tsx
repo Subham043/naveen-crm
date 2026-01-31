@@ -35,7 +35,9 @@ export default function SelectRole({ selected, setSelected }: Props) {
       const currentPage = additional?.page ?? 1;
 
       try {
-        const response = await getRolesHandler(search);
+        const params = new URLSearchParams();
+        if (search) params.append("filter[search]", search);
+        const response = await getRolesHandler(params, controller.signal);
         const options: OptionType[] = response.map((role) => ({
           value: role.name,
           label: role.name,

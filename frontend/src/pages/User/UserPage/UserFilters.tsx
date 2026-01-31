@@ -1,7 +1,11 @@
+import FilterClearBtn from "@/components/FilterClearBtn";
 import SearchField from "@/components/SearchField";
 import { useSearchQueryParam } from "@/hooks/useSearchQueryParam";
-import { Button, Group } from "@mantine/core";
+import { Group } from "@mantine/core";
 import { useCallback } from "react";
+import SelectBlockedFilter from "./SelectBlockedFilter";
+import SelectVerifiedFilter from "./SelectVerifiedFilter";
+import SelectRoleFilter from "./SelectRoleFilter";
 
 function UserFilters() {
   const { search, setSearch } = useSearchQueryParam();
@@ -11,15 +15,13 @@ function UserFilters() {
     },
     [setSearch],
   );
-  const onClear = useCallback(() => {
-    setSearch("");
-  }, [setSearch]);
   return (
     <Group gap="xs">
       <SearchField defaultValue={search} onChange={onSearchChange} />
-      <Button variant="filled" type="button" color="dark" onClick={onClear}>
-        CLEAR
-      </Button>
+      <SelectBlockedFilter />
+      <SelectVerifiedFilter />
+      <SelectRoleFilter />
+      <FilterClearBtn />
     </Group>
   );
 }

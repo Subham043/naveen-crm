@@ -5,36 +5,34 @@ import {
 } from "@/utils/constants/query";
 import { useCallback } from "react";
 
-type PaginationQueryParamHookType = (key?: string) => {
+type PaginationQueryParamHookType = () => {
   page: number;
   total: number;
   setPage: (value: number) => void;
   setTotal: (value: number) => void;
 };
 
-export const usePaginationQueryParam: PaginationQueryParamHookType = (
-  key = "",
-) => {
+export const PAGEKEY = "page";
+export const TOTALKEY = "total";
+
+export const usePaginationQueryParam: PaginationQueryParamHookType = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const pageKey = `page${key}`;
-  const totalKey = `total${key}`;
-
-  const page = Number(searchParams.get(pageKey) || QueryInitialPageParam);
-  const total = Number(searchParams.get(totalKey) || QueryTotalCount);
+  const page = Number(searchParams.get(PAGEKEY) || QueryInitialPageParam);
+  const total = Number(searchParams.get(TOTALKEY) || QueryTotalCount);
 
   const setPage = useCallback(
     (value: number) => {
       setSearchParams(
         (prev) => {
           const params = new URLSearchParams(prev);
-          value ? params.set(pageKey, String(value)) : params.delete(pageKey);
+          value ? params.set(PAGEKEY, String(value)) : params.delete(PAGEKEY);
           return params;
         },
         { replace: true },
       ); // 👈 prevent history spam
     },
-    [setSearchParams, pageKey],
+    [setSearchParams],
   );
 
   const setTotal = useCallback(
@@ -42,13 +40,16 @@ export const usePaginationQueryParam: PaginationQueryParamHookType = (
       setSearchParams(
         (prev) => {
           const params = new URLSearchParams(prev);
-          value ? params.set(totalKey, String(value)) : params.delete(totalKey);
+          value ? params.set(TOTALKEY, String(value)) : params.delete(TOTALKEY);
+          if (params.has(PAGEKEY)) {
+            params.set(PAGEKEY, String(QueryInitialPageParam));
+          }
           return params;
         },
         { replace: true },
       ); // 👈 prevent history spam
     },
-    [setSearchParams, totalKey],
+    [setSearchParams],
   );
 
   return {

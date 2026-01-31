@@ -1,9 +1,8 @@
 import { useAuthStore } from "@/stores/auth.store";
-import type { PaginationQueryType, PaginationType, ServiceTeamOrderType } from "@/utils/types";
+import type { PaginationType, ServiceTeamOrderType } from "@/utils/types";
 import { useQuery, type UseQueryResult } from "@tanstack/react-query";
 import { getServiceTeamOrderHandler, getServiceTeamOrdersHandler } from "../dal/service_team_order";
-import { usePaginationQueryParam } from "@/hooks/usePaginationQueryParam";
-import { useSearchQueryParam } from "@/hooks/useSearchQueryParam";
+import { useSearchParams } from "react-router";
 
 
 export const ServiceTeamOrderQueryKey = (id: number, isEdit: boolean = false) => {
@@ -13,17 +12,16 @@ export const ServiceTeamOrderQueryKey = (id: number, isEdit: boolean = false) =>
     return ["service_team_order", id, "view"]
 };
 
-export const ServiceTeamOrdersQueryKey = (query: PaginationQueryType) => {
-    const { page = 1, total = 10, search = "" } = query;
-    return ["service_team_orders", page, total, search]
+export const ServiceTeamOrdersQueryKey = (params: URLSearchParams) => {
+    return ["service_team_orders", params.toString()]
 };
 
 export const ServiceTeamOrderQueryFn = async ({ id, signal }: { id: number, signal?: AbortSignal }) => {
     return await getServiceTeamOrderHandler(id, signal);
 }
 
-export const ServiceTeamOrdersQueryFn = async ({ query, signal }: { query: PaginationQueryType, signal?: AbortSignal }) => {
-    return await getServiceTeamOrdersHandler(query, signal);
+export const ServiceTeamOrdersQueryFn = async ({ params, signal }: { params: URLSearchParams, signal?: AbortSignal }) => {
+    return await getServiceTeamOrdersHandler(params, signal);
 }
 
 /*
@@ -37,7 +35,7 @@ export const useServiceTeamOrderQuery: (id: number, enabled: boolean, isEdit?: b
 
     return useQuery({
         queryKey: ServiceTeamOrderQueryKey(id, isEdit),
-        queryFn: () => ServiceTeamOrderQueryFn({ id }),
+        queryFn: ({ signal }) => ServiceTeamOrderQueryFn({ id, signal }),
         enabled: authToken !== null && enabled,
     });
 };
@@ -50,13 +48,11 @@ export const useServiceTeamOrdersQuery: () => UseQueryResult<
     unknown
 > = () => {
     const authToken = useAuthStore((state) => state.authToken)
-    const { page, total } = usePaginationQueryParam();
-    const { search } = useSearchQueryParam();
-    const query: PaginationQueryType = { page, total, search };
+    const [params] = useSearchParams();
 
     return useQuery({
-        queryKey: ServiceTeamOrdersQueryKey(query),
-        queryFn: () => ServiceTeamOrdersQueryFn({ query }),
+        queryKey: ServiceTeamOrdersQueryKey(params),
+        queryFn: ({ signal }) => ServiceTeamOrdersQueryFn({ params, signal }),
         enabled: authToken !== null,
     });
 };

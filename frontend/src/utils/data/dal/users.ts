@@ -1,6 +1,6 @@
 import axios from "@/utils/axios";
 import { api_routes } from "../../routes/api_routes";
-import type { PaginationQueryType, PaginationType, UserType } from "../../types";
+import type { PaginationType, UserType } from "../../types";
 import type { GenericAbortSignal } from "axios";
 import type { UserCreateFormValuesType } from "@/utils/data/schema/user";
 import type { UserUpdateFormValuesType } from "@/utils/data/schema/user";
@@ -34,12 +34,12 @@ export const getUserHandler = async (id: number, signal?: GenericAbortSignal | u
     return response.data.data;
 }
 
-export const getUsersHandler = async (query: PaginationQueryType, signal?: GenericAbortSignal | undefined) => {
-    const { page = 1, total = 10, search = "" } = query;
-    const params = new URLSearchParams();
-    if (page) params.append("page", page.toString());
-    if (total) params.append("total", total.toString());
-    if (search) params.append("filter[search]", search);
+export const getUsersHandler = async (params: URLSearchParams, signal?: GenericAbortSignal | undefined) => {
     const response = await axios.get<PaginationType<UserType>>(api_routes.users.paginate, { params, signal });
+    return response.data;
+}
+
+export const getSalesTeamUsersHandler = async (params: URLSearchParams, signal?: GenericAbortSignal | undefined) => {
+    const response = await axios.get<PaginationType<UserType>>(api_routes.users.salesTeamPaginate, { params, signal });
     return response.data;
 }

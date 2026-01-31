@@ -3,16 +3,13 @@ import { useMutation } from "@tanstack/react-query";
 import { nprogress } from "@mantine/nprogress";
 import type { OrderApprovalFormValuesType, OrderPublicCreateFormValuesType } from "../schema/order";
 import { approvalOrderHandler, createPublicOrderHandler } from "../dal/order";
-import { usePaginationQueryParam } from "@/hooks/usePaginationQueryParam";
-import { useSearchQueryParam } from "@/hooks/useSearchQueryParam";
-import type { PaginationQueryType, PaginationType, OrderType } from "@/utils/types";
+import type { PaginationType, OrderType } from "@/utils/types";
 import { OrderQueryKey, OrdersQueryKey } from "../query/order";
+import { useSearchParams } from "react-router";
 
 export const useOrderApprovalMutation = (id: number) => {
     const { toastSuccess, toastError } = useToast();
-    const { page, total } = usePaginationQueryParam();
-    const { search } = useSearchQueryParam();
-    const query: PaginationQueryType = { page, total, search };
+    const [queryParams] = useSearchParams();
 
     return useMutation({
         mutationFn: async (values: OrderApprovalFormValuesType) => {
@@ -21,7 +18,7 @@ export const useOrderApprovalMutation = (id: number) => {
         },
         onSuccess: (data, params, ___, context) => {
             toastSuccess(params.order_status === 1 ? "Order approved successfully" : "Order rejected successfully");
-            context.client.setQueryData(OrdersQueryKey(query), (oldData: PaginationType<OrderType> | undefined) => {
+            context.client.setQueryData(OrdersQueryKey(queryParams), (oldData: PaginationType<OrderType> | undefined) => {
                 if (!oldData) return oldData;
                 const oldUserDataIndex = oldData.data.findIndex((user) => user.id === id);
                 if (oldUserDataIndex !== -1) {

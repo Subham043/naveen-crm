@@ -1,6 +1,13 @@
+import FilterClearBtn from "@/components/FilterClearBtn";
+import SelectOrderApprovalByMe from "@/components/Order/SelectOrderApprovalByMe";
+import SelectOrderInvoiceStatus from "@/components/Order/SelectOrderInvoiceStatus";
+import SelectOrderLeadSource from "@/components/Order/SelectOrderLeadSource";
+import SelectOrderPaymentStatus from "@/components/Order/SelectOrderPaymentStatus";
+import SelectOrderShipmentStatus from "@/components/Order/SelectOrderShipmentStatus";
+import SelectOrderStatus from "@/components/Order/SelectOrderStatus";
 import SearchField from "@/components/SearchField";
 import { useSearchQueryParam } from "@/hooks/useSearchQueryParam";
-import { Button, Group } from "@mantine/core";
+import { Group } from "@mantine/core";
 import { useCallback } from "react";
 
 function OrderFilters() {
@@ -11,15 +18,16 @@ function OrderFilters() {
     },
     [setSearch],
   );
-  const onClear = useCallback(() => {
-    setSearch("");
-  }, [setSearch]);
   return (
     <Group gap="xs">
       <SearchField defaultValue={search} onChange={onSearchChange} />
-      <Button variant="filled" type="button" color="dark" onClick={onClear}>
-        CLEAR
-      </Button>
+      <SelectOrderLeadSource />
+      <SelectOrderStatus />
+      <SelectOrderApprovalByMe />
+      <SelectOrderPaymentStatus />
+      <SelectOrderInvoiceStatus />
+      <SelectOrderShipmentStatus />
+      <FilterClearBtn />
     </Group>
   );
 }

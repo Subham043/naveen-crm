@@ -1,9 +1,8 @@
 import { useAuthStore } from "@/stores/auth.store";
-import type { PaginationQueryType, PaginationType, OrderType } from "@/utils/types";
+import type { PaginationType, OrderType } from "@/utils/types";
 import { useQuery, type UseQueryResult } from "@tanstack/react-query";
 import { getOrderHandler, getOrdersHandler } from "../dal/order";
-import { usePaginationQueryParam } from "@/hooks/usePaginationQueryParam";
-import { useSearchQueryParam } from "@/hooks/useSearchQueryParam";
+import { useSearchParams } from "react-router";
 
 
 export const OrderQueryKey = (id: number, isEdit: boolean = false) => {
@@ -13,17 +12,16 @@ export const OrderQueryKey = (id: number, isEdit: boolean = false) => {
     return ["order", id, "view"]
 };
 
-export const OrdersQueryKey = (query: PaginationQueryType) => {
-    const { page = 1, total = 10, search = "" } = query;
-    return ["orders", page, total, search]
+export const OrdersQueryKey = (params: URLSearchParams) => {
+    return ["orders", params.toString()]
 };
 
 export const OrderQueryFn = async ({ id, signal }: { id: number, signal?: AbortSignal }) => {
     return await getOrderHandler(id, signal);
 }
 
-export const OrdersQueryFn = async ({ query, signal }: { query: PaginationQueryType, signal?: AbortSignal }) => {
-    return await getOrdersHandler(query, signal);
+export const OrdersQueryFn = async ({ params, signal }: { params: URLSearchParams, signal?: AbortSignal }) => {
+    return await getOrdersHandler(params, signal);
 }
 
 /*
@@ -37,7 +35,7 @@ export const useOrderQuery: (id: number, enabled: boolean, isEdit?: boolean) => 
 
     return useQuery({
         queryKey: OrderQueryKey(id, isEdit),
-        queryFn: () => OrderQueryFn({ id }),
+        queryFn: ({ signal }) => OrderQueryFn({ id, signal }),
         enabled: authToken !== null && enabled,
     });
 };
@@ -50,13 +48,11 @@ export const useOrdersQuery: () => UseQueryResult<
     unknown
 > = () => {
     const authToken = useAuthStore((state) => state.authToken)
-    const { page, total } = usePaginationQueryParam();
-    const { search } = useSearchQueryParam();
-    const query: PaginationQueryType = { page, total, search };
+    const [params] = useSearchParams();
 
     return useQuery({
-        queryKey: OrdersQueryKey(query),
-        queryFn: () => OrdersQueryFn({ query }),
+        queryKey: OrdersQueryKey(params),
+        queryFn: ({ signal }) => OrdersQueryFn({ params, signal }),
         enabled: authToken !== null,
     });
 };

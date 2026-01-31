@@ -1,8 +1,9 @@
 import { useCallback, useState } from "react";
 import axios from "@/utils/axios";
 import { useToast } from "./useToast";
-import { useSearchQueryParam } from "./useSearchQueryParam";
 import type { GenericAbortSignal } from "axios";
+import { PAGEKEY, TOTALKEY } from "./usePaginationQueryParam";
+import { useSearchParams } from "react-router";
 
 /*
  * Toast Hook Type
@@ -18,7 +19,7 @@ type ExcelExportHookType = () => {
 export const useExcelExport: ExcelExportHookType = () => {
   const { toastError, toastSuccess } = useToast();
   const [excelLoading, setExcelLoading] = useState<boolean>(false);
-  const { search } = useSearchQueryParam();
+  const [params] = useSearchParams();
 
   const exportExcel = useCallback(
     async (
@@ -29,8 +30,12 @@ export const useExcelExport: ExcelExportHookType = () => {
       setExcelLoading(true);
       const link = document.createElement("a");
       try {
-        const params = new URLSearchParams();
-        if (search) params.append("filter[search]", search);
+        if (params.has(PAGEKEY)) {
+          params.delete(PAGEKEY);
+        }
+        if (params.has(TOTALKEY)) {
+          params.delete(TOTALKEY);
+        }
         const response = await axios.get(excel_url, {
           params,
           signal,
@@ -49,7 +54,7 @@ export const useExcelExport: ExcelExportHookType = () => {
         link.remove();
       }
     },
-    [search, toastError, toastSuccess],
+    [toastError, toastSuccess],
   );
 
   return {

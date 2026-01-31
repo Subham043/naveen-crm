@@ -3,6 +3,7 @@
 namespace App\Features\Users\Services;
 
 use App\Features\Authentication\Services\AuthCache;
+use App\Features\Roles\Enums\Roles;
 use App\Features\Users\DTO\UserCreateDTO;
 use App\Features\Users\DTO\UserRoleDTO;
 use App\Features\Users\DTO\UserUpdateDTO;
@@ -29,6 +30,27 @@ class UserService
                 ->allowedSorts('id', 'name')
                 ->allowedFilters([
                     AllowedFilter::custom('search', new CommonFilter, null, false),
+                    AllowedFilter::callback('is_blocked', function (Builder $query, $value) {
+						if(strtolower($value) == "yes"){
+                            $query->where('is_blocked', true);
+                        }
+                        if(strtolower($value) == "no"){
+                            $query->where('is_blocked', false);
+                        }
+                    }),
+                    AllowedFilter::callback('is_verified', function (Builder $query, $value) {
+						if(strtolower($value) == "yes"){
+							$query->whereNotNull('email_verified_at');
+						}
+						if(strtolower($value) == "no"){
+							$query->whereNull('email_verified_at');
+						}
+                    }),
+                    AllowedFilter::callback('role', function (Builder $query, $value) {
+                        $query->whereHas('roles', function($q) use($value){
+                            $q->where('name', $value);
+                        });
+                    }),
                 ]);
     }
 
@@ -40,6 +62,18 @@ class UserService
 	public function paginate(Int $total = 10): LengthAwarePaginator
 	{
 		return $this->query()
+			->paginate($total)
+			->appends(request()->query());
+	}
+
+	public function paginateSalesTeam(Int $total = 10): LengthAwarePaginator
+	{
+		return $this->query()
+			->whereHas('roles', function($q){
+				$q->where('name', Roles::Sales->value());
+			})
+			->where('is_blocked', false)
+			->whereNotNull('email_verified_at')
 			->paginate($total)
 			->appends(request()->query());
 	}

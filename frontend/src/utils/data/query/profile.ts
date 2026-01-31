@@ -33,7 +33,7 @@ export const useProfileQuery: (isEdit?: boolean) => UseQueryResult<
 
     return useQuery({
         queryKey: ProfileQueryKey(isEdit),
-        queryFn: ProfileQueryFn,
+        queryFn: ({ signal }) => ProfileQueryFn({ signal }),
         enabled: authToken !== null,
     });
 };

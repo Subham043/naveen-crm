@@ -2,6 +2,7 @@
 
 namespace App\Features\SalesTeam\Services;
 
+use App\Features\Order\Enums\OrderStatus;
 use App\Features\Order\Models\Order;
 use App\Http\Abstracts\AbstractService;
 use App\Http\Enums\Guards;
@@ -39,6 +40,31 @@ class SalesOrderService extends AbstractService
                 ->allowedSorts('id', 'name')
                 ->allowedFilters([
                     AllowedFilter::custom('search', new CommonFilter, null, false),
+                    AllowedFilter::callback('status', function (Builder $query, $value) {
+                        if(strtolower($value) == "draft"){
+                            $query->where('is_active', false)->whereNull('approval_by_id')->where('order_status', OrderStatus::Pending->value());
+                        }
+                        if(strtolower($value) == "submitted-for-approval"){
+                            $query->where('is_active', true)->whereNull('approval_by_id')->where('order_status', OrderStatus::Pending->value());
+                        }
+                        if(strtolower($value) == "approved"){
+                            $query->where('is_active', true)->whereNotNull('approval_by_id')->where('order_status', OrderStatus::Approved->value());
+                        }
+                        if(strtolower($value) == "rejected"){
+                            $query->where('is_active', true)->whereNotNull('approval_by_id')->where('order_status', OrderStatus::Rejected->value());
+                        }
+                    }),
+                    AllowedFilter::callback('is_created_by_agent', function (Builder $query, $value) {
+                        if(strtolower($value) == "yes"){
+                            $query->where('is_created_by_agent', true);
+                        }
+                        if(strtolower($value) == "no"){
+                            $query->where('is_created_by_agent', false);
+                        }
+                    }),
+                    AllowedFilter::callback('lead_source', function (Builder $query, $value) {
+                        $query->where('lead_source', $value);
+                    }),
                 ]);
     }
 
@@ -59,7 +85,12 @@ class CommonFilter implements Filter
             ->orWhere('phone', 'LIKE', '%' . $value . '%')
             ->orWhere('part_name', 'LIKE', '%' . $value . '%')
             ->orWhere('part_description', 'LIKE', '%' . $value . '%')
-            ->orWhere('billing_address', 'LIKE', '%' . $value . '%');
+            ->orWhere('billing_address', 'LIKE', '%' . $value . '%')
+            ->orWhereHas('approvalBy', function($q) use($value){
+                $q->where('name', 'LIKE', '%' . $value . '%')
+                ->orWhere('email', 'LIKE', '%' . $value . '%')
+                ->orWhere('phone', 'LIKE', '%' . $value . '%');
+            });
         });
     }
 }

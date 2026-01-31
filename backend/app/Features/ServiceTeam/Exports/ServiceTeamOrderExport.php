@@ -2,8 +2,11 @@
 
 namespace App\Features\ServiceTeam\Exports;
 
+use App\Features\Order\Enums\InvoiceStatus;
 use App\Features\Order\Enums\LeadSource;
 use App\Features\Order\Enums\OrderStatus;
+use App\Features\Order\Enums\PaymentStatus;
+use App\Features\Order\Enums\ShipmentStatus;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -38,14 +41,24 @@ class ServiceTeamOrderExport implements FromQuery, WithHeadings, WithMapping
 			$data->sales_user_id,
 			$data->salesUser->name,
 			$data->salesUser->email,
-			$data->is_created_by_agent,
+			$data->is_created_by_agent ? 'Yes' : 'No',
 			$data->assigned_at ? $data->assigned_at->format('Y-m-d H:i:s') : null,
+			PaymentStatus::getValue($data->payment_status),
+			$data->total_price ?? 'N/A',
+			$data->cost_price ?? 'N/A',
+			$data->shipping_cost ?? 'N/A',
+			$data->sales_tax ?? 'N/A',
+			$data->gross_profit ?? 'N/A',
+			$data->tracking_details ?? 'N/A',
+			InvoiceStatus::getValue($data->invoice_status),
+			ShipmentStatus::getValue($data->shipment_status),
+			$data->yard_located ? 'Yes' : 'No',
 			OrderStatus::getValue($data->order_status),
 			$data->approval_by_id,
 			$data->approvalBy->name,
 			$data->approvalBy->email,
 			$data->approval_at ? $data->approval_at->format('Y-m-d H:i:s') : null,
-			$data->is_active,
+			$data->is_active ? 'Yes' : 'No',
 			$data->created_at->format('Y-m-d H:i:s'),
 		];
 	}
@@ -56,17 +69,27 @@ class ServiceTeamOrderExport implements FromQuery, WithHeadings, WithMapping
 			'Id',
 			'Name',
 			'Email',
-			'Phone',
 			'Country Code',
-			'Billing Address',
+			'Phone',
 			'Part Name',
 			'Part Description',
+			'Billing Address',
 			'Lead Source',
 			'Sales User Id',
 			'Sales User Name',
 			'Sales User Email',
 			'Is Created By Agent',
 			'Assigned At',
+			'Payment Status',
+			'Total Price',
+			'Cost Price',
+			'Shipment Price',
+			'Sales Tax',
+			'Gross Profit',
+			'Tracking Details',
+			'Invoice Status',
+			'Shipment Status',
+			'Yard Located',
 			'Order Status',
 			'Approval By Id',
 			'Approval By Name',

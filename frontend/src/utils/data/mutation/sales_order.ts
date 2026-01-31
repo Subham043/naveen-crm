@@ -3,16 +3,17 @@ import { useMutation } from "@tanstack/react-query";
 import { nprogress } from "@mantine/nprogress";
 import type { SalesOrderFormValuesType } from "../schema/sales_order";
 import { createSalesOrderHandler, submitForApprovalSalesOrderHandler, updateSalesOrderHandler } from "../dal/sales_order";
+import type { PaginationType, SalesOrderType } from "@/utils/types";
+import { SalesOrderQueryKey, SalesOrdersQueryKey } from "../query/sales_order";
+import { useSearchParams } from "react-router";
 import { usePaginationQueryParam } from "@/hooks/usePaginationQueryParam";
 import { useSearchQueryParam } from "@/hooks/useSearchQueryParam";
-import type { PaginationQueryType, PaginationType, SalesOrderType } from "@/utils/types";
-import { SalesOrderQueryKey, SalesOrdersQueryKey } from "../query/sales_order";
 
 export const useSalesOrderCreateMutation = () => {
     const { toastSuccess } = useToast();
+    const [params] = useSearchParams();
     const { page, total } = usePaginationQueryParam();
     const { search } = useSearchQueryParam();
-    const query: PaginationQueryType = { page, total, search };
 
     return useMutation({
         mutationFn: async (val: SalesOrderFormValuesType) => {
@@ -22,7 +23,7 @@ export const useSalesOrderCreateMutation = () => {
         onSuccess: (data, __, ___, context) => {
             toastSuccess("Sales Order created successfully");
             if (page === 1 && !search) {
-                context.client.setQueryData(SalesOrdersQueryKey(query), (oldData: PaginationType<SalesOrderType> | undefined) => {
+                context.client.setQueryData(SalesOrdersQueryKey(params), (oldData: PaginationType<SalesOrderType> | undefined) => {
                     if (!oldData) return oldData;
                     if (oldData.data.length < total) {
                         return {
@@ -47,7 +48,7 @@ export const useSalesOrderCreateMutation = () => {
                     }
                 });
             } else {
-                context.client.invalidateQueries({ queryKey: SalesOrdersQueryKey(query) });
+                context.client.invalidateQueries({ queryKey: SalesOrdersQueryKey(params) });
             }
         },
         onSettled: () => {
@@ -58,9 +59,7 @@ export const useSalesOrderCreateMutation = () => {
 
 export const useSalesOrderUpdateMutation = (id: number) => {
     const { toastSuccess } = useToast();
-    const { page, total } = usePaginationQueryParam();
-    const { search } = useSearchQueryParam();
-    const query: PaginationQueryType = { page, total, search };
+    const [params] = useSearchParams();
 
     return useMutation({
         mutationFn: async (val: SalesOrderFormValuesType) => {
@@ -69,7 +68,7 @@ export const useSalesOrderUpdateMutation = (id: number) => {
         },
         onSuccess: (data, __, ___, context) => {
             toastSuccess("Sales Order updated successfully");
-            context.client.setQueryData(SalesOrdersQueryKey(query), (oldData: PaginationType<SalesOrderType> | undefined) => {
+            context.client.setQueryData(SalesOrdersQueryKey(params), (oldData: PaginationType<SalesOrderType> | undefined) => {
                 if (!oldData) return oldData;
                 const oldUserDataIndex = oldData.data.findIndex((user) => user.id === id);
                 if (oldUserDataIndex !== -1) {
@@ -93,9 +92,7 @@ export const useSalesOrderUpdateMutation = (id: number) => {
 
 export const useSalesOrderSubmitForApprovalMutation = (id: number) => {
     const { toastSuccess, toastError } = useToast();
-    const { page, total } = usePaginationQueryParam();
-    const { search } = useSearchQueryParam();
-    const query: PaginationQueryType = { page, total, search };
+    const [params] = useSearchParams();
 
     return useMutation({
         mutationFn: async () => {
@@ -104,7 +101,7 @@ export const useSalesOrderSubmitForApprovalMutation = (id: number) => {
         },
         onSuccess: (data, __, ___, context) => {
             toastSuccess("Sales Order submitted for approval successfully");
-            context.client.setQueryData(SalesOrdersQueryKey(query), (oldData: PaginationType<SalesOrderType> | undefined) => {
+            context.client.setQueryData(SalesOrdersQueryKey(params), (oldData: PaginationType<SalesOrderType> | undefined) => {
                 if (!oldData) return oldData;
                 const oldUserDataIndex = oldData.data.findIndex((user) => user.id === id);
                 if (oldUserDataIndex !== -1) {

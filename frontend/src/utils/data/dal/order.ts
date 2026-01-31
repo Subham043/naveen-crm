@@ -1,6 +1,6 @@
 import axios from "@/utils/axios";
 import { api_routes } from "../../routes/api_routes";
-import type { PaginationQueryType, PaginationType, OrderType } from "../../types";
+import type { PaginationType, OrderType } from "../../types";
 import type { GenericAbortSignal } from "axios";
 import type { OrderApprovalFormValuesType, OrderPublicCreateFormValuesType } from "../schema/order";
 
@@ -18,12 +18,7 @@ export const getOrderHandler = async (id: number, signal?: GenericAbortSignal | 
     return response.data.data;
 }
 
-export const getOrdersHandler = async (query: PaginationQueryType, signal?: GenericAbortSignal | undefined) => {
-    const { page = 1, total = 10, search = "" } = query;
-    const params = new URLSearchParams();
-    if (page) params.append("page", page.toString());
-    if (total) params.append("total", total.toString());
-    if (search) params.append("filter[search]", search);
+export const getOrdersHandler = async (params: URLSearchParams, signal?: GenericAbortSignal | undefined) => {
     const response = await axios.get<PaginationType<OrderType>>(api_routes.orders.paginate, { params, signal });
     return response.data;
 }

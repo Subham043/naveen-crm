@@ -3,16 +3,13 @@ import { useMutation } from "@tanstack/react-query";
 import { nprogress } from "@mantine/nprogress";
 import type { ServiceTeamOrderFormValuesType } from "../schema/service_team_order";
 import { updateServiceTeamOrderHandler } from "../dal/service_team_order";
-import { usePaginationQueryParam } from "@/hooks/usePaginationQueryParam";
-import { useSearchQueryParam } from "@/hooks/useSearchQueryParam";
-import type { PaginationQueryType, PaginationType, ServiceTeamOrderType } from "@/utils/types";
+import type { PaginationType, ServiceTeamOrderType } from "@/utils/types";
 import { ServiceTeamOrderQueryKey, ServiceTeamOrdersQueryKey } from "../query/service_team_order";
+import { useSearchParams } from "react-router";
 
 export const useServiceTeamOrderUpdateMutation = (id: number) => {
     const { toastSuccess } = useToast();
-    const { page, total } = usePaginationQueryParam();
-    const { search } = useSearchQueryParam();
-    const query: PaginationQueryType = { page, total, search };
+    const [params] = useSearchParams();
 
     return useMutation({
         mutationFn: async (val: ServiceTeamOrderFormValuesType) => {
@@ -21,7 +18,7 @@ export const useServiceTeamOrderUpdateMutation = (id: number) => {
         },
         onSuccess: (data, __, ___, context) => {
             toastSuccess("Service Team Order updated successfully");
-            context.client.setQueryData(ServiceTeamOrdersQueryKey(query), (oldData: PaginationType<ServiceTeamOrderType> | undefined) => {
+            context.client.setQueryData(ServiceTeamOrdersQueryKey(params), (oldData: PaginationType<ServiceTeamOrderType> | undefined) => {
                 if (!oldData) return oldData;
                 const oldUserDataIndex = oldData.data.findIndex((user) => user.id === id);
                 if (oldUserDataIndex !== -1) {

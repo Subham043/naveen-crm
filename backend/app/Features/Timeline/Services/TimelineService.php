@@ -24,7 +24,6 @@ class TimelineService
                     $query->select('id', 'name', 'email', 'phone')->with(['roles', 'permissions']);
                 }
             ])
-            // ->whereHas('doneBy')
             ->where('order_id', $order_id);
     }
 
@@ -117,12 +116,12 @@ class CommonFilter implements Filter
     {
         $query->where(function ($q) use ($value) {
             $q->where('comment', 'LIKE', '%' . $value . '%')
-                ->orWhere('message', 'LIKE', '%' . $value . '%')
-                ->orWhereHas('doneBy', function ($q) use ($value) {
-                    $q->where('name', 'LIKE', '%' . $value . '%')
-                        ->orWhere('email', 'LIKE', '%' . $value . '%')
-                        ->orWhere('phone', 'LIKE', '%' . $value . '%');
-                });
+            ->orWhere('message', 'LIKE', '%' . $value . '%')
+            ->orWhereHas('doneBy', function ($q) use ($value) {
+                $q->where('name', 'LIKE', '%' . $value . '%')
+                    ->orWhere('email', 'LIKE', '%' . $value . '%')
+                    ->orWhere('phone', 'LIKE', '%' . $value . '%');
+            });
         });
     }
 }
