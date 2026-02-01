@@ -35,6 +35,8 @@
     "axios": "^1.10.0",
     "dayjs": "^1.11.13",
     "google-libphonenumber": "^3.2.44",
+    "highcharts": "^12.5.0",
+    "highcharts-react-official": "^3.2.3",
     "react": "^19.2.0",
     "react-datepicker": "^8.7.0",
     "react-dom": "^19.2.0",

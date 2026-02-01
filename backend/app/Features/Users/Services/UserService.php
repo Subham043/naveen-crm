@@ -66,18 +66,6 @@ class UserService
 			->appends(request()->query());
 	}
 
-	public function paginateSalesTeam(Int $total = 10): LengthAwarePaginator
-	{
-		return $this->query()
-			->whereHas('roles', function($q){
-				$q->where('name', Roles::Sales->value());
-			})
-			->where('is_blocked', false)
-			->whereNotNull('email_verified_at')
-			->paginate($total)
-			->appends(request()->query());
-	}
-
 	public function getById(Int $id): User
 	{
 		return $this->model()->findOrFail($id);

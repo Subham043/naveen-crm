@@ -11,6 +11,7 @@ use App\Features\Authentication\Controllers\ForgotPasswordController;
 use App\Features\Authentication\Controllers\LoginController;
 use App\Features\Authentication\Controllers\RegisterController;
 use App\Features\Authentication\Controllers\ResetPasswordController;
+use App\Features\Dashboard\Controllers\DashboardController;
 use App\Features\Order\Controllers\OrderApprovalController;
 use App\Features\Order\Controllers\OrderExportController;
 use App\Features\Order\Controllers\OrderPaginateController;
@@ -37,7 +38,6 @@ use App\Features\ServiceTeam\Controllers\ServiceTeamOrderPaginateController;
 use App\Features\ServiceTeam\Controllers\ServiceTeamOrderUpdateController;
 use App\Features\ServiceTeam\Controllers\ServiceTeamOrderViewController;
 use App\Features\Timeline\Controllers\TimelinePaginateController;
-use App\Features\Users\Controllers\SalesTeamUserPaginateController;
 use App\Http\Enums\Guards;
 use App\Http\Enums\Throttle;
 use Illuminate\Support\Facades\Route;
@@ -92,11 +92,9 @@ Route::prefix('v1')->middleware([Throttle::API->middleware()])->group(function (
             });
         });
 
-        //Admin && Service Team Routes
-        Route::middleware([Roles::SuperAdmin->middleware(), Roles::Service->middleware()])->group(function () {
-            Route::prefix('users')->group(function () {
-                Route::get('/sales-team/paginate', [SalesTeamUserPaginateController::class, 'index']);
-            });
+        //Admin || Service Team || Sales Team Routes
+        Route::middleware([Roles::customMiddleware(Roles::SuperAdmin, Roles::Service, Roles::Sales)])->group(function () {
+            Route::get('/dashboard', [DashboardController::class, 'index']);
         });
 
         //Service Team Routes

@@ -18,9 +18,9 @@ export const api_routes = {
     logout: "/api/v1/account/logout",
   },
   roles: "/api/v1/roles",
+  dashboard: "/api/v1/dashboard",
   users: {
     paginate: "/api/v1/users/paginate",
-    salesTeamPaginate: "/api/v1/users/sales-team/paginate",
     create: "/api/v1/users/create",
     update: "/api/v1/users/update",
     status: "/api/v1/users/status",
