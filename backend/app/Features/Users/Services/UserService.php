@@ -3,7 +3,6 @@
 namespace App\Features\Users\Services;
 
 use App\Features\Authentication\Services\AuthCache;
-use App\Features\Roles\Enums\Roles;
 use App\Features\Users\DTO\UserCreateDTO;
 use App\Features\Users\DTO\UserRoleDTO;
 use App\Features\Users\DTO\UserUpdateDTO;
