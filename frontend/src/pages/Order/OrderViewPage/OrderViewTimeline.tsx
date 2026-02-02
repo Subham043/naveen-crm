@@ -11,13 +11,15 @@ import {
   Group,
   Select,
   Pagination,
+  ActionIcon,
 } from "@mantine/core";
 import type { OrderType } from "@/utils/types";
 import { useOrderTimelineQuery } from "@/utils/data/query/order_timeline";
 import CustomLoading from "@/components/CustomLoading";
 import Datetime from "@/components/Datetime";
-import { IconMessage } from "@tabler/icons-react";
+import { IconMessage, IconRefresh } from "@tabler/icons-react";
 import { useCallback, useMemo, useState } from "react";
+import PermittedLayout from "@/layouts/PermittedLayout";
 
 type Props = {
   id: OrderType["id"];
@@ -27,13 +29,11 @@ function OrderViewTimeline({ id }: Props) {
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(10);
 
-  const { data, isLoading, isFetching, isRefetching } = useOrderTimelineQuery(
-    id,
-    {
+  const { data, isLoading, isFetching, isRefetching, refetch } =
+    useOrderTimelineQuery(id, {
       page,
       total,
-    },
-  );
+    });
 
   const onLimitChange = useCallback(
     (value: string | null) => {
@@ -57,7 +57,22 @@ function OrderViewTimeline({ id }: Props) {
   return (
     <Paper shadow="xs" mb="lg" withBorder>
       <Box p="sm" pos="relative">
-        <Title order={5}>Timeline</Title>
+        <Group justify="space-between" align="center">
+          <Title order={5}>Timeline</Title>
+          <PermittedLayout
+            outletType="children"
+            allowedRoles={["Super-Admin"]}
+            additionalCondition={
+              !(isLoading || isFetching || isRefetching) &&
+              data &&
+              data.data.length > 0
+            }
+          >
+            <ActionIcon variant="filled" color="dark" onClick={() => refetch()}>
+              <IconRefresh size={16} stroke={1.5} />
+            </ActionIcon>
+          </PermittedLayout>
+        </Group>
       </Box>
       <Divider />
       <Box p="sm">
@@ -111,28 +126,30 @@ function OrderViewTimeline({ id }: Props) {
           </Text>
         )}
       </Box>
-      {data && data.data.length > 0 && (
-        <>
-          <Divider />
-          <Box p="sm">
-            <Group justify="center">
-              <Select
-                data={["10", "20", "30"]}
-                placeholder="Items Per Page"
-                w={80}
-                value={total.toString()}
-                onChange={onLimitChange}
-              />
-              <Pagination
-                boundaries={2}
-                total={totalPages}
-                value={page}
-                onChange={onPageChange}
-              />
-            </Group>
-          </Box>
-        </>
-      )}
+      {!(isLoading || isFetching || isRefetching) &&
+        data &&
+        data.data.length > 0 && (
+          <>
+            <Divider />
+            <Box p="sm">
+              <Group justify="center">
+                <Select
+                  data={["10", "20", "30"]}
+                  placeholder="Items Per Page"
+                  w={80}
+                  value={total.toString()}
+                  onChange={onLimitChange}
+                />
+                <Pagination
+                  boundaries={2}
+                  total={totalPages}
+                  value={page}
+                  onChange={onPageChange}
+                />
+              </Group>
+            </Box>
+          </>
+        )}
     </Paper>
   );
 }

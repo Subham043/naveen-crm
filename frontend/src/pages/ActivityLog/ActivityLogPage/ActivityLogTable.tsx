@@ -112,7 +112,7 @@ const ActivityLogRow = memo(
           <PermittedLayout outletType="children" allowedRoles={["Super-Admin"]}>
             <Group justify="end" gap="xs">
               <ActionIcon
-                variant="outline"
+                variant="filled"
                 color="yellow"
                 onClick={onViewHandler}
               >
