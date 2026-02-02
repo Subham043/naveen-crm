@@ -3,12 +3,14 @@
 namespace App\Features\SalesTeam\Listeners;
 
 use App\Features\SalesTeam\Events\SalesOrderUpdated;
+use App\Features\SalesTeam\Mail\OrderApprovalPendingMail;
 use App\Features\Timeline\Collections\TimelineChangeCollection;
 use App\Features\Timeline\DTO\TimelineChange;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\DB;
 use App\Features\Timeline\Services\TimelineService;
+use Illuminate\Support\Facades\Mail;
 
 class CreateTimelineForUpdatedSalesOrderListener implements ShouldQueue
 {
@@ -50,6 +52,10 @@ class CreateTimelineForUpdatedSalesOrderListener implements ShouldQueue
             
             if($event->dto->is_active && $event->oldValues['is_active'] == 0){
                 $message = "Order#{$event->order->id} was updated and submitted for approval by agent named {$event->userName}<{$event->userEmail}>";
+
+                Mail::to(config('mail.mailers.smtp.admin_email'))->send(
+                    (new OrderApprovalPendingMail($event->userName, $event->order->id))->afterCommit()
+                );
             }
             
             $this->timelineService->createTimeline($event->order, $changes, $message, null, $event->userId);

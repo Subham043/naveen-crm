@@ -4,12 +4,14 @@ namespace App\Features\Order\Listeners;
 
 use App\Features\Order\Enums\OrderStatus;
 use App\Features\Order\Events\OrderApproval;
+use App\Features\Order\Mail\OrderApprovalMail;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\DB;
 use App\Features\Timeline\Collections\TimelineChangeCollection;
 use App\Features\Timeline\DTO\TimelineChange;
 use App\Features\Timeline\Services\TimelineService;
+use Illuminate\Support\Facades\Mail;
 
 class CreateTimelineForOrderApprovalListener implements ShouldQueue
 {
@@ -57,6 +59,10 @@ class CreateTimelineForOrderApprovalListener implements ShouldQueue
             }
             
             $this->timelineService->createTimeline($event->order, $changes, $message, null, $event->userId);
+
+            Mail::to($event->order->salesUser->email)->send(
+                (new OrderApprovalMail($event->order->salesUser->name, $event->order->id, $event->orderApprovalDTO->order_status == OrderStatus::Approved->value() ? 'approved' : 'rejected'))->afterCommit()
+            );
         });
     }
 }

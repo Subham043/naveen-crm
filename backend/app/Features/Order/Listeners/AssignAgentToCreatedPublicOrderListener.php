@@ -3,6 +3,7 @@
 namespace App\Features\Order\Listeners;
 
 use App\Features\Order\Events\PublicOrderCreated;
+use App\Features\Order\Mail\OrderAssignedMail;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use App\Features\Users\Models\User;
@@ -11,6 +12,7 @@ use App\Features\Roles\Enums\Roles;
 use App\Features\Timeline\Collections\TimelineChangeCollection;
 use App\Features\Timeline\DTO\TimelineChange;
 use App\Features\Timeline\Services\TimelineService;
+use Illuminate\Support\Facades\Mail;
 
 class AssignAgentToCreatedPublicOrderListener implements ShouldQueue
 {
@@ -63,6 +65,10 @@ class AssignAgentToCreatedPublicOrderListener implements ShouldQueue
                 $order->disableLogging();
 
                 $order->save();
+
+                Mail::to($user->email)->send(
+                    (new OrderAssignedMail($user->name, $order->id))->afterCommit()
+                );
 
                 $doneBy = "{$user->name} <{$user->email}> ({$user->currentRole()})";
                 activity("order_{$order->id}")
