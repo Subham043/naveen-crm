@@ -8,6 +8,7 @@ use App\Features\Authentication\Services\AuthCache;
 use App\Features\Order\Models\Order;
 use App\Features\Timeline\Models\Timeline;
 use App\Features\Order\Models\Yard;
+use App\Features\Roles\Enums\Roles;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Features\Roles\Interfaces\RoleTraitInterface;
 use App\Features\Roles\Traits\RoleTrait;
@@ -18,11 +19,15 @@ use Illuminate\Notifications\Notifiable;
 use Database\Factories\UserFactory;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Enums\Guards;
 
 class User extends Authenticatable implements MustVerifyEmail, RoleTraitInterface, JWTSubject
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasRoles, RoleTrait;
+    use HasFactory, Notifiable, HasRoles, RoleTrait, LogsActivity;
 
     /**
      * The attributes that are mass assignable.
@@ -62,6 +67,8 @@ class User extends Authenticatable implements MustVerifyEmail, RoleTraitInterfac
             'is_blocked' => 'boolean',
         ];
     }
+
+    protected $recordEvents = ['created', 'updated', 'deleted'];
 
     /**
      * User Factory.
@@ -135,5 +142,28 @@ class User extends Authenticatable implements MustVerifyEmail, RoleTraitInterfac
     public function yards()
     {
         return $this->hasMany(Yard::class, 'service_team_id');
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        $logName = "user_{$this->id}";
+        $user = Auth::guard(Guards::API->value())->user();
+        return LogOptions::defaults()
+        ->useLogName($logName)
+        ->setDescriptionForEvent(
+            function(string $eventName) use ($user){
+                $description = "User with id {$this->id} was {$eventName}";
+                if($user){
+                    $role = request()->user()->currentRole() ?? Roles::SuperAdmin->value();
+                    $doneBy = "{$user->name} <{$user->email}> ({$role})";
+                    $description = "User with id {$this->id} was {$eventName} by {$doneBy}";
+                }
+                return $description;
+            }
+        )
+        ->logFillable()
+        ->logExcept(['remember_token', 'password', 'updated_at', 'created_at'])
+        ->logOnlyDirty()
+        ->dontSubmitEmptyLogs();
     }
 }

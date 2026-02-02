@@ -28,7 +28,7 @@ class SalesTeamDashboardService
 
             SUM(CASE WHEN orders.sales_user_id = ? AND orders.lead_source = 2 THEN 1 ELSE 0 END) as totalLeadOrders,
 
-            SUM(CASE WHEN orders.sales_user_id = ? AND orders.lead_source = 3 THEN 1 ELSE 0 END) as totalCallOrders,
+            SUM(CASE WHEN orders.sales_user_id = ? AND orders.lead_source = 3 THEN 1 ELSE 0 END) as totalCallOrders
         ", [
             Auth::guard(Guards::API->value)->id(),
             Auth::guard(Guards::API->value)->id(),

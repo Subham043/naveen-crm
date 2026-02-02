@@ -58,9 +58,22 @@ class AssignAgentToCreatedPublicOrderListener implements ShouldQueue
                     new TimelineChange('assigned_at', null, now()),
                 ]);
                 
-                $this->timelineService->createTimeline($order, $changes, "Order#{$order->id} was auto-assigned to agent named {$user->name}<{$user->email}>", null, $user->id);
+                $this->timelineService->createTimeline($order, $changes, "Order#{$order->id} was auto-assigned to {$user->name}<{$user->email}>", null, $user->id);
                 
+                $order->disableLogging();
+
                 $order->save();
+
+                $doneBy = "{$user->name} <{$user->email}> ({$user->currentRole()})";
+                activity("order_{$order->id}")
+                ->causedBy($user)
+                ->performedOn($order)
+                ->event("order_auto_assigned_to_agent")
+                ->withProperties([
+                    'old' => ['sales_user_id' => null, 'assigned_at' => null],
+                    'attributes' => ['sales_user_id' => $user->id, 'assigned_at' => now()]
+                ])
+                ->log("Order was auto assigned to {$doneBy}");
             }
         });
     }

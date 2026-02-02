@@ -29,6 +29,7 @@ class SalesOrderSubmitForApprovalController extends Controller
         try {
             //code...
             $user = Auth::guard(Guards::API->value())->user();
+            $order->disableLogging();
             $updated_order = DB::transaction(function () use ($order) {
                 return $this->salesOrderService->update(
                     ['is_active' => 1],
@@ -36,6 +37,17 @@ class SalesOrderSubmitForApprovalController extends Controller
                 );
             });
             event(new SalesOrderSubmittedForApproval($updated_order, $user->id, $user->name, $user->email));
+            $user2 = request()->user();
+            $doneBy = "{$user2->name} <{$user2->email}> ({$user2->currentRole()})";
+            activity("order_{$order->id}")
+			->causedBy($user2)
+			->performedOn($order)
+			->event("order_submitted_for_approval")
+			->withProperties([
+                'old' => ['is_active' => 0],
+				'attributes' => ['is_active' => 1]
+            ])
+			->log("Order submitted for approval by {$doneBy}");
             return response()->json(["message" => "Order submitted for approval successfully.", "data" => SalesOrderCollection::make($updated_order)], 200);
         } catch (\Throwable $th) {
             return response()->json(["message" => "Something went wrong. Please try again"], 400);

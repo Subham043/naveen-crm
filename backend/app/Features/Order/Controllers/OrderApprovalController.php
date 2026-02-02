@@ -30,11 +30,24 @@ class OrderApprovalController extends Controller
             //code...
             $dto = OrderApprovalDTO::fromRequest($request);
             $user = Auth::guard(Guards::API->value())->user();
+            $order->disableLogging();
             DB::transaction(function () use ($order, $dto, $user) {
-                return $this->orderService->update([...$dto->toArray(), 'approval_by_id' => $user->id, 'approval_at' => now()], $order);
+                $this->orderService->update([...$dto->toArray(), 'approval_by_id' => $user->id, 'approval_at' => now()], $order);
             });
             event(new OrderApproval($order, $dto, $user->id, $user->name, $user->email));
-            return response()->json(["message" => $request->order_status == OrderStatus::Approved->value() ? "Order approved successfully." : "Order rejected successfully.", "data" => OrderCollection::make($order)], 200);
+            $user2 = request()->user();
+            $doneBy = "{$user2->name} <{$user2->email}> ({$user2->currentRole()})";
+            $approval_status = $dto->order_status == OrderStatus::Approved->value() ? "approved" : "rejected";
+            activity("order_{$order->id}")
+			->causedBy($user2)
+			->performedOn($order)
+			->event("order_{$approval_status}")
+			->withProperties([
+                'old' => ['order_status' => 0, 'approval_by_id' => null, 'approval_at' => null],
+				'attributes' => [...$dto->toArray(), 'approval_by_id' => $user->id, 'approval_at' => now()]
+            ])
+			->log("Order {$approval_status} by {$doneBy}");
+            return response()->json(["message" => "Order {$approval_status} successfully.", "data" => OrderCollection::make($order)], 200);
         } catch (\Throwable $th) {
             return response()->json(["message" => "Something went wrong. Please try again"], 400);
         }

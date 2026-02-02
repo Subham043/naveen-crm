@@ -32,7 +32,21 @@ class AuthService
 
     public function login(LoginDTO $credentials, Guards $guard)
 	{
-		return Auth::guard($guard->value())->attempt($credentials->toArray());
+		$token = Auth::guard($guard->value())->attempt($credentials->toArray());
+		$user = request()->user();
+		$doneBy = "{$user->name} <{$user->email}> ({$user->currentRole()})";
+		activity("login_{$user->id}")
+			->causedBy($user)
+			->performedOn($user)
+			->event('logged_in')
+			->withProperties([
+				'attributes' => [
+					'ip' => request()->ip(),
+					'user_agent' => request()->userAgent(),
+				]
+            ])
+			->log("{$doneBy} logged into the system");
+		return $token;
 	}
 
 	public function set_cookie(string $token): \Symfony\Component\HttpFoundation\Cookie
@@ -65,6 +79,19 @@ class AuthService
 
 	public function logout(Guards $guard): void
 	{
+		$user = request()->user();
+		$doneBy = "{$user->name} <{$user->email}> ({$user->currentRole()})";
+		activity("logout_{$user->id}")
+			->causedBy($user)
+			->performedOn($user)
+			->event('logged_out')
+			->withProperties([
+				'attributes' => [
+					'ip' => request()->ip(),
+					'user_agent' => request()->userAgent(),
+				]
+            ])
+			->log("{$doneBy} logged out of the system");
 		AuthCache::forget(Auth::guard($guard->value())->id());
 		Auth::guard($guard->value())->logout(true);
 	}
