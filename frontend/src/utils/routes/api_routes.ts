@@ -42,6 +42,20 @@ export const api_routes = {
     view: "/api/v1/activity-log/view",
     excel: "/api/v1/activity-log/excel",
   },
+  reports: {
+    sales: {
+      paginate: "/api/v1/report/sales/paginate",
+      excel: "/api/v1/report/sales/excel",
+    },
+    agentPerformance: {
+      paginate: "/api/v1/report/agent-performance/paginate",
+      excel: "/api/v1/report/agent-performance/excel",
+    },
+    revenueSummary: {
+      paginate: "/api/v1/report/revenue-summary/paginate",
+      excel: "/api/v1/report/revenue-summary/excel",
+    },
+  },
   sales: {
     orders: {
       paginate: "/api/v1/sales/order/paginate",

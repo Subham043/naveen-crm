@@ -138,6 +138,38 @@ export type ActivityLogType = {
   updated_at: string;
 }
 
+export type SalesReportType = {
+  date: string;
+  total_orders: number;
+  total_sales: number;
+  total_tax: number;
+  total_profit: number;
+}
+
+export type AgentPerformanceReportType = {
+  sales_user_id: number;
+  total_leads: number;
+  total_sales: number;
+  total_profit: number;
+  converted_leads: number;
+  conversion_rate: number;
+  sales_user_info: {
+    id: number;
+    name: string;
+    email: string;
+    phone?: string;
+  } | null;
+}
+
+export type RevenueSummaryReportType = {
+  period: string;
+  total_revenue: number;
+  total_cost: number;
+  total_shipping: number;
+  total_tax: number;
+  total_profit: number;
+}
+
 export type TexteditorImageType = {
   id: number;
   image: string;

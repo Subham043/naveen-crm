@@ -49,6 +49,15 @@ const ServiceTeamOrderView = React.lazy(
 const OrderPublicForm = React.lazy(
   () => import("@/pages/OrderPublicForm/index.tsx"),
 );
+const SalesReport = React.lazy(
+  () => import("@/pages/Report/SalesReport/index.tsx"),
+);
+const RevenueSummary = React.lazy(
+  () => import("@/pages/Report/RevenueSummary/index.tsx"),
+);
+const AgentWisePerformanceReport = React.lazy(
+  () => import("@/pages/Report/AgentWisePerformanceReport/index.tsx"),
+);
 
 function App() {
   return (
@@ -134,6 +143,18 @@ function App() {
                     <Route
                       path={page_routes.activity_logs.link}
                       element={<ActivityLog />}
+                    />
+                    <Route
+                      path={page_routes.sales_reports.link}
+                      element={<SalesReport />}
+                    />
+                    <Route
+                      path={page_routes.revenue_summary_reports.link}
+                      element={<RevenueSummary />}
+                    />
+                    <Route
+                      path={page_routes.agent_performance_reports.link}
+                      element={<AgentWisePerformanceReport />}
                     />
                     <Route path={page_routes.orders.link} element={<Order />} />
                     <Route

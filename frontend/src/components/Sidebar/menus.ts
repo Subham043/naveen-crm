@@ -1,6 +1,7 @@
 import { page_routes } from "@/utils/routes/page_routes";
 import type { AvailableRoles } from "@/utils/types";
 import {
+  IconChartBar,
   IconFileSpreadsheet,
   IconHome,
   IconLogs,
@@ -43,6 +44,29 @@ export const menus: LinksGroupProps[] = [
     canAccess: ["Super-Admin"],
   },
   {
+    label: "Reports",
+    icon: IconChartBar,
+    initiallyOpened: false,
+    canAccess: ["Super-Admin"],
+    links: [
+      {
+        label: page_routes.sales_reports.name,
+        link: page_routes.sales_reports.link,
+        canAccess: ["Super-Admin"],
+      },
+      {
+        label: page_routes.agent_performance_reports.name,
+        link: page_routes.agent_performance_reports.link,
+        canAccess: ["Super-Admin"],
+      },
+      {
+        label: page_routes.revenue_summary_reports.name,
+        link: page_routes.revenue_summary_reports.link,
+        canAccess: ["Super-Admin"],
+      },
+    ],
+  },
+  {
     link: page_routes.activity_logs.link,
     label: page_routes.activity_logs.name,
     icon: IconLogs,
@@ -60,37 +84,4 @@ export const menus: LinksGroupProps[] = [
     icon: IconFileSpreadsheet,
     canAccess: ["Service-Team"],
   },
-  // {
-  //   label: "Admin",
-  //   icon: IconUserHexagon,
-  //   initiallyOpened: false,
-  //   canAccess: ["ORG_ADMIN", "SUPER_ADMIN"],
-  //   links: [
-  //     {
-  //       label: page_routes.users.name,
-  //       link: page_routes.users.link,
-  //       canAccess: ["ORG_ADMIN", "SUPER_ADMIN"],
-  //     },
-  //     {
-  //       label: page_routes.departments.name,
-  //       link: page_routes.departments.link,
-  //       canAccess: ["ORG_ADMIN", "SUPER_ADMIN"],
-  //     },
-  //     {
-  //       label: page_routes.organizations.name,
-  //       link: page_routes.organizations.link,
-  //       canAccess: ["SUPER_ADMIN"],
-  //     },
-  //     {
-  //       label: page_routes.applications.name,
-  //       link: page_routes.applications.link,
-  //       canAccess: ["ORG_ADMIN", "SUPER_ADMIN"],
-  //     },
-  //     {
-  //       label: page_routes.manageDocs.name,
-  //       link: page_routes.manageDocs.link,
-  //       canAccess: ["ORG_ADMIN", "SUPER_ADMIN"],
-  //     },
-  //   ],
-  // },
 ];
