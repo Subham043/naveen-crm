@@ -15,8 +15,8 @@ const TotalCallOrders = "totalCallOrders"
 const TotalPrice = "totalPrice"
 const CostPrice = "costPrice"
 const ShippingCost = "shippingCost"
-const SalesTax = "salesTax"
-const GrossProfit = "grossProfit"
+const TotalSalesTax = "totalSalesTax"
+const TotalGrossProfit = "totalGrossProfit"
 const TotalPaymentPendingOrders = "totalPaymentPendingOrders"
 const TotalPaymentPaidOrders = "totalPaymentPaidOrders"
 const TotalPaymentPartiallyPaidOrders = "totalPaymentPartiallyPaidOrders"
@@ -74,8 +74,8 @@ const OrderFinancialGraphContent = [
     TotalPrice,
     CostPrice,
     ShippingCost,
-    SalesTax,
-    GrossProfit,
+    TotalSalesTax,
+    TotalGrossProfit,
 ];
 
 const dashboardKeyIconMap = {
@@ -86,8 +86,8 @@ const dashboardKeyIconMap = {
     [TotalPrice]: { Icon: IconReceipt2, color: "var(--mantine-color-teal-filled)" },
     [CostPrice]: { Icon: IconTagStarred, color: "var(--mantine-color-indigo-filled)" },
     [ShippingCost]: { Icon: IconShoppingCartDollar, color: "var(--mantine-color-orange-filled)" },
-    [SalesTax]: { Icon: IconReceipt, color: "var(--mantine-color-cyan-filled)" },
-    [GrossProfit]: { Icon: IconBasketStar, color: "var(--mantine-color-green-filled)" },
+    [TotalSalesTax]: { Icon: IconReceipt, color: "var(--mantine-color-cyan-filled)" },
+    [TotalGrossProfit]: { Icon: IconBasketStar, color: "var(--mantine-color-green-filled)" },
     [TotalPaymentPendingOrders]: { Icon: IconCashMoveBack, color: "var(--mantine-color-red-filled)" },
     [TotalPaymentPaidOrders]: { Icon: IconBrandCashapp, color: "var(--mantine-color-teal-filled)" },
     [TotalPaymentPartiallyPaidOrders]: { Icon: IconCreditCardPay, color: "var(--mantine-color-orange-filled)" },

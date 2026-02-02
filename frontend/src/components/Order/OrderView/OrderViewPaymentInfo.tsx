@@ -34,7 +34,7 @@ function OrderViewPaymentInfo({
               Total Price
             </Text>
             <Text size="sm" c="dimmed">
-              {total_price || "N/A"}
+              {total_price ? total_price : 0.0}
             </Text>
           </Box>
           <Box>
@@ -42,7 +42,7 @@ function OrderViewPaymentInfo({
               Cost Price
             </Text>
             <Text size="sm" c="dimmed">
-              {cost_price || "N/A"}
+              {cost_price ? cost_price : 0.0}
             </Text>
           </Box>
           <Box>
@@ -50,15 +50,15 @@ function OrderViewPaymentInfo({
               Shipping Cost
             </Text>
             <Text size="sm" c="dimmed">
-              {shipping_cost || "N/A"}
+              {shipping_cost ? shipping_cost : 0.0}
             </Text>
           </Box>
           <Box>
             <Text fw={600} c="blue">
-              ServiceTeam Tax
+              Sales Tax
             </Text>
             <Text size="sm" c="dimmed">
-              {sales_tax || "N/A"}
+              {sales_tax ? sales_tax : 0.0}
             </Text>
           </Box>
           <Box>
@@ -66,7 +66,7 @@ function OrderViewPaymentInfo({
               Gross Profit
             </Text>
             <Text size="sm" c="dimmed">
-              {gross_profit || "N/A"}
+              {gross_profit ? gross_profit : 0.0}
             </Text>
           </Box>
           <Box>

@@ -94,14 +94,14 @@ class Order extends Model
     public function salesTax(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->cost_price ? $this->cost_price * 0.04 : null,
+            get: fn () => $this->cost_price ? $this->cost_price * 0.04 : 0.0,
         );
     }
 
     public function grossProfit(): Attribute
     {
         return Attribute::make(
-            get: fn () => !($this->cost_price || $this->shipping_cost || $this->total_price) ? null : ($this->total_price - ($this->cost_price + $this->shipping_cost + $this->sales_tax)),
+            get: fn () => !($this->cost_price || $this->shipping_cost || $this->total_price) ? 0.0 : ($this->total_price - ($this->cost_price + $this->shipping_cost + $this->sales_tax)),
         );
     }
 

@@ -25,22 +25,22 @@ class ServiceTeamDashboardService
 
             SUM(CASE 
                 WHEN orders.is_active = 1 AND orders.order_status = 1 AND orders.total_price IS NOT NULL 
-                THEN orders.total_price ELSE 0 END
+                THEN orders.total_price ELSE 0.00 END
             ) as totalPrice,
 
             SUM(CASE 
                 WHEN orders.is_active = 1 AND orders.order_status = 1 AND orders.cost_price IS NOT NULL 
-                THEN orders.cost_price ELSE 0 END
+                THEN orders.cost_price ELSE 0.00 END
             ) as costPrice,
 
             SUM(CASE 
                 WHEN orders.is_active = 1 AND orders.order_status = 1 AND orders.shipping_cost IS NOT NULL 
-                THEN orders.shipping_cost ELSE 0 END
+                THEN orders.shipping_cost ELSE 0.00 END
             ) as shippingCost,
 
             SUM(CASE 
                 WHEN orders.is_active = 1 AND orders.order_status = 1 AND orders.cost_price IS NOT NULL 
-                THEN orders.cost_price * 0.04 ELSE 0 END
+                THEN orders.cost_price * 0.04 ELSE 0.00 END
             ) as salesTax,
 
             SUM(CASE 
@@ -53,7 +53,7 @@ class ServiceTeamDashboardService
                     orders.total_price
                     - (orders.cost_price + orders.shipping_cost + (orders.cost_price * 0.04))
                 )
-                ELSE 0 END
+                ELSE 0.00 END
             ) as grossProfit,
 
             SUM(CASE WHEN orders.is_active = 1 AND orders.order_status = 1 AND orders.payment_status = ? THEN 1 ELSE 0 END) as totalPaymentPendingOrders,

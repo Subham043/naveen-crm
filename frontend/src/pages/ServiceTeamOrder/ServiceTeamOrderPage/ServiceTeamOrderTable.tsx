@@ -133,7 +133,7 @@ const ServiceTeamOrderTableRow = memo(
             "N/A"
           )}
         </Table.Td>
-        <Table.Td>{total_price || "N/A"}</Table.Td>
+        <Table.Td>{total_price ? total_price : 0.0}</Table.Td>
         <Table.Td>
           <OrderPaymentStatus
             payment_status={payment_status as PaymentStatus}

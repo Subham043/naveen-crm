@@ -120,7 +120,7 @@ const OrderTableRow = memo(
             "N/A"
           )}
         </Table.Td>
-        <Table.Td>{total_price || "N/A"}</Table.Td>
+        <Table.Td>{total_price ? total_price : 0.0}</Table.Td>
         <Table.Td>
           <OrderApprovalStatus
             is_active={is_active}
