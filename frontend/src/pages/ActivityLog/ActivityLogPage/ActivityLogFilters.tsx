@@ -5,8 +5,19 @@ import { Group } from "@mantine/core";
 import { useCallback } from "react";
 import SelectLogTypeFilter from "./SelectLogTypeFilter";
 import SelectCauserFilter from "./SelectCauserFilter";
+import type { AvailableRoles } from "@/utils/types";
 
-function ActivityLogFilters() {
+type Props = {
+  causers: {
+    id: number;
+    name: string;
+    email: string;
+    phone?: string;
+    role: AvailableRoles;
+  }[];
+};
+
+function ActivityLogFilters({ causers }: Props) {
   const { search, setSearch } = useSearchQueryParam();
   const onSearchChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -18,7 +29,7 @@ function ActivityLogFilters() {
     <Group gap="xs">
       <SearchField defaultValue={search} onChange={onSearchChange} />
       <SelectLogTypeFilter />
-      <SelectCauserFilter />
+      <SelectCauserFilter causers={causers} />
       <FilterClearBtn />
     </Group>
   );

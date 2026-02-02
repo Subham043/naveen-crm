@@ -13,10 +13,11 @@ type OptionType = {
 };
 
 type Props = {
+  selected?: OptionType;
   setSelected: (user: number | undefined) => void;
 };
 
-export default function SelectUser({ setSelected }: Props) {
+export default function SelectUser({ setSelected, selected }: Props) {
   /** Used to cancel in-flight requests to avoid race conditions */
   const abortControllerRef = useRef<AbortController | null>(null);
 
@@ -70,7 +71,7 @@ export default function SelectUser({ setSelected }: Props) {
   return (
     <div style={{ position: "relative", zIndex: 12, minWidth: "480px" }}>
       <AsyncPaginate
-        // value={value}
+        value={selected}
         isMulti={false}
         loadOptions={loadOptions}
         onChange={onChange}

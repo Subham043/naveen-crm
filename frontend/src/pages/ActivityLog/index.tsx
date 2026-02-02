@@ -44,7 +44,21 @@ export default function ActivityLog() {
         <Divider />
         <Box p="sm">
           {/* Filters */}
-          <ActivityLogFilters />
+          <ActivityLogFilters
+            causers={
+              data && data.data.length > 0
+                ? data.data
+                    .filter((activityLog) => activityLog.causer !== null)
+                    .map((activityLog) => ({
+                      id: activityLog.causer!.id,
+                      name: activityLog.causer!.name,
+                      email: activityLog.causer!.email,
+                      phone: activityLog.causer!.phone,
+                      role: activityLog.causer!.role,
+                    }))
+                : []
+            }
+          />
         </Box>
         <Divider />
         <Box>
