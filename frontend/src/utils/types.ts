@@ -116,6 +116,28 @@ export type OrderTimelineType = {
   updated_at: string;
 }
 
+export type ActivityLogType = {
+  id: number;
+  causer_id: number | null;
+  description: string;
+  event: string;
+  log_name: string;
+  subject_id: number;
+  properties: {
+    "old"?: Record<string, string | number | boolean | null>,
+    "attributes": Record<string, string | number | boolean | null>
+  };
+  causer: {
+    id: number;
+    name: string;
+    email: string;
+    phone?: string;
+    role: AvailableRoles;
+  } | null;
+  created_at: string;
+  updated_at: string;
+}
+
 export type TexteditorImageType = {
   id: number;
   image: string;

@@ -7,6 +7,9 @@ use App\Features\Account\Controllers\ProfileUpdateController;
 use App\Features\Account\Controllers\ProfileVerifyController;
 use App\Features\Account\Controllers\LogoutController;
 use App\Features\Account\Controllers\RefreshTokenController;
+use App\Features\ActivityLogs\Controllers\ActivityLogExportController;
+use App\Features\ActivityLogs\Controllers\ActivityLogPaginateController;
+use App\Features\ActivityLogs\Controllers\ActivityLogViewController;
 use App\Features\Authentication\Controllers\ForgotPasswordController;
 use App\Features\Authentication\Controllers\LoginController;
 use App\Features\Authentication\Controllers\RegisterController;
@@ -89,6 +92,11 @@ Route::prefix('v1')->middleware([Throttle::API->middleware()])->group(function (
                 Route::get('/view/{id}', [OrderViewController::class, 'index']);
                 Route::post('/approval/{id}', [OrderApprovalController::class, 'index']);
                 Route::get('/timeline/{order_id}', [TimelinePaginateController::class, 'index']);
+            });
+            Route::prefix('activity-log')->group(function () {
+                Route::get('/excel', [ActivityLogExportController::class, 'index']);
+                Route::get('/paginate', [ActivityLogPaginateController::class, 'index']);
+                Route::get('/view/{id}', [ActivityLogViewController::class, 'index']);
             });
         });
 

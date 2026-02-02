@@ -3,6 +3,7 @@ import type { AvailableRoles } from "@/utils/types";
 import {
   IconFileSpreadsheet,
   IconHome,
+  IconLogs,
   IconUsers,
 } from "@tabler/icons-react";
 
@@ -39,6 +40,12 @@ export const menus: LinksGroupProps[] = [
     link: page_routes.orders.link,
     label: page_routes.orders.name,
     icon: IconFileSpreadsheet,
+    canAccess: ["Super-Admin"],
+  },
+  {
+    link: page_routes.activity_logs.link,
+    label: page_routes.activity_logs.name,
+    icon: IconLogs,
     canAccess: ["Super-Admin"],
   },
   {

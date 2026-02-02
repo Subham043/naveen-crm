@@ -37,6 +37,11 @@ export const api_routes = {
     timeline: "/api/v1/order/timeline",
     publicCreate: "/api/v1/order/public/create",
   },
+  activityLog: {
+    paginate: "/api/v1/activity-log/paginate",
+    view: "/api/v1/activity-log/view",
+    excel: "/api/v1/activity-log/excel",
+  },
   sales: {
     orders: {
       paginate: "/api/v1/sales/order/paginate",
