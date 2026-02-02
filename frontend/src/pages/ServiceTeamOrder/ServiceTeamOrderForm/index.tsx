@@ -5,6 +5,7 @@ import {
   Button,
   Drawer,
   Group,
+  Input,
   LoadingOverlay,
   Paper,
   Select,
@@ -209,7 +210,14 @@ export default function ServiceTeamOrderForm({
             <Paper shadow="xs" withBorder mt="md">
               <Box p="sm" pos="relative">
                 <Group justify="space-between" gap={10}>
-                  <Title order={5}>YARD DETAILS</Title>
+                  <Box>
+                    <Title order={5}>YARD DETAILS</Title>
+                    {form.formState.errors.yards?.message && (
+                      <Input.Error>
+                        {form.formState.errors.yards?.message}
+                      </Input.Error>
+                    )}
+                  </Box>
                   <ActionIcon
                     variant="outline"
                     color="cyan"
