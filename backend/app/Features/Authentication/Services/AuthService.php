@@ -33,19 +33,21 @@ class AuthService
     public function login(LoginDTO $credentials, Guards $guard)
 	{
 		$token = Auth::guard($guard->value())->attempt($credentials->toArray());
-		$user = request()->user();
-		$doneBy = "{$user->name} <{$user->email}> ({$user->currentRole()})";
-		activity("login_{$user->id}")
-			->causedBy($user)
-			->performedOn($user)
-			->event('logged_in')
-			->withProperties([
-				'attributes' => [
-					'ip' => request()->ip(),
-					'user_agent' => request()->userAgent(),
-				]
-            ])
-			->log("{$doneBy} logged into the system");
+		if ($token) {
+			$user = request()->user();
+			$doneBy = "{$user->name} <{$user->email}> ({$user->currentRole()})";
+			activity("login_{$user->id}")
+				->causedBy($user)
+				->performedOn($user)
+				->event('logged_in')
+				->withProperties([
+					'attributes' => [
+						'ip' => request()->ip(),
+						'user_agent' => request()->userAgent(),
+					]
+				])
+				->log("{$doneBy} logged into the system");
+		}
 		return $token;
 	}
 

@@ -11,12 +11,11 @@ class CacheAuthenticatedUser
 {
     public function handle($request, Closure $next)
     {
-        try {
-            if (($request->bearerToken() || $request->hasCookie(config('session.cookie'))) && Auth::guard(Guards::API->value())->check()) {
-                AuthCache::getCachedUser();
+        if (($request->bearerToken() || $request->hasCookie(config('session.cookie'))) && Auth::guard(Guards::API->value())->check()) {
+            $user = AuthCache::getCachedUser(Guards::API);
+            if ($user?->is_blocked==true) {
+                abort(403, 'Your account has been blocked. Please contact the administrator.');
             }
-        } catch (\Throwable $e) {
-            // ignore
         }
 
         return $next($request);

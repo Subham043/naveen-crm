@@ -20,6 +20,7 @@ const DashboardLayout = React.lazy(
 const AuthLayout = React.lazy(() => import("@/layouts/AuthLayout/index.tsx"));
 const ProtectedLayout = React.lazy(() => import("@/layouts/ProtectedLayout"));
 const VerifiedLayout = React.lazy(() => import("@/layouts/VerifiedLayout"));
+const BlockedLayout = React.lazy(() => import("@/layouts/BlockedLayout"));
 const PermittedLayout = React.lazy(() => import("@/layouts/PermittedLayout"));
 const GuestLayout = React.lazy(() => import("@/layouts/GuestLayout.tsx"));
 
@@ -65,102 +66,107 @@ function App() {
       <Routes>
         <Route element={<AuthPersistLayout />}>
           <Route element={<ProtectedLayout />}>
-            <Route element={<VerifiedLayout />}>
-              <Route element={<DeleteProvider />}>
-                <Route element={<DashboardLayout />}>
-                  <Route
-                    element={
-                      <PermittedLayout
-                        outletType="outlet"
-                        allowedRoles={[
-                          "Super-Admin",
-                          "Sales-Team",
-                          "Service-Team",
-                        ]}
-                        allowLoading={true}
-                        display403={true}
+            <Route element={<BlockedLayout />}>
+              <Route element={<VerifiedLayout />}>
+                <Route element={<DeleteProvider />}>
+                  <Route element={<DashboardLayout />}>
+                    <Route
+                      element={
+                        <PermittedLayout
+                          outletType="outlet"
+                          allowedRoles={[
+                            "Super-Admin",
+                            "Sales-Team",
+                            "Service-Team",
+                          ]}
+                          allowLoading={true}
+                          display403={true}
+                        />
+                      }
+                    >
+                      <Route
+                        path={page_routes.dashboard.link}
+                        element={<Dashboard />}
                       />
-                    }
-                  >
-                    <Route
-                      path={page_routes.dashboard.link}
-                      element={<Dashboard />}
-                    />
-                    <Route
-                      path={page_routes.profile.link}
-                      element={<Profile />}
-                    />
-                  </Route>
-                  <Route
-                    element={
-                      <PermittedLayout
-                        outletType="outlet"
-                        allowedRoles={["Sales-Team"]}
-                        allowLoading={true}
-                        display403={true}
+                      <Route
+                        path={page_routes.profile.link}
+                        element={<Profile />}
                       />
-                    }
-                  >
+                    </Route>
                     <Route
-                      path={page_routes.sales_orders.link}
-                      element={<SalesOrder />}
-                    />
-                    <Route
-                      path={`${page_routes.sales_orders.link}/:id`}
-                      element={<SalesOrderView />}
-                    />
-                  </Route>
-                  <Route
-                    element={
-                      <PermittedLayout
-                        outletType="outlet"
-                        allowedRoles={["Service-Team"]}
-                        allowLoading={true}
-                        display403={true}
+                      element={
+                        <PermittedLayout
+                          outletType="outlet"
+                          allowedRoles={["Sales-Team"]}
+                          allowLoading={true}
+                          display403={true}
+                        />
+                      }
+                    >
+                      <Route
+                        path={page_routes.sales_orders.link}
+                        element={<SalesOrder />}
                       />
-                    }
-                  >
-                    <Route
-                      path={page_routes.service_team_orders.link}
-                      element={<ServiceTeamOrder />}
-                    />
-                    <Route
-                      path={`${page_routes.service_team_orders.link}/:id`}
-                      element={<ServiceTeamOrderView />}
-                    />
-                  </Route>
-                  <Route
-                    element={
-                      <PermittedLayout
-                        outletType="outlet"
-                        allowedRoles={["Super-Admin"]}
-                        allowLoading={true}
-                        display403={true}
+                      <Route
+                        path={`${page_routes.sales_orders.link}/:id`}
+                        element={<SalesOrderView />}
                       />
-                    }
-                  >
-                    <Route path={page_routes.users.link} element={<User />} />
+                    </Route>
                     <Route
-                      path={page_routes.activity_logs.link}
-                      element={<ActivityLog />}
-                    />
+                      element={
+                        <PermittedLayout
+                          outletType="outlet"
+                          allowedRoles={["Service-Team"]}
+                          allowLoading={true}
+                          display403={true}
+                        />
+                      }
+                    >
+                      <Route
+                        path={page_routes.service_team_orders.link}
+                        element={<ServiceTeamOrder />}
+                      />
+                      <Route
+                        path={`${page_routes.service_team_orders.link}/:id`}
+                        element={<ServiceTeamOrderView />}
+                      />
+                    </Route>
                     <Route
-                      path={page_routes.sales_reports.link}
-                      element={<SalesReport />}
-                    />
-                    <Route
-                      path={page_routes.revenue_summary_reports.link}
-                      element={<RevenueSummary />}
-                    />
-                    <Route
-                      path={page_routes.agent_performance_reports.link}
-                      element={<AgentWisePerformanceReport />}
-                    />
-                    <Route path={page_routes.orders.link} element={<Order />} />
-                    <Route
-                      path={`${page_routes.orders.link}/:id`}
-                      element={<OrderView />}
-                    />
+                      element={
+                        <PermittedLayout
+                          outletType="outlet"
+                          allowedRoles={["Super-Admin"]}
+                          allowLoading={true}
+                          display403={true}
+                        />
+                      }
+                    >
+                      <Route path={page_routes.users.link} element={<User />} />
+                      <Route
+                        path={page_routes.activity_logs.link}
+                        element={<ActivityLog />}
+                      />
+                      <Route
+                        path={page_routes.sales_reports.link}
+                        element={<SalesReport />}
+                      />
+                      <Route
+                        path={page_routes.revenue_summary_reports.link}
+                        element={<RevenueSummary />}
+                      />
+                      <Route
+                        path={page_routes.agent_performance_reports.link}
+                        element={<AgentWisePerformanceReport />}
+                      />
+                      <Route
+                        path={page_routes.orders.link}
+                        element={<Order />}
+                      />
+                      <Route
+                        path={`${page_routes.orders.link}/:id`}
+                        element={<OrderView />}
+                      />
+                    </Route>
                   </Route>
                 </Route>
               </Route>

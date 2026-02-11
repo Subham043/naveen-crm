@@ -6,6 +6,7 @@ use App\Features\Account\Requests\ProfileUpdatePostRequest;
 use App\Features\Account\Resources\ProfileCollection;
 use App\Features\Authentication\Services\AuthCache;
 use App\Http\Controllers\Controller;
+use App\Http\Enums\Guards;
 
 class ProfileUpdateController extends Controller
 {
@@ -23,7 +24,7 @@ class ProfileUpdateController extends Controller
 
             $user->save();
 
-            $cachedUser = AuthCache::getCachedUser();
+            $cachedUser = AuthCache::getCachedUser(Guards::API);
 
             return response()->json([
                 'profile' => ProfileCollection::make($cachedUser),
