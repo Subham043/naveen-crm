@@ -109,6 +109,35 @@ export default function SalesOrderForm({ modal, handleModalClose }: Props) {
           />
           <Controller
             control={form.control}
+            name="part_year"
+            render={({ field, fieldState }) => (
+              <TextInput
+                label="Part Year"
+                type="number"
+                value={field.value ? field.value : undefined}
+                onChange={field.onChange}
+                error={fieldState.error?.message}
+                withAsterisk={isActive === 1}
+                mt="md"
+              />
+            )}
+          />
+          <Controller
+            control={form.control}
+            name="part_model"
+            render={({ field, fieldState }) => (
+              <TextInput
+                label="Part Model"
+                value={field.value ? field.value : ""}
+                onChange={field.onChange}
+                error={fieldState.error?.message}
+                withAsterisk={isActive === 1}
+                mt="md"
+              />
+            )}
+          />
+          <Controller
+            control={form.control}
             name="part_name"
             render={({ field, fieldState }) => (
               <TextInput

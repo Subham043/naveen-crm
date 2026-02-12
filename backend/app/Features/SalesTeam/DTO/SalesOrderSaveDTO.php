@@ -15,6 +15,8 @@ final class SalesOrderSaveDTO
         public readonly ?string $phone,
         public readonly ?string $country_code,
         public readonly ?string $billing_address,
+        public readonly ?string $part_year,
+        public readonly ?string $part_model,
         public readonly ?string $part_name,
         public readonly ?string $part_description,
     ) {}
@@ -33,6 +35,8 @@ final class SalesOrderSaveDTO
             phone: $request->validated('phone'),
             country_code: $request->validated('country_code'),
             billing_address: $request->validated('billing_address'),
+            part_year: $request->validated('part_year'),
+            part_model: $request->validated('part_model'),
             part_name: $request->validated('part_name'),
             part_description: $request->validated('part_description'),
         );
@@ -60,6 +64,14 @@ final class SalesOrderSaveDTO
 
         if ($this->billing_address) {
             $data['billing_address'] = $this->billing_address;
+        }
+
+        if ($this->part_year) {
+            $data['part_year'] = $this->part_year;
+        }
+
+        if ($this->part_model) {
+            $data['part_model'] = $this->part_model;
         }
 
         if ($this->part_name) {

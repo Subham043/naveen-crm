@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('country_code')->nullable();
             $table->text('billing_address')->nullable();
             //item part info
+            $table->string('part_year')->nullable();
+            $table->string('part_model')->nullable();
             $table->string('part_name')->nullable();
             $table->text('part_description')->nullable();
             //lead source

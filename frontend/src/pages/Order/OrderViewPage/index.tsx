@@ -75,6 +75,8 @@ export default function OrderView() {
         email={data.email}
         phone_number={data.phone_number}
         lead_source_info={data.lead_source_info}
+        part_year={data.part_year}
+        part_model={data.part_model}
         part_name={data.part_name}
         part_description={data.part_description}
         billing_address={data.billing_address}

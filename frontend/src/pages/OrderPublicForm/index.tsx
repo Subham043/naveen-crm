@@ -100,6 +100,39 @@ export default function OrderPublicForm() {
             />
             <Controller
               control={form.control}
+              name="part_year"
+              render={({ field, fieldState }) => (
+                <TextInput
+                  label="Part Year"
+                  type="number"
+                  placeholder="Part Year"
+                  value={field.value ? field.value : undefined}
+                  onChange={field.onChange}
+                  error={fieldState.error?.message}
+                  withAsterisk
+                  mt="sm"
+                />
+              )}
+            />
+          </SimpleGrid>
+          <SimpleGrid cols={{ base: 1, sm: 2 }}>
+            <Controller
+              control={form.control}
+              name="part_model"
+              render={({ field, fieldState }) => (
+                <TextInput
+                  label="Part Model"
+                  placeholder="Part Model"
+                  value={field.value ? field.value : ""}
+                  onChange={field.onChange}
+                  error={fieldState.error?.message}
+                  withAsterisk
+                  mt="sm"
+                />
+              )}
+            />
+            <Controller
+              control={form.control}
               name="part_name"
               render={({ field, fieldState }) => (
                 <TextInput
@@ -121,22 +154,6 @@ export default function OrderPublicForm() {
               <Textarea
                 label="Part Description"
                 placeholder="Part Description"
-                value={field.value ? field.value : ""}
-                onChange={field.onChange}
-                error={fieldState.error?.message}
-                rows={5}
-                withAsterisk
-                mt="sm"
-              />
-            )}
-          />
-          <Controller
-            control={form.control}
-            name="billing_address"
-            render={({ field, fieldState }) => (
-              <Textarea
-                label="Billing Address"
-                placeholder="Billing Address"
                 value={field.value ? field.value : ""}
                 onChange={field.onChange}
                 error={fieldState.error?.message}

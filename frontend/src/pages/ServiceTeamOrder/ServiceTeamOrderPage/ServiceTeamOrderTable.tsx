@@ -28,6 +28,8 @@ const ServiceTeamOrderTableRow = memo(
     name,
     email,
     phone_number,
+    part_year,
+    part_model,
     part_name,
     lead_source_info,
     payment_status,
@@ -87,6 +89,8 @@ const ServiceTeamOrderTableRow = memo(
             </Box>
           </Group>
         </Table.Td>
+        <Table.Td>{part_year || "N/A"}</Table.Td>
+        <Table.Td>{part_model || "N/A"}</Table.Td>
         <Table.Td>{part_name || "N/A"}</Table.Td>
         <Table.Td>{lead_source_info}</Table.Td>
         <Table.Td>
@@ -189,6 +193,8 @@ function ServiceTeamOrderTable({
           <Table.Tr bg={"var(--mantine-color-blue-light)"}>
             <Table.Th>ID</Table.Th>
             <Table.Th>CUSTOMER</Table.Th>
+            <Table.Th>PART YEAR</Table.Th>
+            <Table.Th>PART MODEL</Table.Th>
             <Table.Th>PART NAME</Table.Th>
             <Table.Th>SOURCE</Table.Th>
             <Table.Th>AGENT</Table.Th>
@@ -202,7 +208,7 @@ function ServiceTeamOrderTable({
         </Table.Thead>
         <Table.Tbody>
           {loading ? (
-            <TableRowLoading colSpan={11} />
+            <TableRowLoading colSpan={13} />
           ) : serviceTeamOrders.length > 0 ? (
             serviceTeamOrders.map((item) => (
               <ServiceTeamOrderTableRow
@@ -213,6 +219,8 @@ function ServiceTeamOrderTable({
                 phone={item.phone}
                 country_code={item.country_code}
                 phone_number={item.phone_number}
+                part_year={item.part_year}
+                part_model={item.part_model}
                 part_name={item.part_name}
                 part_description={item.part_description}
                 billing_address={item.billing_address}
@@ -248,7 +256,7 @@ function ServiceTeamOrderTable({
               />
             ))
           ) : (
-            <TableRowNotFound colSpan={11} />
+            <TableRowNotFound colSpan={13} />
           )}
         </Table.Tbody>
       </Table>

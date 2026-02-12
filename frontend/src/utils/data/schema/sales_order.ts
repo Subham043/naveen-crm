@@ -60,6 +60,24 @@ export const salesOrderSchema = yup
                 then: (schema) => schema.required("Billing Address is required"),
                 otherwise: (schema) => schema.optional(),
             }),
+        part_year: yup
+            .number()
+            .typeError("Part Year must be a number")
+            .min(1900, "Part Year must be greater than 1900")
+            .max(3000, "Part Year must be less than 3000")
+            .when("is_active", {
+                is: (val: number | undefined) => val === 1,
+                then: (schema) => schema.required("Part Year is required"),
+                otherwise: (schema) => schema.optional(),
+            }),
+        part_model: yup
+            .string()
+            .typeError("Part Model must contain characters only")
+            .when("is_active", {
+                is: (val: number | undefined) => val === 1,
+                then: (schema) => schema.required("Part Model is required"),
+                otherwise: (schema) => schema.optional(),
+            }),
         part_name: yup
             .string()
             .typeError("Part Name must contain characters only")

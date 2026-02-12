@@ -23,7 +23,7 @@ class SalesOrderSubmitForApprovalController extends Controller
      */
     public function index($id){
         $order = $this->salesOrderService->getByIdAndIsInactive($id);
-        if(empty($order->country_code) || empty($order->phone) || empty($order->billing_address) || empty($order->part_name) || empty($order->part_description)){
+        if(empty($order->country_code) || empty($order->phone) || empty($order->billing_address) || empty($order->part_year) || empty($order->part_model) || empty($order->part_name) || empty($order->part_description)){
             return response()->json(["message" => "Please fill all the required fields to submit for approval."], 400);
         }
         try {

@@ -20,6 +20,8 @@ type Props = {
   email: OrderType["email"];
   phone_number: OrderType["phone_number"];
   lead_source_info: OrderType["lead_source_info"];
+  part_year: OrderType["part_year"];
+  part_model: OrderType["part_model"];
   part_name: OrderType["part_name"];
   part_description: OrderType["part_description"];
   billing_address: OrderType["billing_address"];
@@ -35,6 +37,8 @@ function OrderViewCustomerInfo({
   email,
   phone_number,
   lead_source_info,
+  part_year,
+  part_model,
   part_name,
   part_description,
   billing_address,
@@ -86,6 +90,22 @@ function OrderViewCustomerInfo({
             </Text>
             <Text size="sm" c="dimmed">
               {lead_source_info}
+            </Text>
+          </Box>
+          <Box>
+            <Text fw={600} c="blue">
+              Part Year
+            </Text>
+            <Text size="sm" c="dimmed">
+              {part_year || "N/A"}
+            </Text>
+          </Box>
+          <Box>
+            <Text fw={600} c="blue">
+              Part Model
+            </Text>
+            <Text size="sm" c="dimmed">
+              {part_model || "N/A"}
             </Text>
           </Box>
           <Box>

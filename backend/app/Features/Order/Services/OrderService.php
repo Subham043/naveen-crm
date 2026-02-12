@@ -17,7 +17,7 @@ class OrderService extends AbstractService
 
     public function model(): Builder
     {
-        return Order::select('id', 'name', 'email', 'phone', 'country_code', 'billing_address', 'part_name', 'part_description', 'lead_source', 'sales_user_id', 'is_created_by_agent', 'assigned_at', 'payment_status', 'yard_located', 'total_price', 'cost_price', 'shipping_cost', 'tracking_details', 'invoice_status', 'shipment_status', 'order_status', 'approval_by_id', 'approval_at', 'is_active', 'created_at', 'updated_at')
+        return Order::select('id', 'name', 'email', 'phone', 'country_code', 'billing_address', 'part_year', 'part_model', 'part_name', 'part_description', 'lead_source', 'sales_user_id', 'is_created_by_agent', 'assigned_at', 'payment_status', 'yard_located', 'total_price', 'cost_price', 'shipping_cost', 'tracking_details', 'invoice_status', 'shipment_status', 'order_status', 'approval_by_id', 'approval_at', 'is_active', 'created_at', 'updated_at')
         ->with([
             'salesUser' => function($query){
                 $query->select('id', 'name', 'email', 'phone');
@@ -94,6 +94,8 @@ class CommonFilter implements Filter
             $q->where('name', 'LIKE', '%' . $value . '%')
             ->orWhere('email', 'LIKE', '%' . $value . '%')
             ->orWhere('phone', 'LIKE', '%' . $value . '%')
+            ->orWhere('part_year', 'LIKE', '%' . $value . '%')
+            ->orWhere('part_model', 'LIKE', '%' . $value . '%')
             ->orWhere('part_name', 'LIKE', '%' . $value . '%')
             ->orWhereHas('salesUser', function($q) use($value){
                 $q->where('name', 'LIKE', '%' . $value . '%')

@@ -28,6 +28,8 @@ class OrderCollection extends JsonResource
 			'country_code' => $this->country_code,
 			'phone_number' => $this->country_code && $this->phone ? $this->country_code . ' ' . $this->phone : null,
 			'billing_address' => $this->billing_address,
+			'part_year' => $this->part_year,
+			'part_model' => $this->part_model,
 			'part_name' => $this->part_name,
 			'part_description' => $this->part_description,
 			'lead_source' => $this->lead_source,

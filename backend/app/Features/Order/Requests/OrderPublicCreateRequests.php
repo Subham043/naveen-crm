@@ -28,7 +28,8 @@ class OrderPublicCreateRequests extends InputRequest
             'email' => 'required|string|email:rfc,dns|max:255',
             'phone' => ['required', 'numeric'],
             'country_code' => ['required', 'string', 'max:255'],
-            'billing_address' => ['required', 'string'],
+            'part_year' => ['required', 'numeric', 'min:1900', 'max:2100'],
+            'part_model' => ['required', 'string', 'max:255'],
             'part_name' => ['required', 'string', 'max:255'],
             'part_description' => ['required', 'string'],
             'captcha' => 'required|captcha'

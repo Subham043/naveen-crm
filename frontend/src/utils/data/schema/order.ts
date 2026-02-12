@@ -37,10 +37,16 @@ export const orderPublicCreateSchema = yup
                 }
             })
             .required("Phone Number is required"),
-        billing_address: yup
+        part_year: yup
+            .number()
+            .typeError("Part Year must be a number")
+            .min(1900, "Part Year must be greater than 1900")
+            .max(3000, "Part Year must be less than 3000")
+            .required("Part Year is required"),
+        part_model: yup
             .string()
-            .typeError("Billing Address must contain characters only")
-            .required("Billing Address is required"),
+            .typeError("Part Model must contain characters only")
+            .required("Part Model is required"),
         part_name: yup
             .string()
             .typeError("Part Name must contain characters only")

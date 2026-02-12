@@ -23,6 +23,8 @@ const SalesOrderTableRow = memo(
     name,
     email,
     phone_number,
+    part_year,
+    part_model,
     part_name,
     lead_source_info,
     order_status,
@@ -81,6 +83,8 @@ const SalesOrderTableRow = memo(
             </Box>
           </Group>
         </Table.Td>
+        <Table.Td>{part_year || "N/A"}</Table.Td>
+        <Table.Td>{part_model || "N/A"}</Table.Td>
         <Table.Td>{part_name || "N/A"}</Table.Td>
         <Table.Td>{lead_source_info}</Table.Td>
         <Table.Td>{is_created_by_agent ? "Yes" : "No"}</Table.Td>
@@ -133,6 +137,8 @@ function SalesOrderTable({
           <Table.Tr bg={"var(--mantine-color-blue-light)"}>
             <Table.Th>ID</Table.Th>
             <Table.Th>CUSTOMER</Table.Th>
+            <Table.Th>PART YEAR</Table.Th>
+            <Table.Th>PART MODEL</Table.Th>
             <Table.Th>PART NAME</Table.Th>
             <Table.Th>SOURCE</Table.Th>
             <Table.Th>SELF CREATED</Table.Th>
@@ -143,7 +149,7 @@ function SalesOrderTable({
         </Table.Thead>
         <Table.Tbody>
           {loading ? (
-            <TableRowLoading colSpan={8} />
+            <TableRowLoading colSpan={10} />
           ) : salesOrders.length > 0 ? (
             salesOrders.map((item) => (
               <SalesOrderTableRow
@@ -154,6 +160,8 @@ function SalesOrderTable({
                 phone={item.phone}
                 country_code={item.country_code}
                 phone_number={item.phone_number}
+                part_year={item.part_year}
+                part_model={item.part_model}
                 part_name={item.part_name}
                 part_description={item.part_description}
                 billing_address={item.billing_address}
@@ -189,7 +197,7 @@ function SalesOrderTable({
               />
             ))
           ) : (
-            <TableRowNotFound colSpan={8} />
+            <TableRowNotFound colSpan={10} />
           )}
         </Table.Tbody>
       </Table>

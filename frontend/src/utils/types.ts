@@ -47,6 +47,8 @@ export type OrderType = {
   country_code?: string;
   phone_number?: string;
   billing_address?: string;
+  part_year?: number;
+  part_model?: string;
   part_name?: string;
   part_description?: string;
   lead_source: number;
