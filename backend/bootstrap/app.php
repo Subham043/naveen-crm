@@ -30,7 +30,10 @@ return Application::configure(basePath: dirname(__DIR__))
             JwtCookieParser::class,
             CacheAuthenticatedUser::class,
         ]);
-        $middleware->encryptCookies(except: ['CRM_AUTH']);
+        $middleware->encryptCookies(except: ['WISEMAN_AUTOMART_AUTH']);
+        $middleware->validateCsrfTokens(except: [
+            'order/webhook/create',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->render(function (NotFoundHttpException $e, Request $request) {

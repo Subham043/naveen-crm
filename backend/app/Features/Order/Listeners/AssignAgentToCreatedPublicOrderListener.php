@@ -3,6 +3,7 @@
 namespace App\Features\Order\Listeners;
 
 use App\Features\Order\Events\PublicOrderCreated;
+use App\Features\Order\Events\WebhookOrderCreated;
 use App\Features\Order\Mail\OrderAssignedMail;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -29,7 +30,7 @@ class AssignAgentToCreatedPublicOrderListener implements ShouldQueue
     /**
      * Handle the event.
      */
-    public function handle(PublicOrderCreated $event): void
+    public function handle(PublicOrderCreated|WebhookOrderCreated $event): void
     {
         DB::transaction(function () use ($event) {
             $order = $event->order->fresh();

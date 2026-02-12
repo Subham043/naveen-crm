@@ -16,8 +16,8 @@ class JwtCookieParser
 
         // If token is missing in Authorization header, pull from cookie
         $token = $request->bearerToken();
-        if ((! $token || $token === 'null' || $token === 'undefined') && $request->hasCookie(config('session.cookie', 'CRM_AUTH'))) {
-            $token = $request->cookie(config('session.cookie', 'CRM_AUTH'));
+        if ((! $token || $token === 'null' || $token === 'undefined') && $request->hasCookie(config('session.cookie', 'WISEMAN_AUTOMART_AUTH'))) {
+            $token = $request->cookie(config('session.cookie', 'WISEMAN_AUTOMART_AUTH'));
         }
 
         if ($token) {

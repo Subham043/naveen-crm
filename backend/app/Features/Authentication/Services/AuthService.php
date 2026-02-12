@@ -54,7 +54,7 @@ class AuthService
 	public function set_cookie(string $token): \Symfony\Component\HttpFoundation\Cookie
 	{
 		$cookie = cookie(
-			config('session.cookie', 'CRM_AUTH'),
+			config('session.cookie', 'WISEMAN_AUTOMART_AUTH'),
 			$token,
 			(int) config('session.lifetime'), // minutes
 			config('session.path'),

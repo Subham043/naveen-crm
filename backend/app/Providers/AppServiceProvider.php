@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Features\Order\Events\OrderApproval;
 use App\Features\Order\Events\PublicOrderCreated;
+use App\Features\Order\Events\WebhookOrderCreated;
 use App\Features\Order\Listeners\AssignAgentToCreatedPublicOrderListener;
 use App\Features\Order\Listeners\CreateTimelineForCreatedPublicOrderListener;
 use App\Features\Order\Listeners\CreateTimelineForOrderApprovalListener;
@@ -81,7 +82,17 @@ class AppServiceProvider extends ServiceProvider
         );
         
         Event::listen(
+            WebhookOrderCreated::class,
+            CreateTimelineForCreatedPublicOrderListener::class,
+        );
+        
+        Event::listen(
             PublicOrderCreated::class,
+            AssignAgentToCreatedPublicOrderListener::class,
+        );
+        
+        Event::listen(
+            WebhookOrderCreated::class,
             AssignAgentToCreatedPublicOrderListener::class,
         );
         

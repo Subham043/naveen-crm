@@ -1,7 +1,6 @@
 <?php
 
+use App\Features\Order\Controllers\OrderWebhookCreateController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::post('/order/webhook/create', [OrderWebhookCreateController::class, 'index']);

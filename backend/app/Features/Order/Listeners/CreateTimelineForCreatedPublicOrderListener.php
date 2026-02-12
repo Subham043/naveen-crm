@@ -3,6 +3,7 @@
 namespace App\Features\Order\Listeners;
 
 use App\Features\Order\Events\PublicOrderCreated;
+use App\Features\Order\Events\WebhookOrderCreated;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\DB;
@@ -25,12 +26,12 @@ class CreateTimelineForCreatedPublicOrderListener implements ShouldQueue
     /**
      * Handle the event.
      */
-    public function handle(PublicOrderCreated $event): void
+    public function handle(PublicOrderCreated|WebhookOrderCreated $event): void
     {
         DB::transaction(function () use ($event) {
             $changes = new TimelineChangeCollection();
 
-            $event->orderPublicCreateDTO
+            $event->orderCreateDTO
             ->toCollection()
             ->each(function ($value, $key) use ($changes) {
                 if($value == null){
