@@ -1,7 +1,7 @@
 import { base } from "./env.base";
 
-const APP_ENDPOINT = "https://portal.aaaedu.in";
-const API_ENDPOINT = "https://server-api.aaaedu.in";
+const APP_ENDPOINT = "https://wiseman-crm.digisole.in";
+const API_ENDPOINT = "https://wiseman-server.digisole.in";
 
 /*
  * Configuration for production env
