@@ -44,7 +44,7 @@ function Header({ opened, toggle }: Props) {
         <Box>
           {/* <Title order={3} ml="5px" tt="uppercase">AAAEDU</Title> */}
           <Group gap={10} align="center">
-            <Burger opened={opened} onClick={toggle} size="md" />
+            <Burger opened={!opened} onClick={toggle} size="md" />
             <Title order={3} lh={0}>
               {page_name.toLocaleUpperCase()}
             </Title>
