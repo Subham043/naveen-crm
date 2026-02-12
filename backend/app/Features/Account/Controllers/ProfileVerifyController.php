@@ -11,7 +11,7 @@ class ProfileVerifyController extends Controller
         $clientUrl = rtrim(config('app.client_url'), '/');
         $request->fulfill();
         if($request->userInfo()->hasVerifiedEmail()){
-            $user = request()->user();
+            $user = $request->userInfo();
             $doneBy = "{$user->name} <{$user->email}> ({$user->currentRole()})";
             activity("email_verified_{$user->id}")
 			->causedBy($user)

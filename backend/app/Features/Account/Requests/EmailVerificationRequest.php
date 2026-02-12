@@ -18,7 +18,7 @@ class EmailVerificationRequest extends InputRequest
      */
     public function authorize(): bool
     {
-        $this->user = User::with('roles')->find($this->route('id'));
+        $this->user = User::with(['roles', 'permissions'])->find($this->route('id'));
 
         if (! $this->user) {
             return false;
