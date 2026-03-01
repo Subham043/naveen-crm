@@ -45,7 +45,7 @@ class AdminDashboardService
                     WHEN orders.is_active = 1
                     AND orders.order_status = 1
                     AND orders.cost_price IS NOT NULL
-                    THEN orders.cost_price * 0.04
+                    THEN orders.cost_price * 0.03
                     ELSE 0.00
                 END
             ) AS totalSalesTax,
@@ -58,7 +58,7 @@ class AdminDashboardService
                 AND orders.shipping_cost IS NOT NULL
                 THEN (
                     orders.total_price
-                    - (orders.cost_price + orders.shipping_cost + (orders.cost_price * 0.04))
+                    - (orders.cost_price + orders.shipping_cost + (orders.cost_price * 0.03))
                 )
                 ELSE 0.00 END
             ) as totalGrossProfit,

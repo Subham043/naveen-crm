@@ -3,17 +3,11 @@ import type { OrderType } from "@/utils/types";
 import Datetime from "@/components/Datetime";
 
 type Props = {
-  sales_user_info: OrderType["sales_user_info"];
-  is_created_by_agent: OrderType["is_created_by_agent"];
-  assigned_at: OrderType["assigned_at"];
+  quotation_info: OrderType["quotation_info"];
 };
 
-function OrderViewAgentInfo({
-  sales_user_info,
-  is_created_by_agent,
-  assigned_at,
-}: Props) {
-  if (!sales_user_info) return null;
+function OrderViewAgentInfo({ quotation_info }: Props) {
+  if (!quotation_info || !quotation_info.sales_user_info) return null;
   return (
     <Paper shadow="xs" mb="lg" withBorder>
       <Box p="sm" pos="relative">
@@ -27,7 +21,7 @@ function OrderViewAgentInfo({
               Name
             </Text>
             <Text size="sm" c="dimmed">
-              {sales_user_info.name}
+              {quotation_info.sales_user_info.name}
             </Text>
           </Box>
           <Box>
@@ -35,7 +29,7 @@ function OrderViewAgentInfo({
               Email
             </Text>
             <Text size="sm" c="dimmed">
-              {sales_user_info.email}
+              {quotation_info.sales_user_info.email}
             </Text>
           </Box>
           <Box>
@@ -43,27 +37,28 @@ function OrderViewAgentInfo({
               Phone
             </Text>
             <Text size="sm" c="dimmed">
-              {sales_user_info.phone || "N/A"}
+              {quotation_info.sales_user_info.phone || "N/A"}
             </Text>
           </Box>
-          <Box>
+          {/* <Box>
             <Text fw={600} c="blue">
               Order Created By Agent
             </Text>
             <Text size="sm" c="dimmed">
-              {is_created_by_agent ? "Yes" : "No, Assigned By System"}
+              {quotation_info.is_created_by_agent ? "Yes" : "No, Assigned By System"}
             </Text>
-          </Box>
-          {!is_created_by_agent && assigned_at && (
-            <Box>
-              <Text fw={600} c="blue">
-                Order Assigned At
-              </Text>
-              <Text size="sm" c="dimmed">
-                <Datetime value={assigned_at} />
-              </Text>
-            </Box>
-          )}
+          </Box> */}
+          {!quotation_info.is_created_by_agent &&
+            quotation_info.assigned_at && (
+              <Box>
+                <Text fw={600} c="blue">
+                  Quotation Assigned At
+                </Text>
+                <Text size="sm" c="dimmed">
+                  <Datetime value={quotation_info.assigned_at} />
+                </Text>
+              </Box>
+            )}
         </SimpleGrid>
       </Box>
     </Paper>

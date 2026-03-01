@@ -15,11 +15,14 @@ use App\Features\Authentication\Controllers\LoginController;
 use App\Features\Authentication\Controllers\RegisterController;
 use App\Features\Authentication\Controllers\ResetPasswordController;
 use App\Features\Dashboard\Controllers\DashboardController;
-use App\Features\Order\Controllers\OrderApprovalController;
+use App\Features\Quotation\Controllers\QuotationApprovalController;
 use App\Features\Order\Controllers\OrderExportController;
 use App\Features\Order\Controllers\OrderPaginateController;
-use App\Features\Order\Controllers\OrderPublicCreateController;
+use App\Features\Quotation\Controllers\QuotationPublicCreateController;
 use App\Features\Order\Controllers\OrderViewController;
+use App\Features\Quotation\Controllers\QuotationExportController;
+use App\Features\Quotation\Controllers\QuotationPaginateController;
+use App\Features\Quotation\Controllers\QuotationViewController;
 use App\Features\Report\Controllers\AgentPerformanceReportExportController;
 use App\Features\Report\Controllers\AgentPerformanceReportPaginateController;
 use App\Features\Report\Controllers\RevenueSummaryExportController;
@@ -28,7 +31,7 @@ use App\Features\Report\Controllers\SalesReportExportController;
 use App\Features\Report\Controllers\SalesReportPaginateController;
 use App\Features\Roles\Controllers\RoleAllController;
 use App\Features\Roles\Enums\Roles;
-use App\Features\SalesTeam\Controllers\SalesOrderCreateController;
+use App\Features\SalesTeam\Controllers\SalesQuotationCreateController;
 use App\Features\Users\Controllers\UserCreateController;
 use App\Features\Users\Controllers\UserDeleteController;
 use App\Features\Users\Controllers\UserExportController;
@@ -37,11 +40,11 @@ use App\Features\Users\Controllers\UserToggleStatusController;
 use App\Features\Users\Controllers\UserToggleVerificationController;
 use App\Features\Users\Controllers\UserUpdateController;
 use App\Features\Users\Controllers\UserViewController;
-use App\Features\SalesTeam\Controllers\SalesOrderExportController;
-use App\Features\SalesTeam\Controllers\SalesOrderPaginateController;
-use App\Features\SalesTeam\Controllers\SalesOrderSubmitForApprovalController;
-use App\Features\SalesTeam\Controllers\SalesOrderUpdateController;
-use App\Features\SalesTeam\Controllers\SalesOrderViewController;
+use App\Features\SalesTeam\Controllers\SalesQuotationExportController;
+use App\Features\SalesTeam\Controllers\SalesQuotationPaginateController;
+use App\Features\SalesTeam\Controllers\SalesQuotationSubmitForApprovalController;
+use App\Features\SalesTeam\Controllers\SalesQuotationUpdateController;
+use App\Features\SalesTeam\Controllers\SalesQuotationViewController;
 use App\Features\ServiceTeam\Controllers\ServiceTeamOrderExportController;
 use App\Features\ServiceTeam\Controllers\ServiceTeamOrderPaginateController;
 use App\Features\ServiceTeam\Controllers\ServiceTeamOrderUpdateController;
@@ -75,7 +78,7 @@ Route::prefix('v1')->middleware([Throttle::API->middleware()])->group(function (
         });
     });
 
-    Route::post('/order/public/create', [OrderPublicCreateController::class, 'index'])->middleware([Throttle::AUTH->middleware()]);
+    Route::post('/quotation/public/create', [QuotationPublicCreateController::class, 'index'])->middleware([Throttle::AUTH->middleware()]);
 
     Route::middleware([Guards::API->middleware(), 'verified'])->group(function () {
         //Admin Routes
@@ -92,12 +95,17 @@ Route::prefix('v1')->middleware([Throttle::API->middleware()])->group(function (
                 Route::get('/view/{id}', [UserViewController::class, 'index']);
                 Route::delete('/delete/{id}', [UserDeleteController::class, 'index']);
             });
+            Route::prefix('quotation')->group(function () {
+                Route::get('/excel', [QuotationExportController::class, 'index']);
+                Route::get('/paginate', [QuotationPaginateController::class, 'index']);
+                Route::get('/view/{id}', [QuotationViewController::class, 'index']);
+                Route::post('/approval/{id}', [QuotationApprovalController::class, 'index']);
+                Route::get('/timeline/{quotation_id}', [TimelinePaginateController::class, 'index']);
+            });
             Route::prefix('order')->group(function () {
                 Route::get('/excel', [OrderExportController::class, 'index']);
                 Route::get('/paginate', [OrderPaginateController::class, 'index']);
                 Route::get('/view/{id}', [OrderViewController::class, 'index']);
-                Route::post('/approval/{id}', [OrderApprovalController::class, 'index']);
-                Route::get('/timeline/{order_id}', [TimelinePaginateController::class, 'index']);
             });
             Route::prefix('activity-log')->group(function () {
                 Route::get('/excel', [ActivityLogExportController::class, 'index']);
@@ -137,13 +145,13 @@ Route::prefix('v1')->middleware([Throttle::API->middleware()])->group(function (
 
         //Sales Routes
         Route::prefix('sales')->middleware([Roles::Sales->middleware()])->group(function () {
-            Route::prefix('order')->group(function () {
-                Route::get('/excel', [SalesOrderExportController::class, 'index']);
-                Route::get('/paginate', [SalesOrderPaginateController::class, 'index']);
-                Route::post('/create', [SalesOrderCreateController::class, 'index']);
-                Route::post('/update/{id}', [SalesOrderUpdateController::class, 'index']);
-                Route::get('/view/{id}', [SalesOrderViewController::class, 'index']);
-                Route::get('/submit-for-approval/{id}', [SalesOrderSubmitForApprovalController::class, 'index']);
+            Route::prefix('quotation')->group(function () {
+                Route::get('/excel', [SalesQuotationExportController::class, 'index']);
+                Route::get('/paginate', [SalesQuotationPaginateController::class, 'index']);
+                Route::post('/create', [SalesQuotationCreateController::class, 'index']);
+                Route::post('/update/{id}', [SalesQuotationUpdateController::class, 'index']);
+                Route::get('/view/{id}', [SalesQuotationViewController::class, 'index']);
+                Route::get('/submit-for-approval/{id}', [SalesQuotationSubmitForApprovalController::class, 'index']);
             });
         });
     });

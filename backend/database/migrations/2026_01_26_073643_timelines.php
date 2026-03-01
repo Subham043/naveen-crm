@@ -15,8 +15,9 @@ return new class extends Migration
             $table->id();
             $table->text('message');
             $table->text('comment')->nullable();
+            $table->text('additional_comment')->nullable();
             $table->json('properties')->nullable();
-            $table->foreignId('order_id')->nullable()->index();
+            $table->foreignId('quotation_id')->nullable()->index();
             $table->foreignId('user_id')->nullable()->index();
             $table->timestamps();
         });

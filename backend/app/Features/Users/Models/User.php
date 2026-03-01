@@ -5,9 +5,9 @@ namespace App\Features\Users\Models;
 use App\Features\Authentication\Notifications\ResetPasswordNotification;
 use App\Features\Authentication\Notifications\VerifyEmailNotification;
 use App\Features\Authentication\Services\AuthCache;
-use App\Features\Order\Models\Order;
 use App\Features\Timeline\Models\Timeline;
 use App\Features\Order\Models\Yard;
+use App\Features\Quotation\Models\Quotation;
 use App\Features\Roles\Enums\Roles;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Features\Roles\Interfaces\RoleTraitInterface;
@@ -124,14 +124,14 @@ class User extends Authenticatable implements MustVerifyEmail, RoleTraitInterfac
         });
     }
 
-    public function orders_assigned()
+    public function quotations_assigned()
     {
-        return $this->hasMany(Order::class, 'sales_user_id');
+        return $this->hasMany(Quotation::class, 'sales_user_id');
     }
 
-    public function orders_approved()
+    public function quotations_approved()
     {
-        return $this->hasMany(Order::class, 'approval_by_id');
+        return $this->hasMany(Quotation::class, 'approval_by_id');
     }
 
     public function timelines()

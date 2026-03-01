@@ -2,19 +2,19 @@
 
 namespace App\Providers;
 
-use App\Features\Order\Events\OrderApproval;
-use App\Features\Order\Events\PublicOrderCreated;
-use App\Features\Order\Events\WebhookOrderCreated;
-use App\Features\Order\Listeners\AssignAgentToCreatedPublicOrderListener;
-use App\Features\Order\Listeners\CreateTimelineForCreatedPublicOrderListener;
-use App\Features\Order\Listeners\CreateTimelineForOrderApprovalListener;
+use App\Features\Quotation\Events\QuotationApproval;
+use App\Features\Quotation\Events\PublicQuotationCreated;
+use App\Features\Quotation\Events\WebhookQuotationCreated;
+use App\Features\Quotation\Listeners\AssignAgentToCreatedPublicQuotationListener;
+use App\Features\Quotation\Listeners\CreateTimelineForCreatedPublicQuotationListener;
+use App\Features\Quotation\Listeners\CreateTimelineForQuotationApprovalListener;
 use App\Features\Roles\Enums\Roles;
-use App\Features\SalesTeam\Events\SalesOrderCreated;
-use App\Features\SalesTeam\Events\SalesOrderSubmittedForApproval;
-use App\Features\SalesTeam\Events\SalesOrderUpdated;
-use App\Features\SalesTeam\Listeners\CreateTimelineForCreatedSalesOrderListener;
-use App\Features\SalesTeam\Listeners\CreateTimelineForSalesOrderSubmittedForApprovalListener;
-use App\Features\SalesTeam\Listeners\CreateTimelineForUpdatedSalesOrderListener;
+use App\Features\SalesTeam\Events\SalesQuotationCreated;
+use App\Features\SalesTeam\Events\SalesQuotationSubmittedForApproval;
+use App\Features\SalesTeam\Events\SalesQuotationUpdated;
+use App\Features\SalesTeam\Listeners\CreateTimelineForCreatedSalesQuotationListener;
+use App\Features\SalesTeam\Listeners\CreateTimelineForSalesQuotationSubmittedForApprovalListener;
+use App\Features\SalesTeam\Listeners\CreateTimelineForUpdatedSalesQuotationListener;
 use App\Features\ServiceTeam\Events\ServiceTeamOrderUpdated;
 use App\Features\ServiceTeam\Listeners\CreateTimelineForUpdatedServiceTeamOrderListener;
 use App\Features\Users\Models\User;
@@ -77,38 +77,38 @@ class AppServiceProvider extends ServiceProvider
 
         //event listeners
         Event::listen(
-            PublicOrderCreated::class,
-            CreateTimelineForCreatedPublicOrderListener::class,
+            PublicQuotationCreated::class,
+            CreateTimelineForCreatedPublicQuotationListener::class,
         );
         
         Event::listen(
-            WebhookOrderCreated::class,
-            CreateTimelineForCreatedPublicOrderListener::class,
+            WebhookQuotationCreated::class,
+            CreateTimelineForCreatedPublicQuotationListener::class,
         );
         
         Event::listen(
-            PublicOrderCreated::class,
-            AssignAgentToCreatedPublicOrderListener::class,
+            PublicQuotationCreated::class,
+            AssignAgentToCreatedPublicQuotationListener::class,
         );
         
         Event::listen(
-            WebhookOrderCreated::class,
-            AssignAgentToCreatedPublicOrderListener::class,
+            WebhookQuotationCreated::class,
+            AssignAgentToCreatedPublicQuotationListener::class,
         );
         
         Event::listen(
-            SalesOrderCreated::class,
-            CreateTimelineForCreatedSalesOrderListener::class,
+            SalesQuotationCreated::class,
+            CreateTimelineForCreatedSalesQuotationListener::class,
         );
         
         Event::listen(
-            SalesOrderUpdated::class,
-            CreateTimelineForUpdatedSalesOrderListener::class,
+            SalesQuotationUpdated::class,
+            CreateTimelineForUpdatedSalesQuotationListener::class,
         );
         
         Event::listen(
-            SalesOrderSubmittedForApproval::class,
-            CreateTimelineForSalesOrderSubmittedForApprovalListener::class,
+            SalesQuotationSubmittedForApproval::class,
+            CreateTimelineForSalesQuotationSubmittedForApprovalListener::class,
         );
 
         Event::listen(
@@ -117,8 +117,8 @@ class AppServiceProvider extends ServiceProvider
         );
         
         Event::listen(
-            OrderApproval::class,
-            CreateTimelineForOrderApprovalListener::class,
+            QuotationApproval::class,
+            CreateTimelineForQuotationApprovalListener::class,
         );
 
         //global rate limiter for all api requests

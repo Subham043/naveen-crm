@@ -1,0 +1,51 @@
+<?php
+
+namespace App\Features\SalesTeam\Listeners;
+
+use App\Features\SalesTeam\Events\SalesQuotationSubmittedForApproval;
+use App\Features\SalesTeam\Mail\QuotationApprovalPendingMail;
+use App\Features\Timeline\Collections\TimelineChangeCollection;
+use App\Features\Timeline\DTO\TimelineChange;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\DB;
+use App\Features\Timeline\Services\TimelineService;
+use Illuminate\Support\Facades\Mail;
+
+class CreateTimelineForSalesQuotationSubmittedForApprovalListener implements ShouldQueue
+{
+    use InteractsWithQueue;
+
+    public $tries = 3;
+
+    /**
+     * Create the event listener.
+     */
+    public function __construct(private TimelineService $timelineService)
+    {}
+
+    /**
+     * Handle the event.
+     */
+    public function handle(SalesQuotationSubmittedForApproval $event): void
+    {
+        DB::transaction(function () use ($event) {
+            $changes = new TimelineChangeCollection();
+            $changes->pushChange(
+                new TimelineChange(
+                    field: 'is_active',
+                    old: false,
+                    new: true
+                )
+            );
+
+            $message = "Quotation#{$event->quotation->id} was submitted for approval by agent named {$event->userName}<{$event->userEmail}>";
+            
+            $this->timelineService->createTimeline($event->quotation, $changes, $message, null, $event->userId);
+
+            Mail::to(config('mail.mailers.smtp.admin_email'))->send(
+                (new QuotationApprovalPendingMail($event->userName, $event->quotation->id))->afterCommit()
+            );
+        });
+    }
+}

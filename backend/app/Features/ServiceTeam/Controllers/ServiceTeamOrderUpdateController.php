@@ -56,6 +56,7 @@ class ServiceTeamOrderUpdateController extends Controller
                     $dto->toArray(),
                     $order
                 );
+                $updated_order->quotation->update($dto->toArray());
                 if ($request->yard_located && $request->has('yards')) {
                     $this->serviceTeamOrderService->syncYards(
                         YardTimelineDTOCollection::fromRequest($request->yards), 

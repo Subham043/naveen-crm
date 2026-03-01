@@ -9,51 +9,25 @@ import {
 } from "@mantine/core";
 import type { OrderType } from "@/utils/types";
 import Datetime from "@/components/Datetime";
-import OrderApprovalStatus from "@/components/Order/OrderApprovalStatus";
+import QuotationApprovalStatus from "@/components/Quotation/QuotationApprovalStatus";
 
 type Props = {
-  is_active: OrderType["is_active"];
-  order_status: OrderType["order_status"];
-  approval_by_info: OrderType["approval_by_info"];
-  approval_at: OrderType["approval_at"];
-  name: OrderType["name"];
-  email: OrderType["email"];
-  phone_number: OrderType["phone_number"];
-  lead_source_info: OrderType["lead_source_info"];
-  part_year: OrderType["part_year"];
-  part_model: OrderType["part_model"];
-  part_name: OrderType["part_name"];
-  part_description: OrderType["part_description"];
-  billing_address: OrderType["billing_address"];
+  quotation_info: OrderType["quotation_info"];
   created_at: OrderType["created_at"];
 };
 
-function OrderViewCustomerInfo({
-  is_active,
-  order_status,
-  approval_by_info,
-  approval_at,
-  name,
-  email,
-  phone_number,
-  lead_source_info,
-  part_year,
-  part_model,
-  part_name,
-  part_description,
-  billing_address,
-  created_at,
-}: Props) {
+function OrderViewCustomerInfo({ quotation_info, created_at }: Props) {
+  if (!quotation_info) return null;
   return (
     <Paper shadow="xs" mb="lg" withBorder>
       <Box p="sm" pos="relative">
         <Group justify="space-between" align="center">
           <Title order={5}>Customer Info</Title>
-          <OrderApprovalStatus
-            is_active={is_active}
-            order_status={order_status}
-            approval_by_info={approval_by_info}
-            approval_at={approval_at}
+          <QuotationApprovalStatus
+            is_active={quotation_info.is_active}
+            quotation_status={quotation_info.quotation_status}
+            approval_by_info={quotation_info.approval_by_info}
+            approval_at={quotation_info.approval_at}
           />
         </Group>
       </Box>
@@ -65,7 +39,7 @@ function OrderViewCustomerInfo({
               Name
             </Text>
             <Text size="sm" c="dimmed">
-              {name}
+              {quotation_info.name}
             </Text>
           </Box>
           <Box>
@@ -73,7 +47,7 @@ function OrderViewCustomerInfo({
               Email
             </Text>
             <Text size="sm" c="dimmed">
-              {email}
+              {quotation_info.email}
             </Text>
           </Box>
           <Box>
@@ -81,7 +55,7 @@ function OrderViewCustomerInfo({
               Phone
             </Text>
             <Text size="sm" c="dimmed">
-              {phone_number || "N/A"}
+              {quotation_info.phone_number || "N/A"}
             </Text>
           </Box>
           <Box>
@@ -89,39 +63,7 @@ function OrderViewCustomerInfo({
               Lead Source
             </Text>
             <Text size="sm" c="dimmed">
-              {lead_source_info}
-            </Text>
-          </Box>
-          <Box>
-            <Text fw={600} c="blue">
-              Part Year
-            </Text>
-            <Text size="sm" c="dimmed">
-              {part_year || "N/A"}
-            </Text>
-          </Box>
-          <Box>
-            <Text fw={600} c="blue">
-              Part Model
-            </Text>
-            <Text size="sm" c="dimmed">
-              {part_model || "N/A"}
-            </Text>
-          </Box>
-          <Box>
-            <Text fw={600} c="blue">
-              Part Name
-            </Text>
-            <Text size="sm" c="dimmed">
-              {part_name || "N/A"}
-            </Text>
-          </Box>
-          <Box>
-            <Text fw={600} c="blue">
-              Part Description
-            </Text>
-            <Text size="sm" c="dimmed">
-              {part_description || "N/A"}
+              {quotation_info.lead_source_info}
             </Text>
           </Box>
           <Box>
@@ -129,7 +71,15 @@ function OrderViewCustomerInfo({
               Billing Address
             </Text>
             <Text size="sm" c="dimmed">
-              {billing_address || "N/A"}
+              {quotation_info.billing_address || "N/A"}
+            </Text>
+          </Box>
+          <Box>
+            <Text fw={600} c="blue">
+              Shipping Address
+            </Text>
+            <Text size="sm" c="dimmed">
+              {quotation_info.shipping_address || "N/A"}
             </Text>
           </Box>
           <Box>

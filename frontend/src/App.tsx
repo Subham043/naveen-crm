@@ -37,9 +37,13 @@ const Order = React.lazy(() => import("@/pages/Order/index.tsx"));
 const OrderView = React.lazy(
   () => import("@/pages/Order/OrderViewPage/index.tsx"),
 );
-const SalesOrder = React.lazy(() => import("@/pages/SalesOrder/index.tsx"));
-const SalesOrderView = React.lazy(
-  () => import("@/pages/SalesOrder/SalesOrderViewPage/index.tsx"),
+const Quotation = React.lazy(() => import("@/pages/Quotation/index.tsx"));
+const QuotationView = React.lazy(
+  () => import("@/pages/Quotation/QuotationViewPage/index.tsx"),
+);
+const SalesQuotation = React.lazy(() => import("@/pages/SalesQuotation"));
+const SalesQuotationView = React.lazy(
+  () => import("@/pages/SalesQuotation/SalesQuotationViewPage"),
 );
 const ServiceTeamOrder = React.lazy(
   () => import("@/pages/ServiceTeamOrder/index.tsx"),
@@ -47,8 +51,8 @@ const ServiceTeamOrder = React.lazy(
 const ServiceTeamOrderView = React.lazy(
   () => import("@/pages/ServiceTeamOrder/ServiceTeamOrderViewPage/index.tsx"),
 );
-const OrderPublicForm = React.lazy(
-  () => import("@/pages/OrderPublicForm/index.tsx"),
+const QuotationPublicForm = React.lazy(
+  () => import("@/pages/QuotationPublicForm"),
 );
 const SalesReport = React.lazy(
   () => import("@/pages/Report/SalesReport/index.tsx"),
@@ -104,12 +108,12 @@ function App() {
                       }
                     >
                       <Route
-                        path={page_routes.sales_orders.link}
-                        element={<SalesOrder />}
+                        path={page_routes.sales_quotations.link}
+                        element={<SalesQuotation />}
                       />
                       <Route
-                        path={`${page_routes.sales_orders.link}/:id`}
-                        element={<SalesOrderView />}
+                        path={`${page_routes.sales_quotations.link}/:id`}
+                        element={<SalesQuotationView />}
                       />
                     </Route>
                     <Route
@@ -166,6 +170,14 @@ function App() {
                         path={`${page_routes.orders.link}/:id`}
                         element={<OrderView />}
                       />
+                      <Route
+                        path={page_routes.quotations.link}
+                        element={<Quotation />}
+                      />
+                      <Route
+                        path={`${page_routes.quotations.link}/:id`}
+                        element={<QuotationView />}
+                      />
                     </Route>
                   </Route>
                 </Route>
@@ -190,8 +202,8 @@ function App() {
 
         <Route element={<AuthLayout />}>
           <Route
-            path={page_routes.public_orders.link}
-            element={<OrderPublicForm />}
+            path={page_routes.public_quotations.link}
+            element={<QuotationPublicForm />}
           />
         </Route>
         <Route element={<SuspenseOutlet />}>

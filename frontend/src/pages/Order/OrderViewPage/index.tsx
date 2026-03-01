@@ -4,13 +4,14 @@ import { Blockquote, Box, Button, Group, Title } from "@mantine/core";
 import { IconArrowNarrowLeft, IconX } from "@tabler/icons-react";
 import { useParams } from "react-router";
 import { useNavigate } from "react-router";
-import OrderViewApprovalBtn from "./OrderViewApprovalBtn";
 import OrderViewCustomerInfo from "@/components/Order/OrderView/OrderViewCustomerInfo";
 import OrderViewAgentInfo from "@/components/Order/OrderView/OrderViewAgentInfo";
 import OrderViewPaymentInfo from "@/components/Order/OrderView/OrderViewPaymentInfo";
 import OrderViewYardInfo from "@/components/Order/OrderView/OrderViewYardInfo";
 import OrderViewLogisticInfo from "@/components/Order/OrderView/OrderViewLogisticInfo";
 import OrderViewTimeline from "./OrderViewTimeline";
+import OrderViewPartInfo from "@/components/Order/OrderView/OrderViewPartInfo";
+import OrderViewPriceInfo from "@/components/Order/OrderView/OrderViewPriceInfo";
 
 export default function OrderView() {
   const { id } = useParams<{ id: string }>();
@@ -45,18 +46,6 @@ export default function OrderView() {
         <Group justify="space-between" align="center">
           <Title order={3}>Order #{data.id}</Title>
           <Group gap="xs" justify="flex-end" align="center">
-            <OrderViewApprovalBtn
-              is_active={data.is_active}
-              id={data.id}
-              order_status={data.order_status as 0 | 1 | 2}
-              update_order_status={1}
-            />
-            <OrderViewApprovalBtn
-              is_active={data.is_active}
-              id={data.id}
-              order_status={data.order_status as 0 | 1 | 2}
-              update_order_status={2}
-            />
             <Button
               leftSection={<IconArrowNarrowLeft size={16} />}
               variant="filled"
@@ -71,53 +60,34 @@ export default function OrderView() {
       </Box>
 
       <OrderViewCustomerInfo
-        name={data.name}
-        email={data.email}
-        phone_number={data.phone_number}
-        lead_source_info={data.lead_source_info}
-        part_year={data.part_year}
-        part_model={data.part_model}
-        part_name={data.part_name}
-        part_description={data.part_description}
-        billing_address={data.billing_address}
+        quotation_info={data.quotation_info}
         created_at={data.created_at}
-        is_active={data.is_active}
-        order_status={data.order_status}
-        approval_by_info={data.approval_by_info}
-        approval_at={data.approval_at}
       />
 
-      <OrderViewAgentInfo
-        sales_user_info={data.sales_user_info}
-        is_created_by_agent={data.is_created_by_agent}
-        assigned_at={data.assigned_at}
+      <OrderViewPartInfo quotation_info={data.quotation_info} />
+
+      <OrderViewAgentInfo quotation_info={data.quotation_info} />
+
+      <OrderViewPriceInfo quotation_info={data.quotation_info} />
+
+      <OrderViewPaymentInfo
+        payment_status={data.payment_status}
+        payment_card_type_info={data.payment_card_type_info}
+        payment_gateway_info={data.payment_gateway_info}
+        transaction_id={data.transaction_id}
       />
 
-      {data.order_status === 1 && (
-        <>
-          <OrderViewPaymentInfo
-            total_price={data.total_price}
-            cost_price={data.cost_price}
-            shipping_cost={data.shipping_cost}
-            sales_tax={data.sales_tax}
-            gross_profit={data.gross_profit}
-            payment_status={data.payment_status}
-          />
+      <OrderViewYardInfo yard_located={data.yard_located} yards={data.yards} />
 
-          <OrderViewYardInfo
-            yard_located={data.yard_located}
-            yards={data.yards}
-          />
+      <OrderViewLogisticInfo
+        tracking_details={data.tracking_details}
+        invoice_status={data.invoice_status}
+        shipment_status={data.shipment_status}
+      />
 
-          <OrderViewLogisticInfo
-            tracking_details={data.tracking_details}
-            invoice_status={data.invoice_status}
-            shipment_status={data.shipment_status}
-          />
-        </>
+      {data.quotation_id && (
+        <OrderViewTimeline quotation_id={data.quotation_id} />
       )}
-
-      <OrderViewTimeline id={data.id} />
     </Box>
   );
 }

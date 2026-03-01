@@ -19,6 +19,7 @@ class TimelineCollection extends JsonResource
 			'id' => $this->id,
 			'message' => $this->message,
 			'comment' => $this->comment,
+			'additional_comment' => $this->additional_comment,
 			'properties' => $this->properties,
 			'user_id' => $this->user_id,
 			'done_by' => $this->user_id ? TimelineUserCollection::make($this->doneBy) : null,

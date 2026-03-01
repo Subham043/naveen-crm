@@ -2,7 +2,7 @@
 
 namespace App\Features\Timeline\Models;
 
-use App\Features\Order\Models\Order;
+use App\Features\Quotation\Models\Quotation;
 use App\Features\Users\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -21,14 +21,16 @@ class Timeline extends Model
     protected $fillable = [
         'message',
         'comment',
+        'additional_comment',
         'properties',
-        'order_id',
+        'quotation_id',
         'user_id',
     ];
 
     protected $attributes = [
         'comment' => null,
-        'order_id' => null,
+        'additional_comment' => null,
+        'quotation_id' => null,
         'user_id' => null,
     ];
 
@@ -43,9 +45,9 @@ class Timeline extends Model
         return $this->belongsTo(User::class, 'user_id')->withDefault();
     }
 
-    public function order()
+    public function quotation()
     {
-        return $this->belongsTo(Order::class, 'order_id')->withDefault();
+        return $this->belongsTo(Quotation::class, 'quotation_id')->withDefault();
     }
 
 }

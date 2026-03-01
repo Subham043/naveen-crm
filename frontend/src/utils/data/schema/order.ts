@@ -2,7 +2,7 @@ import * as yup from "yup";
 
 import { PhoneNumberUtil } from 'google-libphonenumber';
 
-export const orderPublicCreateSchema = yup
+export const orderUpdateSchema = yup
     .object({
         name: yup
             .string()
@@ -47,6 +47,10 @@ export const orderPublicCreateSchema = yup
             .string()
             .typeError("Part Model must contain characters only")
             .required("Part Model is required"),
+        part_make: yup
+            .string()
+            .typeError("Part Make must contain characters only")
+            .required("Part Make is required"),
         part_name: yup
             .string()
             .typeError("Part Name must contain characters only")
@@ -55,20 +59,69 @@ export const orderPublicCreateSchema = yup
             .string()
             .typeError("Part Description must contain characters only")
             .required("Part Description is required"),
-        captcha: yup.string().typeError("Captcha must contain characters only").required("Captcha is required"),
-    })
-    .required();
-
-export type OrderPublicCreateFormValuesType = yup.InferType<typeof orderPublicCreateSchema>;
-
-export const orderApprovalSchema = yup
-    .object({
-        order_status: yup
+        sale_price: yup
             .number()
-            .typeError("Order Status must be a number")
-            .oneOf([1, 2], "Order Status must be 1 or 2")
-            .required(),
+            .typeError("Total Price must be a number")
+            .required("Total Price is required"),
+        cost_price: yup
+            .number()
+            .typeError("Cost Price must be a number")
+            .required("Cost Price is required"),
+        shipping_cost: yup
+            .number()
+            .typeError("Shipping Cost must be a number")
+            .required("Shipping Cost is required"),
+        tracking_details: yup
+            .string()
+            .typeError("Tracking Details must contain characters only")
+            .optional(),
+        tracking_status: yup
+            .number()
+            .typeError("Tracking Status must be a number")
+            .oneOf([0, 1], "Tracking Status must be 0 or 1")
+            .required("Tracking Status is required"),
+        payment_status: yup
+            .number()
+            .typeError("Payment Status must be a number")
+            .oneOf([0, 1, 2], "Payment Status must be 0 or 1 or 2")
+            .required("Payment Status is required"),
+        payment_card_type: yup
+            .number()
+            .typeError("Payment Card Type must be a number")
+            .oneOf([1, 2, 3, 4], "Payment Card Type must be 1 or 2 or 3 or 4")
+            .required("Payment Card Type is required"),
+        payment_gateway: yup
+            .number()
+            .typeError("Payment Gateway must be a number")
+            .oneOf([1, 2, 3], "Payment Gateway must be 1 or 2 or 3")
+            .required("Payment Gateway is required"),
+        invoice_status: yup
+            .number()
+            .typeError("Invoice Status must be a number")
+            .oneOf([0, 1, 2], "Invoice Status must be 0 or 1 or 2")
+            .required("Invoice Status is required"),
+        shipment_status: yup
+            .number()
+            .typeError("Shipment Status must be a number")
+            .oneOf([0, 1], "Shipment Status must be 0 or 1")
+            .required("Shipment Status is required"),
+        yard_located: yup
+            .number()
+            .typeError("Yard Located must be a number")
+            .oneOf([0, 1], "Yard Located must be 0 or 1")
+            .required("Yard Located is required"),
+        yards: yup
+            .array()
+            .typeError("Yard must be an array")
+            .when("yard_located", {
+                is: (val: number | undefined) => val === 1,
+                then: (schema) => schema.of(yup.object({
+                    yard: yup.string().typeError("Yard must contain characters only").required("Yard is required"),
+                    id: yup.number().typeError("Yard ID must be a number").optional(),
+                })).min(1, "Yard is required").required("Yard is required"),
+                otherwise: (schema) => schema.optional(),
+            }),
     })
     .required();
 
-export type OrderApprovalFormValuesType = yup.InferType<typeof orderApprovalSchema>;
+export type OrderUpdateFormValuesType = yup.InferType<typeof orderUpdateSchema>;

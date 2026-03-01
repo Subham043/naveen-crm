@@ -1,28 +1,99 @@
+import { PhoneNumberUtil } from "google-libphonenumber";
 import * as yup from "yup";
 
 export const serviceTeamOrderSchema = yup
     .object({
-        total_price: yup
+        name: yup
+            .string()
+            .typeError("Name must contain characters only")
+            .required("Name is required"),
+        email: yup
+            .string()
+            .typeError("Email must contain characters only")
+            .email("Please enter a valid email")
+            .required("Email is required"),
+        phone: yup
+            .string()
+            .typeError("Phone must contain characters only")
+            .matches(/^[0-9]+$/, "Phone must contain numbers only")
+            .required("Phone is required"),
+        country_code: yup
+            .string()
+            .typeError("Country Code must contain characters only")
+            .required("Country Code is required"),
+        phone_number: yup
+            .string()
+            .typeError("Phone Number must contain characters only")
+            .test("phone-number", "Phone Number is invalid", function (_) {
+                const { country_code, phone } = this.parent;
+                if (!country_code || !phone) return true;
+                try {
+                    const phoneUtil = PhoneNumberUtil.getInstance();
+                    const phoneNumber = phoneUtil.parse(`${country_code}${phone}`);
+                    return phoneUtil.isValidNumber(phoneNumber);
+                } catch (error) {
+                    return false;
+                }
+            })
+            .required("Phone Number is required"),
+        part_year: yup
+            .number()
+            .typeError("Part Year must be a number")
+            .min(1900, "Part Year must be greater than 1900")
+            .max(3000, "Part Year must be less than 3000")
+            .required("Part Year is required"),
+        part_model: yup
+            .string()
+            .typeError("Part Model must contain characters only")
+            .required("Part Model is required"),
+        part_make: yup
+            .string()
+            .typeError("Part Make must contain characters only")
+            .required("Part Make is required"),
+        part_name: yup
+            .string()
+            .typeError("Part Name must contain characters only")
+            .required("Part Name is required"),
+        part_description: yup
+            .string()
+            .typeError("Part Description must contain characters only")
+            .required("Part Description is required"),
+        sale_price: yup
             .number()
             .typeError("Total Price must be a number")
-            .optional(),
+            .required("Total Price is required"),
         cost_price: yup
             .number()
             .typeError("Cost Price must be a number")
-            .optional(),
+            .required("Cost Price is required"),
         shipping_cost: yup
             .number()
             .typeError("Shipping Cost must be a number")
-            .optional(),
+            .required("Shipping Cost is required"),
         tracking_details: yup
             .string()
             .typeError("Tracking Details must contain characters only")
             .optional(),
+        tracking_status: yup
+            .number()
+            .typeError("Tracking Status must be a number")
+            .oneOf([0, 1], "Tracking Status must be 0 or 1")
+            .required("Tracking Status is required"),
         payment_status: yup
             .number()
             .typeError("Payment Status must be a number")
             .oneOf([0, 1, 2], "Payment Status must be 0 or 1 or 2")
             .required("Payment Status is required"),
+        payment_card_type: yup
+            .number()
+            .typeError("Payment Card Type must be a number")
+            .oneOf([1, 2, 3, 4], "Payment Card Type must be 1 or 2 or 3 or 4")
+            .required("Payment Card Type is required"),
+        payment_gateway: yup
+            .number()
+            .typeError("Payment Gateway must be a number")
+            .oneOf([1, 2, 3], "Payment Gateway must be 1 or 2 or 3")
+            .required("Payment Gateway is required"),
         invoice_status: yup
             .number()
             .typeError("Invoice Status must be a number")
@@ -31,7 +102,7 @@ export const serviceTeamOrderSchema = yup
         shipment_status: yup
             .number()
             .typeError("Shipment Status must be a number")
-            .oneOf([1, 2, 3, 4, 5], "Shipment Status must be 1 or 2 or 3 or 4 or 5")
+            .oneOf([0, 1], "Shipment Status must be 0 or 1")
             .required("Shipment Status is required"),
         yard_located: yup
             .number()
@@ -53,6 +124,19 @@ export const serviceTeamOrderSchema = yup
             .string()
             .typeError("Comment must contain characters only")
             .required(),
+        additional_comment_required: yup
+            .number()
+            .typeError("Additional Comment Required must be a number")
+            .oneOf([0, 1], "Additional Comment Required must be 0 or 1")
+            .required(),
+        additional_comment: yup
+            .string()
+            .typeError("Additional Comment must contain characters only")
+            .when("additional_comment_required", {
+                is: (val: number | undefined) => val === 1,
+                then: (schema) => schema.required("Additional Comment is required"),
+                otherwise: (schema) => schema.optional(),
+            }),
     })
     .required();
 

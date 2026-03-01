@@ -17,8 +17,8 @@ class TimelinePaginateController extends Controller
      * @param Request $request
      * @return TimelineCollection
      */
-    public function index(Request $request, $order_id){
-        $data = $this->timelineService->paginate($order_id, $request->total ?? 10);
+    public function index(Request $request, $quotation_id){
+        $data = $this->timelineService->paginate($quotation_id, $request->total ?? 10);
         return TimelineCollection::collection($data);
     }
 

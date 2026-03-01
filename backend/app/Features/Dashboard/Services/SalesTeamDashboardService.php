@@ -2,7 +2,7 @@
 
 namespace App\Features\Dashboard\Services;
 
-use App\Features\Order\Models\Order;
+use App\Features\Quotation\Models\Quotation;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\QueryBuilder\QueryBuilder;
 use Illuminate\Support\Facades\Auth;
@@ -12,25 +12,22 @@ class SalesTeamDashboardService
 {
     protected function model(): Builder
 	{
-		return Order::query()
+		return Quotation::query()
         ->selectRaw("
-            SUM(CASE WHEN orders.sales_user_id = ? THEN 1 ELSE 0 END) as totalOrders,
+            SUM(CASE WHEN quotations.sales_user_id = ? THEN 1 ELSE 0 END) as totalQuotations,
 
-            SUM(CASE WHEN orders.sales_user_id = ? AND orders.is_active = 0 THEN 1 ELSE 0 END) as totalDraftOrders,
+            SUM(CASE WHEN quotations.sales_user_id = ? AND quotations.is_active = 0 THEN 1 ELSE 0 END) as totalDraftQuotations,
 
-            SUM(CASE WHEN orders.sales_user_id = ? AND orders.is_active = 1 AND orders.order_status = 0 THEN 1 ELSE 0 END) as totalApprovalPendingOrders,
+            SUM(CASE WHEN quotations.sales_user_id = ? AND quotations.is_active = 1 AND quotations.order_status = 0 THEN 1 ELSE 0 END) as totalApprovalPendingQuotations,
 
-            SUM(CASE WHEN orders.sales_user_id = ? AND orders.is_active = 1 AND orders.order_status = 1 THEN 1 ELSE 0 END) as totalApprovedOrders,
+            SUM(CASE WHEN quotations.sales_user_id = ? AND quotations.is_active = 1 AND quotations.order_status = 1 THEN 1 ELSE 0 END) as totalApprovedQuotations,
 
-            SUM(CASE WHEN orders.sales_user_id = ? AND orders.is_active = 1 AND orders.order_status = 2 THEN 1 ELSE 0 END) as totalRejectedOrders,
+            SUM(CASE WHEN quotations.sales_user_id = ? AND quotations.is_active = 1 AND quotations.order_status = 2 THEN 1 ELSE 0 END) as totalRejectedQuotations,
 
-            SUM(CASE WHEN orders.sales_user_id = ? AND orders.lead_source = 1 THEN 1 ELSE 0 END) as totalWebsiteLeadOrders,
+            SUM(CASE WHEN quotations.sales_user_id = ? AND quotations.lead_source = 1 THEN 1 ELSE 0 END) as totalWebsiteLeadQuotations,
 
-            SUM(CASE WHEN orders.sales_user_id = ? AND orders.lead_source = 2 THEN 1 ELSE 0 END) as totalLeadOrders,
-
-            SUM(CASE WHEN orders.sales_user_id = ? AND orders.lead_source = 3 THEN 1 ELSE 0 END) as totalCallOrders
+            SUM(CASE WHEN quotations.sales_user_id = ? AND quotations.lead_source = 2 THEN 1 ELSE 0 END) as totalCallQuotations
         ", [
-            Auth::guard(Guards::API->value)->id(),
             Auth::guard(Guards::API->value)->id(),
             Auth::guard(Guards::API->value)->id(),
             Auth::guard(Guards::API->value)->id(),
@@ -53,14 +50,13 @@ class SalesTeamDashboardService
             return $data;
         }
         return [
-            "totalOrders" => 0,
-            "totalDraftOrders" => 0,
-            "totalApprovalPendingOrders" => 0,
-            "totalApprovedOrders" => 0,
-            "totalRejectedOrders" => 0,
-            "totalWebsiteLeadOrders" => 0,
-            "totalLeadOrders" => 0,
-            "totalCallOrders" => 0,
+            "totalQuotations" => 0,
+            "totalDraftQuotations" => 0,
+            "totalApprovalPendingQuotations" => 0,
+            "totalApprovedQuotations" => 0,
+            "totalRejectedQuotations" => 0,
+            "totalWebsiteLeadQuotations" => 0,
+            "totalCallQuotations" => 0,
         ];
 	}
 }

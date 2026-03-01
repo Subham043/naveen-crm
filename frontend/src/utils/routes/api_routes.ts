@@ -29,13 +29,19 @@ export const api_routes = {
     verify: "/api/v1/users/verify",
     excel: "/api/v1/users/excel",
   },
+  quotations: {
+    paginate: "/api/v1/quotation/paginate",
+    view: "/api/v1/quotation/view",
+    excel: "/api/v1/quotation/excel",
+    approval: "/api/v1/quotation/approval",
+    timeline: "/api/v1/quotation/timeline",
+    publicCreate: "/api/v1/quotation/public/create",
+  },
   orders: {
     paginate: "/api/v1/order/paginate",
     view: "/api/v1/order/view",
+    update: "/api/v1/order/update",
     excel: "/api/v1/order/excel",
-    approval: "/api/v1/order/approval",
-    timeline: "/api/v1/order/timeline",
-    publicCreate: "/api/v1/order/public/create",
   },
   activityLog: {
     paginate: "/api/v1/activity-log/paginate",
@@ -57,13 +63,13 @@ export const api_routes = {
     },
   },
   sales: {
-    orders: {
-      paginate: "/api/v1/sales/order/paginate",
-      create: "/api/v1/sales/order/create",
-      update: "/api/v1/sales/order/update",
-      view: "/api/v1/sales/order/view",
-      excel: "/api/v1/sales/order/excel",
-      submitForApproval: "/api/v1/sales/order/submit-for-approval",
+    quotations: {
+      paginate: "/api/v1/sales/quotation/paginate",
+      create: "/api/v1/sales/quotation/create",
+      update: "/api/v1/sales/quotation/update",
+      view: "/api/v1/sales/quotation/view",
+      excel: "/api/v1/sales/quotation/excel",
+      submitForApproval: "/api/v1/sales/quotation/submit-for-approval",
     }
   },
   serviceTeam: {

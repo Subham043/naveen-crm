@@ -4,11 +4,8 @@ namespace App\Features\Order\Enums;
 
 enum ShipmentStatus: int
 {
-	case Processing = 1;
-	case Shipped = 2;
-	case Delivered = 3;
-	case Closed = 4;
-	case Cancelled = 5;
+	case POPending = 1;
+	case PoSent = 2;
     
     public function value(): int
     {
@@ -18,11 +15,8 @@ enum ShipmentStatus: int
 	public static function getValue(int|null $value): string|null
 	{
 		return match ($value) {
-			self::Processing->value => 'Processing',
-			self::Shipped->value => 'Shipped',
-			self::Delivered->value => 'Delivered',
-			self::Closed->value => 'Closed',
-			self::Cancelled->value => 'Cancelled',
+			self::POPending->value => 'PO Pending',
+			self::PoSent->value => 'PO Sent',
 			null => null,
 			default => null,
 		};

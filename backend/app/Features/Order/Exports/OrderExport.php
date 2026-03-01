@@ -3,9 +3,13 @@
 namespace App\Features\Order\Exports;
 
 use App\Features\Order\Enums\InvoiceStatus;
-use App\Features\Order\Enums\LeadSource;
+use App\Features\Quotation\Enums\LeadSource;
 use App\Features\Order\Enums\OrderStatus;
+use App\Features\Quotation\Enums\QuotationStatus;
 use App\Features\Order\Enums\PaymentStatus;
+use App\Features\Order\Enums\PaymentCardType;
+use App\Features\Order\Enums\PaymentGateway;
+use App\Features\Order\Enums\TrackingStatus;
 use App\Features\Order\Enums\ShipmentStatus;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -30,37 +34,42 @@ class OrderExport implements FromQuery, WithHeadings, WithMapping
 	{
 		return [
 			$data->id,
-			$data->name,
-			$data->email,
-			$data->country_code,
-			$data->phone,
-			$data->part_year,
-			$data->part_model,
-			$data->part_name,
-			$data->part_description,
-			$data->billing_address,
-			LeadSource::getValue($data->lead_source),
-			$data->sales_user_id,
-			$data->salesUser->name,
-			$data->salesUser->email,
-			$data->is_created_by_agent ? 'Yes' : 'No',
-			$data->assigned_at ? $data->assigned_at->format('Y-m-d H:i:s') : null,
+			$data->quotation->name,
+			$data->quotation->email,
+			$data->quotation->country_code,
+			$data->quotation->phone,
+			$data->quotation->part_year,
+			$data->quotation->part_model,
+			$data->quotation->part_make,
+			$data->quotation->part_name,
+			$data->quotation->part_description,
+			$data->quotation->billing_address,
+			LeadSource::getValue($data->quotation->lead_source),
+			$data->quotation->sales_user_id,
+			$data->quotation->salesUser->name,
+			$data->quotation->salesUser->email,
+			$data->quotation->is_created_by_agent ? 'Yes' : 'No',
+			$data->quotation->assigned_at ? $data->quotation->assigned_at->format('Y-m-d H:i:s') : null,
+			QuotationStatus::getValue($data->quotation->quotation_status),
 			PaymentStatus::getValue($data->payment_status),
-			$data->total_price ?? 'N/A',
-			$data->cost_price ?? 'N/A',
-			$data->shipping_cost ?? 'N/A',
-			$data->sales_tax ?? 'N/A',
-			$data->gross_profit ?? 'N/A',
+			PaymentCardType::getValue($data->payment_card_type),
+			PaymentGateway::getValue($data->payment_gateway),
+			$data->quotation->sale_price ?? 'N/A',
+			$data->quotation->cost_price ?? 'N/A',
+			$data->quotation->shipping_cost ?? 'N/A',
+			$data->quotation->sales_tax ?? 'N/A',
+			$data->quotation->gross_profit ?? 'N/A',
 			$data->tracking_details ?? 'N/A',
+			TrackingStatus::getValue($data->tracking_status),
 			InvoiceStatus::getValue($data->invoice_status),
 			ShipmentStatus::getValue($data->shipment_status),
 			$data->yard_located ? 'Yes' : 'No',
 			OrderStatus::getValue($data->order_status),
-			$data->approval_by_id,
-			$data->approvalBy->name,
-			$data->approvalBy->email,
-			$data->approval_at ? $data->approval_at->format('Y-m-d H:i:s') : null,
-			$data->is_active ? 'Yes' : 'No',
+			$data->quotation->approval_by_id,
+			$data->quotation->approvalBy->name,
+			$data->quotation->approvalBy->email,
+			$data->quotation->approval_at ? $data->quotation->approval_at->format('Y-m-d H:i:s') : null,
+			$data->quotation->is_active ? 'Yes' : 'No',
 			$data->created_at->format('Y-m-d H:i:s'),
 		];
 	}
@@ -75,6 +84,7 @@ class OrderExport implements FromQuery, WithHeadings, WithMapping
 			'Phone',
 			'Part Year',
 			'Part Model',
+			'Part Make',
 			'Part Name',
 			'Part Description',
 			'Billing Address',
@@ -84,13 +94,17 @@ class OrderExport implements FromQuery, WithHeadings, WithMapping
 			'Sales User Email',
 			'Is Created By Agent',
 			'Assigned At',
+			'Quotation Status',
 			'Payment Status',
-			'Total Price',
+			'Payment Card Type',
+			'Payment Gateway',
+			'Sale Price',
 			'Cost Price',
 			'Shipment Price',
 			'Sales Tax',
 			'Gross Profit',
 			'Tracking Details',
+			'Tracking Status',
 			'Invoice Status',
 			'Shipment Status',
 			'Yard Located',

@@ -19,8 +19,8 @@ class ReportService
             DATE(created_at) as date,
             COUNT(id) as total_orders,
             SUM(total_price) as total_sales,
-            SUM(cost_price * 0.04) as total_tax,
-            SUM(total_price - (cost_price + shipping_cost + (cost_price * 0.04))) as total_profit
+            SUM(cost_price * 0.03) as total_tax,
+            SUM(total_price - (cost_price + shipping_cost + (cost_price * 0.03))) as total_profit
         ')
         ->where('is_active', true)
         ->where('order_status', OrderStatus::Approved->value())
@@ -34,7 +34,7 @@ class ReportService
             sales_user_id,
             COUNT(id) as total_leads,
             SUM(total_price) as total_sales,
-            SUM(total_price - (cost_price + shipping_cost + (cost_price * 0.04))) as total_profit,
+            SUM(total_price - (cost_price + shipping_cost + (cost_price * 0.03))) as total_profit,
             SUM(CASE WHEN order_status > 0 THEN 1 ELSE 0 END) as converted_leads,
             ROUND(
                 (SUM(CASE WHEN order_status > 0 THEN 1 ELSE 0 END) / COUNT(id)) * 100,
@@ -64,8 +64,8 @@ class ReportService
             SUM(total_price) as total_revenue,
             SUM(cost_price) as total_cost,
             SUM(shipping_cost) as total_shipping,
-            SUM(cost_price * 0.04) as total_tax,
-            SUM(total_price - (cost_price + shipping_cost + (cost_price * 0.04))) as total_profit
+            SUM(cost_price * 0.03) as total_tax,
+            SUM(total_price - (cost_price + shipping_cost + (cost_price * 0.03))) as total_profit
         ")
         ->where('is_active', true)
         ->where('order_status', OrderStatus::Approved->value())

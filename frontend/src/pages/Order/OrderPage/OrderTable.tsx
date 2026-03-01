@@ -1,53 +1,35 @@
 import TableRowLoading from "@/components/TableRowLoading";
 import TrippleDotMenu from "@/components/TrippleDotMenu";
-import PermittedLayout from "@/layouts/PermittedLayout";
 import type { OrderType } from "@/utils/types";
 import { Avatar, Box, Group, Table, Text } from "@mantine/core";
 import TableRowNotFound from "@/components/TableRowNotFound";
 import Datetime from "@/components/Datetime";
 import { memo } from "react";
 import OrderViewBtn from "./OrderViewBtn";
-import OrderApprovalBtn from "./OrderApprovalBtn";
-import OrderApprovalStatus from "@/components/Order/OrderApprovalStatus";
+import QuotationApprovalStatus from "@/components/Quotation/QuotationApprovalStatus";
 
 type OrderTableProps = {
   orders: OrderType[];
   loading: boolean;
 };
 
-const OrderTableRow = memo(
-  ({
-    id,
-    name,
-    email,
-    phone_number,
-    part_year,
-    part_model,
-    part_name,
-    lead_source_info,
-    order_status,
-    is_active,
-    sales_user_info,
-    approval_by_info,
-    total_price,
-    approval_at,
-    created_at,
-  }: OrderType) => {
-    return (
-      <Table.Tr key={id}>
-        <Table.Td>{id}</Table.Td>
-        <Table.Td>
+const OrderTableRow = memo(({ id, quotation_info, created_at }: OrderType) => {
+  return (
+    <Table.Tr key={id}>
+      <Table.Td>{id}</Table.Td>
+      <Table.Td>
+        {quotation_info && (
           <Group gap={7} align="flex-start">
             <Avatar
-              name={name}
+              name={quotation_info.name}
               color="initials"
-              alt={name}
+              alt={quotation_info.name}
               radius="xl"
               size={30}
             />
             <Box>
               <Text fw={500} size="sm" lh={1} ml={3} tt="capitalize">
-                {name}
+                {quotation_info.name}
               </Text>
               <Text
                 fw={500}
@@ -58,9 +40,9 @@ const OrderTableRow = memo(
                 tt="lowercase"
                 mt={5}
               >
-                {email}
+                {quotation_info.email}
               </Text>
-              {phone_number && (
+              {quotation_info.phone_number && (
                 <Text
                   fw={500}
                   fs="italic"
@@ -70,30 +52,44 @@ const OrderTableRow = memo(
                   tt="lowercase"
                   mt={5}
                 >
-                  {phone_number}
+                  {quotation_info.phone_number}
                 </Text>
               )}
             </Box>
           </Group>
-        </Table.Td>
-        <Table.Td>{part_year || "N/A"}</Table.Td>
-        <Table.Td>{part_model || "N/A"}</Table.Td>
-        <Table.Td>{part_name || "N/A"}</Table.Td>
-        <Table.Td>{lead_source_info}</Table.Td>
-        <Table.Td>
-          {sales_user_info ? (
-            <Group gap={7} align="flex-start">
-              <Avatar
-                name={sales_user_info.name}
-                color="initials"
-                alt={sales_user_info.name}
-                radius="xl"
-                size={30}
-              />
-              <Box>
-                <Text fw={500} size="sm" lh={1} ml={3} tt="capitalize">
-                  {sales_user_info.name}
-                </Text>
+        )}
+      </Table.Td>
+      <Table.Td>{quotation_info?.part_year || "N/A"}</Table.Td>
+      <Table.Td>{quotation_info?.part_model || "N/A"}</Table.Td>
+      <Table.Td>{quotation_info?.part_make || "N/A"}</Table.Td>
+      <Table.Td>{quotation_info?.part_name || "N/A"}</Table.Td>
+      <Table.Td>{quotation_info?.lead_source_info}</Table.Td>
+      <Table.Td>
+        {quotation_info?.sales_user_info ? (
+          <Group gap={7} align="flex-start">
+            <Avatar
+              name={quotation_info.sales_user_info.name}
+              color="initials"
+              alt={quotation_info.sales_user_info.name}
+              radius="xl"
+              size={30}
+            />
+            <Box>
+              <Text fw={500} size="sm" lh={1} ml={3} tt="capitalize">
+                {quotation_info.sales_user_info.name}
+              </Text>
+              <Text
+                fw={500}
+                fs="italic"
+                size="xs"
+                lh={1}
+                ml={3}
+                tt="lowercase"
+                mt={5}
+              >
+                {quotation_info.sales_user_info.email}
+              </Text>
+              {quotation_info.sales_user_info.phone && (
                 <Text
                   fw={500}
                   fs="italic"
@@ -103,68 +99,53 @@ const OrderTableRow = memo(
                   tt="lowercase"
                   mt={5}
                 >
-                  {sales_user_info.email}
+                  {quotation_info.sales_user_info.phone}
                 </Text>
-                {sales_user_info.phone && (
-                  <Text
-                    fw={500}
-                    fs="italic"
-                    size="xs"
-                    lh={1}
-                    ml={3}
-                    tt="lowercase"
-                    mt={5}
-                  >
-                    {sales_user_info.phone}
-                  </Text>
-                )}
-              </Box>
-            </Group>
-          ) : (
-            "N/A"
-          )}
-        </Table.Td>
-        <Table.Td>{total_price ? total_price : 0.0}</Table.Td>
-        <Table.Td>
-          <OrderApprovalStatus
-            is_active={is_active}
-            order_status={order_status}
-            approval_by_info={approval_by_info}
-            approval_at={approval_at}
-          />
-        </Table.Td>
-        <Table.Td>
-          <Datetime value={created_at} />
-        </Table.Td>
-        <Table.Td>
-          <Group justify="end" gap="xs">
-            <TrippleDotMenu width={200}>
-              <OrderViewBtn id={id} />
-              <PermittedLayout
-                outletType="children"
-                allowedRoles={["Super-Admin"]}
-                additionalCondition={is_active && order_status === 0}
-              >
-                <OrderApprovalBtn
-                  id={id}
-                  is_active={is_active}
-                  order_status={order_status as 0 | 1 | 2}
-                  update_order_status={1}
-                />
-                <OrderApprovalBtn
-                  id={id}
-                  is_active={is_active}
-                  order_status={order_status as 0 | 1 | 2}
-                  update_order_status={2}
-                />
-              </PermittedLayout>
-            </TrippleDotMenu>
+              )}
+            </Box>
           </Group>
-        </Table.Td>
-      </Table.Tr>
-    );
-  },
-);
+        ) : (
+          "N/A"
+        )}
+      </Table.Td>
+      <Table.Td>
+        {quotation_info?.sale_price ? quotation_info.sale_price : 0.0}
+      </Table.Td>
+      <Table.Td>
+        <QuotationApprovalStatus
+          is_active={
+            quotation_info?.is_active ? quotation_info?.is_active : false
+          }
+          quotation_status={
+            quotation_info?.quotation_status
+              ? (quotation_info?.quotation_status as 0 | 1 | 2 | 3)
+              : 0
+          }
+          approval_by_info={
+            quotation_info?.approval_by_info
+              ? quotation_info?.approval_by_info
+              : null
+          }
+          approval_at={
+            quotation_info?.approval_at
+              ? quotation_info?.approval_at
+              : undefined
+          }
+        />
+      </Table.Td>
+      <Table.Td>
+        <Datetime value={created_at} />
+      </Table.Td>
+      <Table.Td>
+        <Group justify="end" gap="xs">
+          <TrippleDotMenu width={200}>
+            <OrderViewBtn id={id} />
+          </TrippleDotMenu>
+        </Group>
+      </Table.Td>
+    </Table.Tr>
+  );
+});
 
 function OrderTable({ loading, orders }: OrderTableProps) {
   return (
@@ -176,10 +157,11 @@ function OrderTable({ loading, orders }: OrderTableProps) {
             <Table.Th>CUSTOMER</Table.Th>
             <Table.Th>PART YEAR</Table.Th>
             <Table.Th>PART MODEL</Table.Th>
+            <Table.Th>PART MAKE</Table.Th>
             <Table.Th>PART NAME</Table.Th>
             <Table.Th>SOURCE</Table.Th>
             <Table.Th>AGENT</Table.Th>
-            <Table.Th>TOTAL PRICE</Table.Th>
+            <Table.Th>SALE PRICE</Table.Th>
             <Table.Th>STATUS</Table.Th>
             <Table.Th>CREATED AT</Table.Th>
             <Table.Th />
@@ -193,41 +175,25 @@ function OrderTable({ loading, orders }: OrderTableProps) {
               <OrderTableRow
                 key={item.id}
                 id={item.id}
-                name={item.name}
-                email={item.email}
-                phone={item.phone}
-                country_code={item.country_code}
-                phone_number={item.phone_number}
-                part_year={item.part_year}
-                part_model={item.part_model}
-                part_name={item.part_name}
-                part_description={item.part_description}
-                billing_address={item.billing_address}
-                lead_source={item.lead_source}
-                lead_source_info={item.lead_source_info}
-                sales_user_id={item.sales_user_id}
-                sales_user_info={item.sales_user_info}
-                is_created_by_agent={item.is_created_by_agent}
-                assigned_at={item.assigned_at}
+                quotation_info={item.quotation_info}
+                quotation_id={item.quotation_id}
                 payment_status={item.payment_status}
                 payment_status_info={item.payment_status_info}
+                payment_card_type={item.payment_card_type}
+                payment_card_type_info={item.payment_card_type_info}
+                payment_gateway={item.payment_gateway}
+                payment_gateway_info={item.payment_gateway_info}
+                transaction_id={item.transaction_id}
                 yard_located={item.yard_located}
-                total_price={item.total_price}
-                cost_price={item.cost_price}
-                shipping_cost={item.shipping_cost}
-                sales_tax={item.sales_tax}
-                gross_profit={item.gross_profit}
                 tracking_details={item.tracking_details}
+                tracking_status={item.tracking_status}
+                tracking_status_info={item.tracking_status_info}
                 invoice_status={item.invoice_status}
                 invoice_status_info={item.invoice_status_info}
                 shipment_status={item.shipment_status}
                 shipment_status_info={item.shipment_status_info}
                 order_status={item.order_status}
                 order_status_info={item.order_status_info}
-                approval_by_id={item.approval_by_id}
-                approval_by_info={item.approval_by_info}
-                approval_at={item.approval_at}
-                is_active={item.is_active}
                 created_at={item.created_at}
                 updated_at={item.updated_at}
                 yards={item.yards}

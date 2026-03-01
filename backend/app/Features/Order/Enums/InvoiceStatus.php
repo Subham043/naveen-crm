@@ -16,9 +16,9 @@ enum InvoiceStatus: int
 	public static function getValue(int|null $value): string|null
 	{
 		return match ($value) {
-			self::NotGenerated->value => 'NotGenerated',
+			self::NotGenerated->value => 'Not Generated',
 			self::Generated->value => 'Generated',
-			self::Sent->value => 'Sent',
+			self::Sent->value => 'Generated & Sent',
 			null => null,
 			default => null,
 		};

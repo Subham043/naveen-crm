@@ -7,8 +7,7 @@ type PropType = {
 
 const data = [
   { label: "Website", value: "1" },
-  { label: "Lead", value: "2" },
-  { label: "Call", value: "3" },
+  { label: "Call", value: "2" },
 ];
 
 const SelectOrderLeadSource = (props: PropType) => {

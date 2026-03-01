@@ -39,7 +39,7 @@ export type RoleType = {
   updated_at: string;
 };
 
-export type OrderType = {
+export type QuotationType = {
   id: number;
   name: string;
   email: string;
@@ -47,8 +47,10 @@ export type OrderType = {
   country_code?: string;
   phone_number?: string;
   billing_address?: string;
+  shipping_address?: string;
   part_year?: number;
   part_model?: string;
+  part_make?: string;
   part_name?: string;
   part_description?: string;
   lead_source: number;
@@ -62,21 +64,13 @@ export type OrderType = {
   } | null;
   is_created_by_agent: boolean;
   assigned_at?: string;
-  payment_status: number;
-  payment_status_info?: string;
-  yard_located: boolean;
-  total_price?: number;
+  sale_price?: number;
   cost_price?: number;
   shipping_cost?: number;
   sales_tax?: number;
   gross_profit?: number;
-  tracking_details?: string;
-  invoice_status: number;
-  invoice_status_info?: string;
-  shipment_status: number;
-  shipment_status_info?: string;
-  order_status: number;
-  order_status_info?: string;
+  quotation_status: number;
+  quotation_status_info?: string;
   approval_by_id?: number;
   approval_by_info: {
     id: number;
@@ -85,7 +79,35 @@ export type OrderType = {
     phone?: string;
   } | null;
   approval_at?: string;
+  quotation_sent: boolean;
   is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export type SalesQuotationType = QuotationType;
+
+export type OrderType = {
+  id: number;
+  quotation_id?: number;
+  quotation_info: QuotationType | null;
+  payment_status: number;
+  payment_status_info?: string;
+  payment_card_type: number;
+  payment_card_type_info?: string;
+  payment_gateway: number;
+  payment_gateway_info?: string;
+  transaction_id?: string;
+  yard_located: boolean;
+  tracking_details?: string;
+  tracking_status: number;
+  tracking_status_info?: string;
+  invoice_status: number;
+  invoice_status_info?: string;
+  shipment_status: number;
+  shipment_status_info?: string;
+  order_status: number;
+  order_status_info?: string;
   created_at: string;
   updated_at: string;
   yards: {
@@ -96,11 +118,9 @@ export type OrderType = {
   }[];
 }
 
-export type SalesOrderType = OrderType;
-
 export type ServiceTeamOrderType = OrderType;
 
-export type OrderTimelineType = {
+export type QuotationTimelineType = {
   id: number;
   order_id: number;
   comment?: string;

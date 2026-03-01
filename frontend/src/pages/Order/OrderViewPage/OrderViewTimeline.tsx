@@ -14,7 +14,7 @@ import {
   ActionIcon,
 } from "@mantine/core";
 import type { OrderType } from "@/utils/types";
-import { useOrderTimelineQuery } from "@/utils/data/query/order_timeline";
+import { useQuotationTimelineQuery } from "@/utils/data/query/quotation_timeline";
 import CustomLoading from "@/components/CustomLoading";
 import Datetime from "@/components/Datetime";
 import { IconMessage, IconRefresh } from "@tabler/icons-react";
@@ -22,15 +22,15 @@ import { useCallback, useMemo, useState } from "react";
 import PermittedLayout from "@/layouts/PermittedLayout";
 
 type Props = {
-  id: OrderType["id"];
+  quotation_id: OrderType["quotation_id"];
 };
 
-function OrderViewTimeline({ id }: Props) {
+function OrderViewTimeline({ quotation_id }: Props) {
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(10);
 
   const { data, isLoading, isFetching, isRefetching, refetch } =
-    useOrderTimelineQuery(id, {
+    useQuotationTimelineQuery(quotation_id ? quotation_id : 0, {
       page,
       total,
     });
