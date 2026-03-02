@@ -5,12 +5,32 @@ import QuotationTable from "./QuotationPage/QuotationTable";
 import QuotationFilters from "./QuotationPage/QuotationFilters";
 import { useQuotationTable } from "./QuotationPage/useQuotationTable";
 import QuotationExportBtn from "./QuotationPage/QuotationExportBtn";
+import { useCallback, useState } from "react";
+import type { ExtendedModalProps } from "@/utils/types";
+import QuotationForm from "./QuotationForm";
 
 /*
  *Quotation Page
  */
 export default function Quotation() {
   const { data, isLoading, isFetching, isRefetching } = useQuotationTable();
+
+  const [modal, setModal] = useState<
+    ExtendedModalProps<{ id: undefined }, { id: number }>
+  >({
+    show: false,
+    type: "create",
+    id: undefined,
+  });
+
+  const handleModalClose = useCallback(
+    () => setModal({ show: false, type: "create", id: undefined }),
+    [],
+  );
+
+  const handleModalUpdate = useCallback((id: number) => {
+    setModal({ show: true, type: "update", id });
+  }, []);
 
   return (
     <>
@@ -39,12 +59,16 @@ export default function Quotation() {
           <QuotationTable
             quotations={data?.data ?? []}
             loading={isLoading || isFetching || isRefetching}
+            onEdit={handleModalUpdate}
           />
         </Box>
         {data && data.data.length > 0 && (
           <CustomPagination totalCount={data ? data.meta.total : 0} />
         )}
       </Paper>
+      <PermittedLayout outletType="children" allowedRoles={["Super-Admin"]}>
+        <QuotationForm modal={modal} handleModalClose={handleModalClose} />
+      </PermittedLayout>
     </>
   );
 }

@@ -1,8 +1,8 @@
 import { useToast } from "@/hooks/useToast";
 import { useMutation } from "@tanstack/react-query";
 import { nprogress } from "@mantine/nprogress";
-import type { QuotationApprovalFormValuesType, QuotationPublicCreateFormValuesType } from "../schema/quotation";
-import { approvalQuotationHandler, createPublicQuotationHandler } from "../dal/quotation";
+import type { QuotationApprovalFormValuesType, QuotationPublicCreateFormValuesType, QuotationUpdateFormValuesType } from "../schema/quotation";
+import { approvalQuotationHandler, createPublicQuotationHandler, updateQuotationHandler } from "../dal/quotation";
 import type { PaginationType, QuotationType } from "@/utils/types";
 import { QuotationQueryKey, QuotationsQueryKey } from "../query/quotation";
 import { useSearchParams } from "react-router";
@@ -53,6 +53,39 @@ export const useQuotationPublicCreateMutation = () => {
         },
         onSuccess: () => {
             toastSuccess("Quotation created successfully");
+        },
+        onSettled: () => {
+            nprogress.complete();
+        }
+    });
+};
+
+export const useQuotationUpdateMutation = (id: number) => {
+    const { toastSuccess } = useToast();
+    const [params] = useSearchParams();
+
+    return useMutation({
+        mutationFn: async (val: QuotationUpdateFormValuesType) => {
+            nprogress.start()
+            return await updateQuotationHandler(id, val);
+        },
+        onSuccess: (data, __, ___, context) => {
+            toastSuccess(" Quotation updated successfully");
+            context.client.setQueryData(QuotationsQueryKey(params), (oldData: PaginationType<QuotationType> | undefined) => {
+                if (!oldData) return oldData;
+                const oldUserDataIndex = oldData.data.findIndex((user) => user.id === id);
+                if (oldUserDataIndex !== -1) {
+                    const newData = [...oldData.data];
+                    newData[oldUserDataIndex] = data;
+                    return {
+                        ...oldData,
+                        data: newData,
+                    };
+                }
+                return oldData;
+            });
+            context.client.setQueryData(QuotationQueryKey(id), data);
+            context.client.setQueryData(QuotationQueryKey(id, true), data);
         },
         onSettled: () => {
             nprogress.complete();

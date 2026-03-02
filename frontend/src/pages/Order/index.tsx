@@ -5,12 +5,32 @@ import OrderTable from "./OrderPage/OrderTable";
 import OrderFilters from "./OrderPage/OrderFilters";
 import { useOrderTable } from "./OrderPage/useOrderTable";
 import OrderExportBtn from "./OrderPage/OrderExportBtn";
+import { useCallback, useState } from "react";
+import type { ExtendedModalProps } from "@/utils/types";
+import OrderForm from "./OrderForm";
 
 /*
  *Order Page
  */
 export default function Order() {
   const { data, isLoading, isFetching, isRefetching } = useOrderTable();
+
+  const [modal, setModal] = useState<
+    ExtendedModalProps<{ id: undefined }, { id: number }>
+  >({
+    show: false,
+    type: "create",
+    id: undefined,
+  });
+
+  const handleModalClose = useCallback(
+    () => setModal({ show: false, type: "create", id: undefined }),
+    [],
+  );
+
+  const handleModalUpdate = useCallback((id: number) => {
+    setModal({ show: true, type: "update", id });
+  }, []);
 
   return (
     <>
@@ -39,12 +59,16 @@ export default function Order() {
           <OrderTable
             orders={data?.data ?? []}
             loading={isLoading || isFetching || isRefetching}
+            onEdit={handleModalUpdate}
           />
         </Box>
         {data && data.data.length > 0 && (
           <CustomPagination totalCount={data ? data.meta.total : 0} />
         )}
       </Paper>
+      <PermittedLayout outletType="children" allowedRoles={["Super-Admin"]}>
+        <OrderForm modal={modal} handleModalClose={handleModalClose} />
+      </PermittedLayout>
     </>
   );
 }

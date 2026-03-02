@@ -13,6 +13,7 @@ import OrderViewTimeline from "./OrderViewTimeline";
 import OrderViewPartInfo from "@/components/Order/OrderView/OrderViewPartInfo";
 import OrderViewPriceInfo from "@/components/Order/OrderView/OrderViewPriceInfo";
 import OrderViewStatusInfo from "@/components/Order/OrderView/OrderViewStatusInfo";
+import OrderEditBtn from "./OrderEditBtn";
 
 export default function OrderView() {
   const { id } = useParams<{ id: string }>();
@@ -47,6 +48,10 @@ export default function OrderView() {
         <Group justify="space-between" align="center">
           <Title order={3}>Order #{data.id}</Title>
           <Group gap="xs" justify="flex-end" align="center">
+            <OrderEditBtn
+              id={data.id}
+              quotation_status={data.quotation_info?.quotation_status}
+            />
             <Button
               leftSection={<IconArrowNarrowLeft size={16} />}
               variant="filled"

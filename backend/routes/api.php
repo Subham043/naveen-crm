@@ -18,10 +18,12 @@ use App\Features\Dashboard\Controllers\DashboardController;
 use App\Features\Quotation\Controllers\QuotationApprovalController;
 use App\Features\Order\Controllers\OrderExportController;
 use App\Features\Order\Controllers\OrderPaginateController;
+use App\Features\Order\Controllers\OrderUpdateController;
 use App\Features\Quotation\Controllers\QuotationPublicCreateController;
 use App\Features\Order\Controllers\OrderViewController;
 use App\Features\Quotation\Controllers\QuotationExportController;
 use App\Features\Quotation\Controllers\QuotationPaginateController;
+use App\Features\Quotation\Controllers\QuotationUpdateController;
 use App\Features\Quotation\Controllers\QuotationViewController;
 use App\Features\Report\Controllers\AgentPerformanceReportExportController;
 use App\Features\Report\Controllers\AgentPerformanceReportPaginateController;
@@ -99,6 +101,7 @@ Route::prefix('v1')->middleware([Throttle::API->middleware()])->group(function (
                 Route::get('/excel', [QuotationExportController::class, 'index']);
                 Route::get('/paginate', [QuotationPaginateController::class, 'index']);
                 Route::get('/view/{id}', [QuotationViewController::class, 'index']);
+                Route::post('/update/{id}', [QuotationUpdateController::class, 'index']);
                 Route::post('/approval/{id}', [QuotationApprovalController::class, 'index']);
                 Route::get('/timeline/{quotation_id}', [TimelinePaginateController::class, 'index']);
             });
@@ -106,6 +109,7 @@ Route::prefix('v1')->middleware([Throttle::API->middleware()])->group(function (
                 Route::get('/excel', [OrderExportController::class, 'index']);
                 Route::get('/paginate', [OrderPaginateController::class, 'index']);
                 Route::get('/view/{id}', [OrderViewController::class, 'index']);
+                Route::post('/update/{id}', [OrderUpdateController::class, 'index']);
             });
             Route::prefix('activity-log')->group(function () {
                 Route::get('/excel', [ActivityLogExportController::class, 'index']);

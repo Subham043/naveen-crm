@@ -1,22 +1,34 @@
 import TableRowLoading from "@/components/TableRowLoading";
 import TrippleDotMenu from "@/components/TrippleDotMenu";
 import type { OrderType } from "@/utils/types";
-import { Avatar, Box, Group, Table, Text } from "@mantine/core";
+import { Avatar, Box, Group, Menu, Table, Text } from "@mantine/core";
 import TableRowNotFound from "@/components/TableRowNotFound";
 import Datetime from "@/components/Datetime";
-import { memo } from "react";
+import { memo, useCallback } from "react";
 import OrderViewBtn from "./OrderViewBtn";
 import OrderStatus, {
   type OrderStatusType,
 } from "@/components/Order/OrderStatus";
+import PermittedLayout from "@/layouts/PermittedLayout";
+import { IconEdit } from "@tabler/icons-react";
 
 type OrderTableProps = {
   orders: OrderType[];
   loading: boolean;
+  onEdit: (id: number) => void;
 };
 
 const OrderTableRow = memo(
-  ({ id, quotation_info, order_status, created_at }: OrderType) => {
+  ({
+    id,
+    quotation_info,
+    order_status,
+    created_at,
+    onEdit,
+  }: OrderType & { onEdit: (id: number) => void }) => {
+    const onEditHandler = useCallback(() => {
+      onEdit(id);
+    }, [onEdit, id]);
     return (
       <Table.Tr key={id}>
         <Table.Td>{id}</Table.Td>
@@ -124,6 +136,19 @@ const OrderTableRow = memo(
           <Group justify="end" gap="xs">
             <TrippleDotMenu width={200}>
               <OrderViewBtn id={id} />
+              <PermittedLayout
+                outletType="children"
+                allowedRoles={["Super-Admin"]}
+                additionalCondition={quotation_info?.quotation_status === 1}
+              >
+                <Menu.Item
+                  leftSection={<IconEdit size={16} stroke={1.5} />}
+                  onClick={onEditHandler}
+                  type="button"
+                >
+                  Edit
+                </Menu.Item>
+              </PermittedLayout>
             </TrippleDotMenu>
           </Group>
         </Table.Td>
@@ -132,7 +157,7 @@ const OrderTableRow = memo(
   },
 );
 
-function OrderTable({ loading, orders }: OrderTableProps) {
+function OrderTable({ loading, orders, onEdit }: OrderTableProps) {
   return (
     <Table.ScrollContainer minWidth={800} p={undefined} m={undefined}>
       <Table highlightOnHover horizontalSpacing="md">
@@ -182,6 +207,7 @@ function OrderTable({ loading, orders }: OrderTableProps) {
                 created_at={item.created_at}
                 updated_at={item.updated_at}
                 yards={item.yards}
+                onEdit={onEdit}
               />
             ))
           ) : (

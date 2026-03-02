@@ -2,12 +2,16 @@
 
 namespace App\Providers;
 
+use App\Features\Order\Events\OrderUpdated;
+use App\Features\Order\Listeners\CreateTimelineForUpdatedOrderListener;
 use App\Features\Quotation\Events\QuotationApproval;
 use App\Features\Quotation\Events\PublicQuotationCreated;
+use App\Features\Quotation\Events\QuotationUpdated;
 use App\Features\Quotation\Events\WebhookQuotationCreated;
 use App\Features\Quotation\Listeners\AssignAgentToCreatedPublicQuotationListener;
 use App\Features\Quotation\Listeners\CreateTimelineForCreatedPublicQuotationListener;
 use App\Features\Quotation\Listeners\CreateTimelineForQuotationApprovalListener;
+use App\Features\Quotation\Listeners\CreateTimelineForUpdatedQuotationListener;
 use App\Features\Roles\Enums\Roles;
 use App\Features\SalesTeam\Events\SalesQuotationCreated;
 use App\Features\SalesTeam\Events\SalesQuotationSubmittedForApproval;
@@ -107,6 +111,11 @@ class AppServiceProvider extends ServiceProvider
         );
         
         Event::listen(
+            QuotationUpdated::class,
+            CreateTimelineForUpdatedQuotationListener::class,
+        );
+        
+        Event::listen(
             SalesQuotationSubmittedForApproval::class,
             CreateTimelineForSalesQuotationSubmittedForApprovalListener::class,
         );
@@ -114,6 +123,11 @@ class AppServiceProvider extends ServiceProvider
         Event::listen(
             ServiceTeamOrderUpdated::class,
             CreateTimelineForUpdatedServiceTeamOrderListener::class,
+        );
+
+        Event::listen(
+            OrderUpdated::class,
+            CreateTimelineForUpdatedOrderListener::class,
         );
         
         Event::listen(

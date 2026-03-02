@@ -59,6 +59,14 @@ export const orderUpdateSchema = yup
             .string()
             .typeError("Part Description must contain characters only")
             .required("Part Description is required"),
+        billing_address: yup
+            .string()
+            .typeError("Billing Address must contain characters only")
+            .required("Billing Address is required"),
+        shipping_address: yup
+            .string()
+            .typeError("Shipping Address must contain characters only")
+            .required("Shipping Address is required"),
         sale_price: yup
             .number()
             .typeError("Total Price must be a number")
@@ -88,13 +96,27 @@ export const orderUpdateSchema = yup
         payment_card_type: yup
             .number()
             .typeError("Payment Card Type must be a number")
-            .oneOf([1, 2, 3, 4], "Payment Card Type must be 1 or 2 or 3 or 4")
-            .required("Payment Card Type is required"),
+            .when("payment_status", {
+                is: (val: number | undefined) => val === 1 || val === 2,
+                then: (schema) => schema.oneOf([1, 2, 3, 4], "Payment Card Type must be 1 or 2 or 3 or 4").required("Payment Card Type is required"),
+                otherwise: (schema) => schema.optional(),
+            }),
         payment_gateway: yup
             .number()
             .typeError("Payment Gateway must be a number")
-            .oneOf([1, 2, 3], "Payment Gateway must be 1 or 2 or 3")
-            .required("Payment Gateway is required"),
+            .when("payment_status", {
+                is: (val: number | undefined) => val === 1 || val === 2,
+                then: (schema) => schema.oneOf([1, 2, 3], "Payment Gateway must be 1 or 2 or 3").required("Payment Gateway is required"),
+                otherwise: (schema) => schema.optional(),
+            }),
+        transaction_id: yup
+            .string()
+            .typeError("Transaction ID must contain characters only")
+            .when("payment_status", {
+                is: (val: number | undefined) => val === 1 || val === 2,
+                then: (schema) => schema.required("Transaction ID is required"),
+                otherwise: (schema) => schema.optional(),
+            }),
         invoice_status: yup
             .number()
             .typeError("Invoice Status must be a number")
@@ -105,6 +127,11 @@ export const orderUpdateSchema = yup
             .typeError("Shipment Status must be a number")
             .oneOf([0, 1], "Shipment Status must be 0 or 1")
             .required("Shipment Status is required"),
+        order_status: yup
+            .number()
+            .typeError("Order Status must be a number")
+            .oneOf([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], "Order Status must be 0 or 1 or 2 or 3 or 4 or 5 or 6 or 7 or 8 or 9")
+            .required("Order Status is required"),
         yard_located: yup
             .number()
             .typeError("Yard Located must be a number")

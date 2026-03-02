@@ -10,6 +10,7 @@ import QuotationViewPartInfo from "@/components/Quotation/QuotationView/Quotatio
 import QuotationViewAgentInfo from "@/components/Quotation/QuotationView/QuotationViewAgentInfo";
 import QuotationViewPriceInfo from "@/components/Quotation/QuotationView/QuotationViewPriceInfo";
 import QuotationViewTimeline from "./QuotationViewTimeline";
+import QuotationEditBtn from "./QuotationEditBtn";
 
 export default function QuotationView() {
   const { id } = useParams<{ id: string }>();
@@ -55,6 +56,10 @@ export default function QuotationView() {
               id={data.id}
               quotation_status={data.quotation_status as 0 | 1 | 2}
               update_quotation_status={2}
+            />
+            <QuotationEditBtn
+              id={data.id}
+              quotation_status={data.quotation_status}
             />
             <Button
               leftSection={<IconArrowNarrowLeft size={16} />}

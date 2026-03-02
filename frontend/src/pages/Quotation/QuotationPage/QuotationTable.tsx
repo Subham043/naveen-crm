@@ -2,17 +2,19 @@ import TableRowLoading from "@/components/TableRowLoading";
 import TrippleDotMenu from "@/components/TrippleDotMenu";
 import PermittedLayout from "@/layouts/PermittedLayout";
 import type { QuotationType } from "@/utils/types";
-import { Avatar, Box, Group, Table, Text } from "@mantine/core";
+import { Avatar, Box, Group, Menu, Table, Text } from "@mantine/core";
 import TableRowNotFound from "@/components/TableRowNotFound";
 import Datetime from "@/components/Datetime";
-import { memo } from "react";
+import { memo, useCallback } from "react";
 import QuotationViewBtn from "./QuotationViewBtn";
 import QuotationApprovalBtn from "./QuotationApprovalBtn";
 import QuotationApprovalStatus from "@/components/Quotation/QuotationApprovalStatus";
+import { IconEdit } from "@tabler/icons-react";
 
 type QuotationTableProps = {
   quotations: QuotationType[];
   loading: boolean;
+  onEdit: (id: number) => void;
 };
 
 const QuotationTableRow = memo(
@@ -33,7 +35,13 @@ const QuotationTableRow = memo(
     sale_price,
     approval_at,
     created_at,
-  }: QuotationType) => {
+    onEdit,
+  }: QuotationType & {
+    onEdit: (id: number) => void;
+  }) => {
+    const onEditHandler = useCallback(() => {
+      onEdit(id);
+    }, [onEdit, id]);
     return (
       <Table.Tr key={id}>
         <Table.Td>{id}</Table.Td>
@@ -160,6 +168,19 @@ const QuotationTableRow = memo(
                   update_quotation_status={2}
                 />
               </PermittedLayout>
+              <PermittedLayout
+                outletType="children"
+                allowedRoles={["Super-Admin"]}
+                additionalCondition={quotation_status === 1}
+              >
+                <Menu.Item
+                  leftSection={<IconEdit size={16} stroke={1.5} />}
+                  onClick={onEditHandler}
+                  type="button"
+                >
+                  Edit
+                </Menu.Item>
+              </PermittedLayout>
             </TrippleDotMenu>
           </Group>
         </Table.Td>
@@ -168,7 +189,7 @@ const QuotationTableRow = memo(
   },
 );
 
-function QuotationTable({ loading, quotations }: QuotationTableProps) {
+function QuotationTable({ loading, quotations, onEdit }: QuotationTableProps) {
   return (
     <Table.ScrollContainer minWidth={800} p={undefined} m={undefined}>
       <Table highlightOnHover horizontalSpacing="md">
@@ -226,6 +247,7 @@ function QuotationTable({ loading, quotations }: QuotationTableProps) {
                 created_at={item.created_at}
                 updated_at={item.updated_at}
                 quotation_sent={item.quotation_sent}
+                onEdit={onEdit}
               />
             ))
           ) : (

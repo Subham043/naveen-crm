@@ -2,7 +2,7 @@ import axios from "@/utils/axios";
 import { api_routes } from "../../routes/api_routes";
 import type { PaginationType, QuotationType } from "../../types";
 import type { GenericAbortSignal } from "axios";
-import type { QuotationApprovalFormValuesType, QuotationPublicCreateFormValuesType } from "../schema/quotation";
+import type { QuotationApprovalFormValuesType, QuotationPublicCreateFormValuesType, QuotationUpdateFormValuesType } from "../schema/quotation";
 
 export const createPublicQuotationHandler = async (val: QuotationPublicCreateFormValuesType, signal?: GenericAbortSignal | undefined) => {
     await axios.post(api_routes.quotations.publicCreate, val, { signal });
@@ -10,6 +10,11 @@ export const createPublicQuotationHandler = async (val: QuotationPublicCreateFor
 
 export const approvalQuotationHandler = async (id: number, data: QuotationApprovalFormValuesType, signal?: GenericAbortSignal | undefined) => {
     const response = await axios.post<{ data: QuotationType }>(api_routes.quotations.approval + `/${id}`, data, { signal });
+    return response.data.data;
+}
+
+export const updateQuotationHandler = async (id: number, val: QuotationUpdateFormValuesType, signal?: GenericAbortSignal | undefined) => {
+    const response = await axios.post<{ data: QuotationType }>(api_routes.quotations.update + `/${id}`, val, { signal });
     return response.data.data;
 }
 

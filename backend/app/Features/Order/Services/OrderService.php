@@ -3,7 +3,9 @@
 namespace App\Features\Order\Services;
 
 use App\Features\Order\Models\Order;
+use App\Features\Order\Models\Yard;
 use App\Features\Quotation\Enums\QuotationStatus;
+use App\Features\Timeline\Collections\YardTimelineDTOCollection;
 use App\Http\Abstracts\AbstractService;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\Filters\Filter;
@@ -101,6 +103,40 @@ class OrderService extends AbstractService
                         });
                     }),
                 ]);
+    }
+
+    /**
+	 * @param YardTimelineDTOCollection $data
+	 * @param Order $order
+	 */
+    public function syncYards(YardTimelineDTOCollection $data, $order)
+    {
+        $yard_array = $data->toDatabaseArray();
+        // 1. Collect incoming IDs
+        $incomingIds = collect($yard_array)
+            ->pluck('id')
+            ->filter()
+            ->values();
+
+        // 2. Delete removed yards
+        $order->yards()
+            ->whereNotIn('id', $incomingIds)
+            ->delete();
+
+        // 3. Prepare data
+        $yards = collect($yard_array)->map(function ($yard) use ($order) {
+            return [
+                'id' => $yard['id'] ?? null, // important for update
+                'order_id' => $order->id,
+                'yard' => $yard['yard'],
+                'service_team_id' => Auth::guard(Guards::API->value())->user()->id,
+                'updated_at' => now(),
+                'created_at' => now(),
+            ];
+        })->toArray();
+
+        // 4. Upsert
+        Yard::upsert($yards, ['id'], ['yard', 'updated_at']);
     }
 
     public function getById(Int $id): Order
