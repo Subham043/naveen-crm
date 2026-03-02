@@ -6,14 +6,14 @@ type PropType = {
 };
 
 const data = [
-  { label: "DRAFT", value: "draft" },
-  { label: "SUBMITTED FOR APPROVAL", value: "submitted-for-approval" },
-  { label: "APPROVED", value: "approved" },
-  { label: "REJECTED", value: "rejected" },
+  { value: "1", label: "Mastercard" },
+  { value: "2", label: "Visa" },
+  { value: "3", label: "Amex" },
+  { value: "4", label: "Zelle" },
 ];
 
-const SelectOrderFilterStatus = (props: PropType) => {
-  const { key = "filter[status]" } = props;
+const SelectOrderPaymentCardType = (props: PropType) => {
+  const { key = "filter[payment_card_type]" } = props;
   const { paramValue, setParamValue } = useCustomQueryParam(key);
   return (
     <Select
@@ -22,12 +22,12 @@ const SelectOrderFilterStatus = (props: PropType) => {
       value={paramValue}
       key={paramValue}
       onChange={(value) => setParamValue(value || "")}
-      placeholder={"Select Status"}
-      w="260px"
+      placeholder={"Payment Card Type"}
+      w="190px"
       clearable={true}
       allowDeselect={false}
     />
   );
 };
 
-export default SelectOrderFilterStatus;
+export default SelectOrderPaymentCardType;

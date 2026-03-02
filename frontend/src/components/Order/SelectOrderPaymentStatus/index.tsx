@@ -21,7 +21,7 @@ const SelectOrderPaymentStatus = (props: PropType) => {
       value={paramValue}
       key={paramValue}
       onChange={(value) => setParamValue(value || "")}
-      placeholder={"Select Payment Status"}
+      placeholder={"Payment Status"}
       w="190px"
       clearable={true}
       allowDeselect={false}

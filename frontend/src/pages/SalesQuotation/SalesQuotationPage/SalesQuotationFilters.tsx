@@ -1,5 +1,4 @@
 import FilterClearBtn from "@/components/FilterClearBtn";
-import SelectQuotationCreatedByMe from "@/components/Quotation/SelectQuotationCreatedByMe";
 import SelectQuotationFilterStatus from "@/components/Quotation/SelectQuotationFilterStatus";
 import SelectQuotationLeadSource from "@/components/Quotation/SelectQuotationLeadSource";
 import SearchField from "@/components/SearchField";
@@ -21,7 +20,6 @@ function SalesQuotationFilters() {
       <SearchField defaultValue={search} onChange={onSearchChange} />
       <SelectQuotationLeadSource />
       <SelectQuotationFilterStatus />
-      <SelectQuotationCreatedByMe />
       <FilterClearBtn />
     </Group>
   );

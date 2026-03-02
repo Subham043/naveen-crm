@@ -9,7 +9,7 @@ type Props = {
   gross_profit: QuotationType["gross_profit"];
 };
 
-function QuotationViewPaymentInfo({
+function QuotationViewPriceInfo({
   sale_price,
   cost_price,
   shipping_cost,
@@ -19,7 +19,7 @@ function QuotationViewPaymentInfo({
   return (
     <Paper shadow="xs" mb="lg" withBorder>
       <Box p="sm" pos="relative">
-        <Title order={5}>Payment Info</Title>
+        <Title order={5}>Price Info</Title>
       </Box>
       <Divider />
       <Box p="sm">
@@ -70,4 +70,4 @@ function QuotationViewPaymentInfo({
   );
 }
 
-export default QuotationViewPaymentInfo;
+export default QuotationViewPriceInfo;

@@ -5,7 +5,7 @@ namespace App\Features\Order\Enums;
 enum ShipmentStatus: int
 {
 	case POPending = 1;
-	case PoSent = 2;
+	case POSent = 2;
     
     public function value(): int
     {
@@ -16,7 +16,7 @@ enum ShipmentStatus: int
 	{
 		return match ($value) {
 			self::POPending->value => 'PO Pending',
-			self::PoSent->value => 'PO Sent',
+			self::POSent->value => 'PO Sent',
 			null => null,
 			default => null,
 		};

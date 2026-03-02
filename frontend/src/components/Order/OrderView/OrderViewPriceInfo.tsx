@@ -10,7 +10,7 @@ function OrderViewPriceInfo({ quotation_info }: Props) {
   return (
     <Paper shadow="xs" mb="lg" withBorder>
       <Box p="sm" pos="relative">
-        <Title order={5}>Payment Info</Title>
+        <Title order={5}>Price Info</Title>
       </Box>
       <Divider />
       <Box p="sm">

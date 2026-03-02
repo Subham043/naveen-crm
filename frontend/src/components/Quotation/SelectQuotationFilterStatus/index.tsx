@@ -22,7 +22,7 @@ const SelectQuotationFilterStatus = (props: PropType) => {
       value={paramValue}
       key={paramValue}
       onChange={(value) => setParamValue(value || "")}
-      placeholder={"Select Status"}
+      placeholder={"Status"}
       w="260px"
       clearable={true}
       allowDeselect={false}

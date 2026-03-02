@@ -4,15 +4,16 @@ namespace App\Features\Order\Enums;
 
 enum OrderStatus: int
 {
-	case Escalation = 0;
-	case Cancelled = 1;
-	case RelocatePoSent = 2;
-    case PendingForRefund = 3;
-    case Refunded = 4;
-	case PendingPartShipped = 5;
-	case Completed = 6;
-	case ChargeBack = 7;
-	case YardRelocate = 8;
+	case Pending = 0;
+	case Escalation = 1;
+	case Cancelled = 2;
+	case RelocatePoSent = 3;
+    case PendingForRefund = 4;
+    case Refunded = 5;
+	case PendingPartShipped = 6;
+	case Completed = 7;
+	case ChargeBack = 8;
+	case YardRelocate = 9;
     
     public function value(): int
     {
@@ -22,6 +23,7 @@ enum OrderStatus: int
 	public static function getValue(int|null $value): string|null
 	{
 		return match ($value) {
+			self::Pending->value => 'Pending',
 			self::Escalation->value => 'Escalation',
 			self::Cancelled->value => 'Cancelled',
 			self::RelocatePoSent->value => 'Relocate Po Sent',

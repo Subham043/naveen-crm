@@ -6,12 +6,13 @@ type PropType = {
 };
 
 const data = [
-  { label: "YES", value: "yes" },
-  { label: "NO", value: "no" },
+  { value: "1", label: "Stripe" },
+  { value: "2", label: "Boa" },
+  { value: "3", label: "Zelle" },
 ];
 
-const SelectOrderCreatedByMe = (props: PropType) => {
-  const { key = "filter[is_created_by_agent]" } = props;
+const SelectOrderPaymentGateway = (props: PropType) => {
+  const { key = "filter[payment_gateway]" } = props;
   const { paramValue, setParamValue } = useCustomQueryParam(key);
   return (
     <Select
@@ -20,12 +21,12 @@ const SelectOrderCreatedByMe = (props: PropType) => {
       value={paramValue}
       key={paramValue}
       onChange={(value) => setParamValue(value || "")}
-      placeholder={"Created By Me"}
-      w="150px"
+      placeholder={"Payment Gateway"}
+      w="190px"
       clearable={true}
       allowDeselect={false}
     />
   );
 };
 
-export default SelectOrderCreatedByMe;
+export default SelectOrderPaymentGateway;

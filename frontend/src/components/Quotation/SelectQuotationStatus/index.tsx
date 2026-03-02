@@ -22,7 +22,7 @@ const SelectQuotationStatus = (props: PropType) => {
       value={paramValue}
       key={paramValue}
       onChange={(value) => setParamValue(value || "")}
-      placeholder={"Select Quotation Status"}
+      placeholder={"Quotation Status"}
       w="220px"
       clearable={true}
       allowDeselect={false}

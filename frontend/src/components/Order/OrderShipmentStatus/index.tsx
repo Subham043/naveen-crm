@@ -1,17 +1,14 @@
 import { Badge } from "@mantine/core";
 
-export type ShipmentStatus = 1 | 2 | 3 | 4 | 5;
+export type ShipmentStatus = 1 | 2;
 
 interface OrderShipmentStatusProps {
   shipment_status: ShipmentStatus;
 }
 
 const shipmentStatusMap = {
-  1: { label: "Processing", color: "yellow" },
-  2: { label: "Shipped", color: "green" },
-  3: { label: "Delivered", color: "blue" },
-  4: { label: "Closed", color: "gray" },
-  5: { label: "Cancelled", color: "red" },
+  1: { label: "PO Pending", color: "yellow" },
+  2: { label: "PO Sent", color: "green" },
 };
 
 function OrderShipmentStatus({ shipment_status }: OrderShipmentStatusProps) {

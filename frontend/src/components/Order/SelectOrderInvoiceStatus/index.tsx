@@ -21,8 +21,8 @@ const SelectOrderInvoiceStatus = (props: PropType) => {
       value={paramValue}
       key={paramValue}
       onChange={(value) => setParamValue(value || "")}
-      placeholder={"Select Invoice Status"}
-      w="190px"
+      placeholder={"Invoice Status"}
+      w="150px"
       clearable={true}
       allowDeselect={false}
     />

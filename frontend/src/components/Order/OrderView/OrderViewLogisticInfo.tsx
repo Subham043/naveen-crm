@@ -1,23 +1,14 @@
 import { Box, Divider, Paper, SimpleGrid, Text, Title } from "@mantine/core";
 import type { OrderType } from "@/utils/types";
-import OrderInvoiceStatus, {
-  type InvoiceStatus,
-} from "@/components/Order/OrderInvoiceStatus";
-import OrderShipmentStatus, {
-  type ShipmentStatus,
-} from "@/components/Order/OrderShipmentStatus";
+import type { TrackingStatus } from "../OrderTrackingStatus";
+import OrderTrackingStatus from "../OrderTrackingStatus";
 
 type Props = {
   tracking_details: OrderType["tracking_details"];
-  invoice_status: OrderType["invoice_status"];
-  shipment_status: OrderType["shipment_status"];
+  tracking_status: OrderType["tracking_status"];
 };
 
-function OrderViewLogisticInfo({
-  tracking_details,
-  invoice_status,
-  shipment_status,
-}: Props) {
+function OrderViewLogisticInfo({ tracking_details, tracking_status }: Props) {
   return (
     <Paper shadow="xs" mb="lg" withBorder>
       <Box p="sm" pos="relative">
@@ -36,18 +27,10 @@ function OrderViewLogisticInfo({
           </Box>
           <Box>
             <Text fw={600} c="blue">
-              Invoice Status
+              Tracking Status
             </Text>
-            <OrderInvoiceStatus
-              invoice_status={invoice_status as InvoiceStatus}
-            />
-          </Box>
-          <Box>
-            <Text fw={600} c="blue">
-              Shipping Status
-            </Text>
-            <OrderShipmentStatus
-              shipment_status={shipment_status as ShipmentStatus}
+            <OrderTrackingStatus
+              tracking_status={tracking_status as TrackingStatus}
             />
           </Box>
         </SimpleGrid>

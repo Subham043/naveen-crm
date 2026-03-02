@@ -8,7 +8,7 @@ import QuotationViewApprovalBtn from "./QuotationViewApprovalBtn";
 import QuotationViewCustomerInfo from "@/components/Quotation/QuotationView/QuotationViewCustomerInfo";
 import QuotationViewPartInfo from "@/components/Quotation/QuotationView/QuotationViewPartInfo";
 import QuotationViewAgentInfo from "@/components/Quotation/QuotationView/QuotationViewAgentInfo";
-import QuotationViewPaymentInfo from "@/components/Quotation/QuotationView/QuotationViewPaymentInfo";
+import QuotationViewPriceInfo from "@/components/Quotation/QuotationView/QuotationViewPriceInfo";
 import QuotationViewTimeline from "./QuotationViewTimeline";
 
 export default function QuotationView() {
@@ -98,7 +98,7 @@ export default function QuotationView() {
         assigned_at={data.assigned_at}
       />
 
-      <QuotationViewPaymentInfo
+      <QuotationViewPriceInfo
         sale_price={data.sale_price}
         cost_price={data.cost_price}
         shipping_cost={data.shipping_cost}

@@ -6,11 +6,8 @@ type PropType = {
 };
 
 const data = [
-  { label: "Processing", value: "1" },
-  { label: "Shipped", value: "2" },
-  { label: "Delivered", value: "3" },
-  { label: "Closed", value: "4" },
-  { label: "Cancelled", value: "5" },
+  { value: "1", label: "PO Pending" },
+  { value: "2", label: "PO Sent" },
 ];
 
 const SelectOrderShipmentStatus = (props: PropType) => {
@@ -23,8 +20,8 @@ const SelectOrderShipmentStatus = (props: PropType) => {
       value={paramValue}
       key={paramValue}
       onChange={(value) => setParamValue(value || "")}
-      placeholder={"Select Shipment Status"}
-      w="200px"
+      placeholder={"Shipment Status"}
+      w="150px"
       clearable={true}
       allowDeselect={false}
     />

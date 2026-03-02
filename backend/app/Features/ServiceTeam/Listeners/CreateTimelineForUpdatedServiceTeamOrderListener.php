@@ -55,7 +55,7 @@ class CreateTimelineForUpdatedServiceTeamOrderListener implements ShouldQueue
 
             $message = "Order#{$event->order->id} was updated by {$event->userName}<{$event->userEmail}>";
             
-            $this->timelineService->createTimeline($event->order, $changes, $message, $event->comment, $event->userId);
+            $this->timelineService->createTimeline($event->order->quotation, $changes, $message, $event->comment, $event->userId);
         });
     }
 }

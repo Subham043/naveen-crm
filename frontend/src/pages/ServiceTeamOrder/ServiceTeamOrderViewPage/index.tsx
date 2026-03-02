@@ -12,6 +12,7 @@ import OrderViewAgentInfo from "@/components/Order/OrderView/OrderViewAgentInfo"
 import OrderViewCustomerInfo from "@/components/Order/OrderView/OrderViewCustomerInfo";
 import OrderViewPartInfo from "@/components/Order/OrderView/OrderViewPartInfo";
 import OrderViewPriceInfo from "@/components/Order/OrderView/OrderViewPriceInfo";
+import OrderViewStatusInfo from "@/components/Order/OrderView/OrderViewStatusInfo";
 
 export default function ServiceTeamOrderView() {
   const { id } = useParams<{ id: string }>();
@@ -71,8 +72,8 @@ export default function ServiceTeamOrderView() {
 
       <OrderViewPaymentInfo
         payment_status={data.payment_status}
-        payment_card_type_info={data.payment_card_type_info}
-        payment_gateway_info={data.payment_gateway_info}
+        payment_card_type={data.payment_card_type}
+        payment_gateway={data.payment_gateway}
         transaction_id={data.transaction_id}
       />
 
@@ -80,8 +81,13 @@ export default function ServiceTeamOrderView() {
 
       <OrderViewLogisticInfo
         tracking_details={data.tracking_details}
+        tracking_status={data.tracking_status}
+      />
+
+      <OrderViewStatusInfo
         invoice_status={data.invoice_status}
         shipment_status={data.shipment_status}
+        order_status={data.order_status}
       />
     </Box>
   );

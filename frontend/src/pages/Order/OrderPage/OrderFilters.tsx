@@ -1,10 +1,12 @@
 import FilterClearBtn from "@/components/FilterClearBtn";
 import SelectOrderApprovalByMe from "@/components/Order/SelectOrderApprovalByMe";
 import SelectOrderInvoiceStatus from "@/components/Order/SelectOrderInvoiceStatus";
-import SelectOrderLeadSource from "@/components/Order/SelectOrderLeadSource";
+import SelectOrderPaymentCardType from "@/components/Order/SelectOrderPaymentCardType";
+import SelectOrderPaymentGateway from "@/components/Order/SelectOrderPaymentGateway";
 import SelectOrderPaymentStatus from "@/components/Order/SelectOrderPaymentStatus";
 import SelectOrderShipmentStatus from "@/components/Order/SelectOrderShipmentStatus";
 import SelectOrderStatus from "@/components/Order/SelectOrderStatus";
+import SelectQuotationLeadSource from "@/components/Quotation/SelectQuotationLeadSource";
 import SearchField from "@/components/SearchField";
 import { useSearchQueryParam } from "@/hooks/useSearchQueryParam";
 import { Group } from "@mantine/core";
@@ -21,10 +23,12 @@ function OrderFilters() {
   return (
     <Group gap="xs">
       <SearchField defaultValue={search} onChange={onSearchChange} />
-      <SelectOrderLeadSource />
-      <SelectOrderStatus />
+      <SelectQuotationLeadSource />
       <SelectOrderApprovalByMe />
+      <SelectOrderStatus />
       <SelectOrderPaymentStatus />
+      <SelectOrderPaymentCardType />
+      <SelectOrderPaymentGateway />
       <SelectOrderInvoiceStatus />
       <SelectOrderShipmentStatus />
       <FilterClearBtn />

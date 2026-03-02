@@ -20,7 +20,7 @@ const SelectQuotationLeadSource = (props: PropType) => {
       value={paramValue}
       key={paramValue}
       onChange={(value) => setParamValue(value || "")}
-      placeholder={"Select Lead Source"}
+      placeholder={"Lead Source"}
       w="170px"
       clearable={true}
       allowDeselect={false}

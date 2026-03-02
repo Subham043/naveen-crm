@@ -6,43 +6,34 @@ import TableRowNotFound from "@/components/TableRowNotFound";
 import Datetime from "@/components/Datetime";
 import { memo } from "react";
 import OrderViewBtn from "./OrderViewBtn";
-import QuotationApprovalStatus from "@/components/Quotation/QuotationApprovalStatus";
+import OrderStatus, {
+  type OrderStatusType,
+} from "@/components/Order/OrderStatus";
 
 type OrderTableProps = {
   orders: OrderType[];
   loading: boolean;
 };
 
-const OrderTableRow = memo(({ id, quotation_info, created_at }: OrderType) => {
-  return (
-    <Table.Tr key={id}>
-      <Table.Td>{id}</Table.Td>
-      <Table.Td>
-        {quotation_info && (
-          <Group gap={7} align="flex-start">
-            <Avatar
-              name={quotation_info.name}
-              color="initials"
-              alt={quotation_info.name}
-              radius="xl"
-              size={30}
-            />
-            <Box>
-              <Text fw={500} size="sm" lh={1} ml={3} tt="capitalize">
-                {quotation_info.name}
-              </Text>
-              <Text
-                fw={500}
-                fs="italic"
-                size="xs"
-                lh={1}
-                ml={3}
-                tt="lowercase"
-                mt={5}
-              >
-                {quotation_info.email}
-              </Text>
-              {quotation_info.phone_number && (
+const OrderTableRow = memo(
+  ({ id, quotation_info, order_status, created_at }: OrderType) => {
+    return (
+      <Table.Tr key={id}>
+        <Table.Td>{id}</Table.Td>
+        <Table.Td>
+          {quotation_info && (
+            <Group gap={7} align="flex-start">
+              <Avatar
+                name={quotation_info.name}
+                color="initials"
+                alt={quotation_info.name}
+                radius="xl"
+                size={30}
+              />
+              <Box>
+                <Text fw={500} size="sm" lh={1} ml={3} tt="capitalize">
+                  {quotation_info.name}
+                </Text>
                 <Text
                   fw={500}
                   fs="italic"
@@ -52,44 +43,44 @@ const OrderTableRow = memo(({ id, quotation_info, created_at }: OrderType) => {
                   tt="lowercase"
                   mt={5}
                 >
-                  {quotation_info.phone_number}
+                  {quotation_info.email}
                 </Text>
-              )}
-            </Box>
-          </Group>
-        )}
-      </Table.Td>
-      <Table.Td>{quotation_info?.part_year || "N/A"}</Table.Td>
-      <Table.Td>{quotation_info?.part_model || "N/A"}</Table.Td>
-      <Table.Td>{quotation_info?.part_make || "N/A"}</Table.Td>
-      <Table.Td>{quotation_info?.part_name || "N/A"}</Table.Td>
-      <Table.Td>{quotation_info?.lead_source_info}</Table.Td>
-      <Table.Td>
-        {quotation_info?.sales_user_info ? (
-          <Group gap={7} align="flex-start">
-            <Avatar
-              name={quotation_info.sales_user_info.name}
-              color="initials"
-              alt={quotation_info.sales_user_info.name}
-              radius="xl"
-              size={30}
-            />
-            <Box>
-              <Text fw={500} size="sm" lh={1} ml={3} tt="capitalize">
-                {quotation_info.sales_user_info.name}
-              </Text>
-              <Text
-                fw={500}
-                fs="italic"
-                size="xs"
-                lh={1}
-                ml={3}
-                tt="lowercase"
-                mt={5}
-              >
-                {quotation_info.sales_user_info.email}
-              </Text>
-              {quotation_info.sales_user_info.phone && (
+                {quotation_info.phone_number && (
+                  <Text
+                    fw={500}
+                    fs="italic"
+                    size="xs"
+                    lh={1}
+                    ml={3}
+                    tt="lowercase"
+                    mt={5}
+                  >
+                    {quotation_info.phone_number}
+                  </Text>
+                )}
+              </Box>
+            </Group>
+          )}
+        </Table.Td>
+        <Table.Td>{quotation_info?.part_year || "N/A"}</Table.Td>
+        <Table.Td>{quotation_info?.part_model || "N/A"}</Table.Td>
+        <Table.Td>{quotation_info?.part_make || "N/A"}</Table.Td>
+        <Table.Td>{quotation_info?.part_name || "N/A"}</Table.Td>
+        <Table.Td>{quotation_info?.lead_source_info}</Table.Td>
+        <Table.Td>
+          {quotation_info?.sales_user_info ? (
+            <Group gap={7} align="flex-start">
+              <Avatar
+                name={quotation_info.sales_user_info.name}
+                color="initials"
+                alt={quotation_info.sales_user_info.name}
+                radius="xl"
+                size={30}
+              />
+              <Box>
+                <Text fw={500} size="sm" lh={1} ml={3} tt="capitalize">
+                  {quotation_info.sales_user_info.name}
+                </Text>
                 <Text
                   fw={500}
                   fs="italic"
@@ -99,53 +90,47 @@ const OrderTableRow = memo(({ id, quotation_info, created_at }: OrderType) => {
                   tt="lowercase"
                   mt={5}
                 >
-                  {quotation_info.sales_user_info.phone}
+                  {quotation_info.sales_user_info.email}
                 </Text>
-              )}
-            </Box>
+                {quotation_info.sales_user_info.phone && (
+                  <Text
+                    fw={500}
+                    fs="italic"
+                    size="xs"
+                    lh={1}
+                    ml={3}
+                    tt="lowercase"
+                    mt={5}
+                  >
+                    {quotation_info.sales_user_info.phone}
+                  </Text>
+                )}
+              </Box>
+            </Group>
+          ) : (
+            "N/A"
+          )}
+        </Table.Td>
+        <Table.Td>
+          {quotation_info?.sale_price ? quotation_info.sale_price : 0.0}
+        </Table.Td>
+        <Table.Td>
+          <OrderStatus order_status={order_status as OrderStatusType} />
+        </Table.Td>
+        <Table.Td>
+          <Datetime value={created_at} />
+        </Table.Td>
+        <Table.Td>
+          <Group justify="end" gap="xs">
+            <TrippleDotMenu width={200}>
+              <OrderViewBtn id={id} />
+            </TrippleDotMenu>
           </Group>
-        ) : (
-          "N/A"
-        )}
-      </Table.Td>
-      <Table.Td>
-        {quotation_info?.sale_price ? quotation_info.sale_price : 0.0}
-      </Table.Td>
-      <Table.Td>
-        <QuotationApprovalStatus
-          is_active={
-            quotation_info?.is_active ? quotation_info?.is_active : false
-          }
-          quotation_status={
-            quotation_info?.quotation_status
-              ? (quotation_info?.quotation_status as 0 | 1 | 2 | 3)
-              : 0
-          }
-          approval_by_info={
-            quotation_info?.approval_by_info
-              ? quotation_info?.approval_by_info
-              : null
-          }
-          approval_at={
-            quotation_info?.approval_at
-              ? quotation_info?.approval_at
-              : undefined
-          }
-        />
-      </Table.Td>
-      <Table.Td>
-        <Datetime value={created_at} />
-      </Table.Td>
-      <Table.Td>
-        <Group justify="end" gap="xs">
-          <TrippleDotMenu width={200}>
-            <OrderViewBtn id={id} />
-          </TrippleDotMenu>
-        </Group>
-      </Table.Td>
-    </Table.Tr>
-  );
-});
+        </Table.Td>
+      </Table.Tr>
+    );
+  },
+);
 
 function OrderTable({ loading, orders }: OrderTableProps) {
   return (
