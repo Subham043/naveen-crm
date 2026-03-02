@@ -16,7 +16,7 @@ export const TimelineQueryFn = async ({ id, params, signal }: { id: number, para
 /*
     Timeline Query Hook Function: This hook is used to fetch information of all the users
 */
-export const useTimelineQuery: (id: number, query?: PaginationQueryType) => UseQueryResult<
+export const useTimelineQuery: (id: number, query?: PaginationQueryType & { from_date?: string, to_date?: string }) => UseQueryResult<
     PaginationType<TimelineType> | undefined,
     unknown
 > = (id, query = { page: 1, total: 10, search: "" }) => {
@@ -25,6 +25,8 @@ export const useTimelineQuery: (id: number, query?: PaginationQueryType) => UseQ
     if (query.page) params.append(PAGEKEY, query.page.toString());
     if (query.total) params.append(TOTALKEY, query.total.toString());
     if (query.search) params.append(SEARCHKEY, query.search);
+    if (query.from_date) params.append("filter[from_date]", query.from_date);
+    if (query.to_date) params.append("filter[to_date]", query.to_date);
 
     return useQuery({
         queryKey: TimelineQueryKey(id, params),

@@ -12,6 +12,7 @@ import {
   Select,
   Pagination,
   ActionIcon,
+  Button,
 } from "@mantine/core";
 import type { QuotationType } from "@/utils/types";
 import { useTimelineQuery } from "@/utils/data/query/timeline";
@@ -20,6 +21,9 @@ import Datetime from "@/components/Datetime";
 import { IconMessage, IconRefresh } from "@tabler/icons-react";
 import { useCallback, useMemo, useState } from "react";
 import PermittedLayout from "@/layouts/PermittedLayout";
+import SearchField from "../SearchField";
+import { useDebouncedCallback } from "@mantine/hooks";
+import CommonDateFilter from "@/pages/Report/CommonFilter/CommonDateFilter";
 
 type Props = {
   quotation_id: QuotationType["id"];
@@ -28,11 +32,17 @@ type Props = {
 function ViewTimeline({ quotation_id }: Props) {
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(10);
+  const [search, setSearch] = useState<string>("");
+  const [fromDate, setFromDate] = useState<string>("");
+  const [toDate, setToDate] = useState<string>("");
 
   const { data, isLoading, isFetching, isRefetching, refetch } =
     useTimelineQuery(quotation_id, {
       page,
       total,
+      search,
+      from_date: fromDate,
+      to_date: toDate,
     });
 
   const onLimitChange = useCallback(
@@ -54,6 +64,18 @@ function ViewTimeline({ quotation_id }: Props) {
     return Math.ceil((data ? data.meta.total : 0) / Number(total));
   }, [data, total]);
 
+  const debouncedSetSearch = useDebouncedCallback((value: string) => {
+    setSearch(value);
+    setPage(1);
+  }, 500);
+
+  const onClear = useCallback(() => {
+    setSearch("");
+    setFromDate("");
+    setToDate("");
+    setPage(1);
+  }, []);
+
   return (
     <Paper shadow="xs" mb="lg" withBorder>
       <Box p="sm" pos="relative">
@@ -61,7 +83,7 @@ function ViewTimeline({ quotation_id }: Props) {
           <Title order={5}>Timeline</Title>
           <PermittedLayout
             outletType="children"
-            allowedRoles={["Super-Admin"]}
+            allowedRoles={["Super-Admin", "Service-Team", "Sales-Team"]}
             additionalCondition={
               !(isLoading || isFetching || isRefetching) &&
               data &&
@@ -72,6 +94,34 @@ function ViewTimeline({ quotation_id }: Props) {
               <IconRefresh size={16} stroke={1.5} />
             </ActionIcon>
           </PermittedLayout>
+        </Group>
+      </Box>
+      <Divider />
+      <Box p="sm">
+        {/* Filters */}
+        <Group gap="xs">
+          <SearchField
+            defaultValue={search}
+            onChange={(e) => debouncedSetSearch(e.currentTarget.value)}
+            key={search}
+          />
+          <Box w="170px">
+            <CommonDateFilter
+              label="From Date"
+              date={fromDate}
+              setDate={(date) => setFromDate(date ? date : "")}
+            />
+          </Box>
+          <Box w="170px">
+            <CommonDateFilter
+              label="To Date"
+              date={toDate}
+              setDate={(date) => setToDate(date ? date : "")}
+            />
+          </Box>
+          <Button variant="filled" type="button" color="dark" onClick={onClear}>
+            CLEAR
+          </Button>
         </Group>
       </Box>
       <Divider />

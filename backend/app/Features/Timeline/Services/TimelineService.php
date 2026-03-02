@@ -34,6 +34,16 @@ class TimelineService
             ->allowedSorts('id', 'created_at')
             ->allowedFilters([
                 AllowedFilter::custom('search', new CommonFilter, null, false),
+                AllowedFilter::callback('from_date', function (Builder $query, $value) {
+                    if($value){
+                        $query->whereDate('created_at', '>=', $value);
+                    }
+                }),
+                AllowedFilter::callback('to_date', function (Builder $query, $value) {
+                    if($value){
+                        $query->whereDate('created_at', '<=', $value);
+                    }
+                }),
             ]);
     }
 
