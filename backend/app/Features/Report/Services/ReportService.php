@@ -79,12 +79,12 @@ class ReportService
         ->allowedFilters([
             AllowedFilter::callback('from_date', function (Builder $query, $value) {
                 if($value){
-                    $query->where('created_at', '>=', $value);
+                    $query->whereDate('created_at', '>=', $value);
                 }
             }),
             AllowedFilter::callback('to_date', function (Builder $query, $value) {
                 if($value){
-                    $query->where('created_at', '<=', $value);
+                    $query->whereDate('created_at', '<=', $value);
                 }
             }),
         ]);

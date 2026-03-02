@@ -3,7 +3,9 @@ import SelectQuotationFilterStatus from "@/components/Quotation/SelectQuotationF
 import SelectQuotationLeadSource from "@/components/Quotation/SelectQuotationLeadSource";
 import SearchField from "@/components/SearchField";
 import { useSearchQueryParam } from "@/hooks/useSearchQueryParam";
-import { Group } from "@mantine/core";
+import FromDateFilter from "@/pages/Report/CommonFilter/FromDateFilter";
+import ToDateFilter from "@/pages/Report/CommonFilter/ToDateFilter";
+import { Box, Group } from "@mantine/core";
 import { useCallback } from "react";
 
 function SalesQuotationFilters() {
@@ -18,6 +20,12 @@ function SalesQuotationFilters() {
   return (
     <Group gap="xs">
       <SearchField defaultValue={search} onChange={onSearchChange} />
+      <Box w="170px">
+        <FromDateFilter />
+      </Box>
+      <Box w="170px">
+        <ToDateFilter />
+      </Box>
       <SelectQuotationLeadSource />
       <SelectQuotationFilterStatus />
       <FilterClearBtn />

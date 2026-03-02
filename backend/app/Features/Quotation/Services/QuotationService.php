@@ -64,6 +64,16 @@ class QuotationService extends AbstractService
                     AllowedFilter::callback('lead_source', function (Builder $query, $value) {
                         $query->where('lead_source', $value);
                     }),
+                    AllowedFilter::callback('from_date', function (Builder $query, $value) {
+                        if($value){
+                            $query->whereDate('created_at', '>=', $value);
+                        }
+                    }),
+                    AllowedFilter::callback('to_date', function (Builder $query, $value) {
+                        if($value){
+                            $query->whereDate('created_at', '<=', $value);
+                        }
+                    }),
                 ]);
     }
 
