@@ -41,7 +41,7 @@ class CreateTimelineForSalesQuotationSubmittedForApprovalListener implements Sho
 
             $message = "Quotation#{$event->quotation->id} was submitted for approval by agent named {$event->userName}<{$event->userEmail}>";
             
-            $this->timelineService->createTimeline($event->quotation, $changes, $message, null, $event->userId);
+            $this->timelineService->createTimeline($event->quotation, $changes, $message, $event->userId, null, null);
 
             Mail::to(config('mail.mailers.smtp.admin_email'))->send(
                 (new QuotationApprovalPendingMail($event->userName, $event->quotation->id))->afterCommit()

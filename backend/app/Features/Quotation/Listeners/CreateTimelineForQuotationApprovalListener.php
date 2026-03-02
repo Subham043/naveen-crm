@@ -58,7 +58,7 @@ class CreateTimelineForQuotationApprovalListener implements ShouldQueue
                 $message = "Quotation#{$event->quotation->id} was rejected by {$event->userName}<{$event->userEmail}>";
             }
             
-            $this->timelineService->createTimeline($event->quotation, $changes, $message, null, $event->userId);
+            $this->timelineService->createTimeline($event->quotation, $changes, $message, $event->userId, null, null);
 
             Mail::to($event->quotation->salesUser->email)->send(
                 (new QuotationApprovalMail($event->quotation->salesUser->name, $event->quotation->id, $event->quotationApprovalDTO->quotation_status == QuotationStatus::Approved->value() ? 'approved' : 'rejected'))->afterCommit()

@@ -99,8 +99,8 @@ class TimelineService
 
         return $changes;
     }
-
-    public function createTimeline(Quotation $quotation, TimelineChangeCollection $changes, string $timeline_message, ?string $comment = null, ?string $additional_comment = null, ?int $user_id = null){
+    
+    public function createTimeline(Quotation $quotation, TimelineChangeCollection $changes, string $timeline_message, ?int $user_id = null, ?string $comment = null, ?string $additional_comment = null){
         $quotation->timelines()->create([
             'comment'    => $comment ?? null,
             'additional_comment'    => $additional_comment ?? null,

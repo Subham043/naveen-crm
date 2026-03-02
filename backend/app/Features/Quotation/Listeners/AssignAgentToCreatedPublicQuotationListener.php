@@ -61,7 +61,7 @@ class AssignAgentToCreatedPublicQuotationListener implements ShouldQueue
                     new TimelineChange('assigned_at', null, now()),
                 ]);
                 
-                $this->timelineService->createTimeline($quotation, $changes, "Quotation#{$quotation->id} was auto-assigned to {$user->name}<{$user->email}>", null, $user->id);
+                $this->timelineService->createTimeline($quotation, $changes, "Quotation#{$quotation->id} was auto-assigned to {$user->name}<{$user->email}>", $user->id, null, null);
                 
                 $quotation->disableLogging();
 

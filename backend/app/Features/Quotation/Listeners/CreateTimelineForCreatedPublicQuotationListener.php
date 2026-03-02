@@ -52,7 +52,7 @@ class CreateTimelineForCreatedPublicQuotationListener implements ShouldQueue
 
             $message = "Quotation#{$event->quotation->id} was submitted from website form";
             
-            $this->timelineService->createTimeline($event->quotation, $changes, $message, null, null);
+            $this->timelineService->createTimeline($event->quotation, $changes, $message, null, null, null);
         });
     }
 }

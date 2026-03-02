@@ -61,7 +61,7 @@ class CreateTimelineForCreatedSalesQuotationListener implements ShouldQueue
                 );
             }
             
-            $this->timelineService->createTimeline($event->quotation, $changes, $message, null, $event->userId);
+            $this->timelineService->createTimeline($event->quotation, $changes, $message, $event->userId, null, null);
         });
     }
 }

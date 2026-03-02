@@ -29,7 +29,7 @@ class CreateTimelineForUpdatedServiceTeamOrderListener implements ShouldQueue
     {
         DB::transaction(function () use ($event) {
             $changes = new TimelineChangeCollection();
-            foreach ($event->dto->toArray() as $key => $newValue) {
+            foreach (array_merge($event->orderDto->toArray(), $event->quotationDto->toArray()) as $key => $newValue) {
                 $oldValue = $event->oldOrderValues[$key] ?? null;
                 if($oldValue != $newValue){
                     $changes->pushChange(
@@ -55,7 +55,7 @@ class CreateTimelineForUpdatedServiceTeamOrderListener implements ShouldQueue
 
             $message = "Order#{$event->order->id} was updated by {$event->userName}<{$event->userEmail}>";
             
-            $this->timelineService->createTimeline($event->order->quotation, $changes, $message, $event->comment, $event->userId);
+            $this->timelineService->createTimeline($event->order->quotation, $changes, $message, $event->userId, $event->comment, $event->additionalComment);
         });
     }
 }
