@@ -27,7 +27,7 @@ return new class extends Migration
             $table->tinyInteger('shipment_status')->nullable()->default(1);
             //order status
             $table->tinyInteger('order_status')->nullable()->default(0);
-            $table->foreignId('quotation_id')->nullable()->index();
+            $table->foreignId('quotation_id')->unique()->nullable()->index();
             $table->timestamps();
         });
     }

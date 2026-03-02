@@ -3,8 +3,12 @@
 namespace App\Features\Dashboard\Services;
 
 use App\Features\Order\Enums\InvoiceStatus;
+use App\Features\Order\Enums\OrderStatus;
+use App\Features\Order\Enums\PaymentCardType;
+use App\Features\Order\Enums\PaymentGateway;
 use App\Features\Order\Enums\PaymentStatus;
 use App\Features\Order\Enums\ShipmentStatus;
+use App\Features\Order\Enums\TrackingStatus;
 use App\Features\Order\Models\Order;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -12,79 +16,121 @@ use Spatie\QueryBuilder\QueryBuilder;
 class ServiceTeamDashboardService
 {
     protected function model(): Builder
-	{
-		return Order::query()
-        ->selectRaw("
-            SUM(CASE WHEN orders.is_active = 1 AND orders.order_status = 1 THEN 1 ELSE 0 END) as totalOrders,
+    {
+        return Order::query()
+            ->join('quotations', 'quotations.id', '=', 'orders.quotation_id')
+            ->selectRaw("
+                COUNT(*) as totalOrders,
 
-            SUM(CASE WHEN orders.is_active = 1 AND orders.order_status = 1 AND orders.lead_source = 1 THEN 1 ELSE 0 END) as totalWebsiteLeadOrders,
+                SUM(CASE WHEN quotations.lead_source = 1 THEN 1 ELSE 0 END) as totalWebsiteLeadOrders,
+                SUM(CASE WHEN quotations.lead_source = 2 THEN 1 ELSE 0 END) as totalCallOrders,
 
-            SUM(CASE WHEN orders.is_active = 1 AND orders.order_status = 1 AND orders.lead_source = 2 THEN 1 ELSE 0 END) as totalLeadOrders,
+                SUM(CASE 
+                    WHEN orders.order_status = 7 
+                    THEN COALESCE(quotations.sale_price,0)
+                    ELSE 0 END
+                ) as salePrice,
 
-            SUM(CASE WHEN orders.is_active = 1 AND orders.order_status = 1 AND orders.lead_source = 3 THEN 1 ELSE 0 END) as totalCallOrders,
+                SUM(CASE 
+                    WHEN orders.order_status = 7 
+                    THEN COALESCE(quotations.cost_price,0)
+                    ELSE 0 END
+                ) as costPrice,
 
-            SUM(CASE 
-                WHEN orders.is_active = 1 AND orders.order_status = 1 AND orders.total_price IS NOT NULL 
-                THEN orders.total_price ELSE 0.00 END
-            ) as totalPrice,
+                SUM(CASE 
+                    WHEN orders.order_status = 7 
+                    THEN COALESCE(quotations.shipping_cost,0)
+                    ELSE 0 END
+                ) as shippingCost,
 
-            SUM(CASE 
-                WHEN orders.is_active = 1 AND orders.order_status = 1 AND orders.cost_price IS NOT NULL 
-                THEN orders.cost_price ELSE 0.00 END
-            ) as costPrice,
+                SUM(CASE 
+                    WHEN orders.order_status = 7 
+                    THEN COALESCE(quotations.cost_price,0) * 0.03
+                    ELSE 0 END
+                ) as totalSalesTax,
 
-            SUM(CASE 
-                WHEN orders.is_active = 1 AND orders.order_status = 1 AND orders.shipping_cost IS NOT NULL 
-                THEN orders.shipping_cost ELSE 0.00 END
-            ) as shippingCost,
+                SUM(CASE 
+                    WHEN orders.order_status = 7
+                    THEN (
+                        COALESCE(quotations.sale_price,0)
+                        - (
+                            COALESCE(quotations.cost_price,0)
+                            + COALESCE(quotations.shipping_cost,0)
+                            + (COALESCE(quotations.cost_price,0) * 0.03)
+                        )
+                    )
+                    ELSE 0 END
+                ) as totalGrossProfit,
 
-            SUM(CASE 
-                WHEN orders.is_active = 1 AND orders.order_status = 1 AND orders.cost_price IS NOT NULL 
-                THEN orders.cost_price * 0.03 ELSE 0.00 END
-            ) as salesTax,
+                SUM(CASE WHEN orders.payment_status = ? THEN 1 ELSE 0 END) as totalPaymentPendingOrders,
+                SUM(CASE WHEN orders.payment_status = ? THEN 1 ELSE 0 END) as totalPaymentPaidOrders,
+                SUM(CASE WHEN orders.payment_status = ? THEN 1 ELSE 0 END) as totalPaymentPartiallyPaidOrders,
 
-            SUM(CASE 
-                WHEN orders.is_active = 1 
-                AND orders.order_status = 1
-                AND orders.total_price IS NOT NULL
-                AND orders.cost_price IS NOT NULL
-                AND orders.shipping_cost IS NOT NULL
-                THEN (
-                    orders.total_price
-                    - (orders.cost_price + orders.shipping_cost + (orders.cost_price * 0.03))
-                )
-                ELSE 0.00 END
-            ) as grossProfit,
+                SUM(CASE WHEN orders.payment_status != 0 AND orders.payment_card_type = ? THEN 1 ELSE 0 END) as totalPaymentMastercardOrders,
+                SUM(CASE WHEN orders.payment_status != 0 AND orders.payment_card_type = ? THEN 1 ELSE 0 END) as totalPaymentVisacardOrders,
+                SUM(CASE WHEN orders.payment_status != 0 AND orders.payment_card_type = ? THEN 1 ELSE 0 END) as totalPaymentAmexcardOrders,
+                SUM(CASE WHEN orders.payment_status != 0 AND orders.payment_card_type = ? THEN 1 ELSE 0 END) as totalPaymentZellecardOrders,
 
-            SUM(CASE WHEN orders.is_active = 1 AND orders.order_status = 1 AND orders.payment_status = ? THEN 1 ELSE 0 END) as totalPaymentPendingOrders,
-            SUM(CASE WHEN orders.is_active = 1 AND orders.order_status = 1 AND orders.payment_status = ? THEN 1 ELSE 0 END) as totalPaymentPaidOrders,
-            SUM(CASE WHEN orders.is_active = 1 AND orders.order_status = 1 AND orders.payment_status = ? THEN 1 ELSE 0 END) as totalPaymentPartiallyPaidOrders,
+                SUM(CASE WHEN orders.payment_status != 0 AND orders.payment_gateway = ? THEN 1 ELSE 0 END) as totalPaymentStripeOrders,
+                SUM(CASE WHEN orders.payment_status != 0 AND orders.payment_gateway = ? THEN 1 ELSE 0 END) as totalPaymentBoaOrders,
+                SUM(CASE WHEN orders.payment_status != 0 AND orders.payment_gateway = ? THEN 1 ELSE 0 END) as totalPaymentZelleOrders,
 
-            SUM(CASE WHEN orders.is_active = 1 AND orders.order_status = 1 AND orders.invoice_status = ? THEN 1 ELSE 0 END) as totalInvoiceNotGeneratedOrders,
-            SUM(CASE WHEN orders.is_active = 1 AND orders.order_status = 1 AND orders.invoice_status = ? THEN 1 ELSE 0 END) as totalInvoiceGeneratedOrders,
-            SUM(CASE WHEN orders.is_active = 1 AND orders.order_status = 1 AND orders.invoice_status = ? THEN 1 ELSE 0 END) as totalInvoiceSentOrders,
+                SUM(CASE WHEN orders.invoice_status = ? THEN 1 ELSE 0 END) as totalInvoiceNotGeneratedOrders,
+                SUM(CASE WHEN orders.invoice_status = ? THEN 1 ELSE 0 END) as totalInvoiceGeneratedOrders,
+                SUM(CASE WHEN orders.invoice_status = ? THEN 1 ELSE 0 END) as totalInvoiceSentOrders,
 
-            SUM(CASE WHEN orders.is_active = 1 AND orders.order_status = 1 AND orders.shipment_status = ? THEN 1 ELSE 0 END) as totalShipmentProcessingOrders,
-            SUM(CASE WHEN orders.is_active = 1 AND orders.order_status = 1 AND orders.shipment_status = ? THEN 1 ELSE 0 END) as totalShipmentShippedOrders,
-            SUM(CASE WHEN orders.is_active = 1 AND orders.order_status = 1 AND orders.shipment_status = ? THEN 1 ELSE 0 END) as totalShipmentDeliveredOrders,
-            SUM(CASE WHEN orders.is_active = 1 AND orders.order_status = 1 AND orders.shipment_status = ? THEN 1 ELSE 0 END) as totalShipmentClosedOrders,
-            SUM(CASE WHEN orders.is_active = 1 AND orders.order_status = 1 AND orders.shipment_status = ? THEN 1 ELSE 0 END) as totalShipmentCancelledOrders
-        ", [
-            PaymentStatus::Pending->value(),
-            PaymentStatus::Paid->value(),
-            PaymentStatus::Partial->value(),
+                SUM(CASE WHEN orders.shipment_status = ? THEN 1 ELSE 0 END) as totalShipmentPOPendingOrders,
+                SUM(CASE WHEN orders.shipment_status = ? THEN 1 ELSE 0 END) as totalShipmentPOSentOrders,
 
-            InvoiceStatus::NotGenerated->value(),
-            InvoiceStatus::Generated->value(),
-            InvoiceStatus::Sent->value(),
+                SUM(CASE WHEN orders.tracking_status = ? THEN 1 ELSE 0 END) as totalTrackingPendingOrders,
+                SUM(CASE WHEN orders.tracking_status = ? THEN 1 ELSE 0 END) as totalTrackingSentOrders,
 
-            ShipmentStatus::Processing->value(),
-            ShipmentStatus::Shipped->value(),
-            ShipmentStatus::Delivered->value(),
-            ShipmentStatus::Closed->value(),
-            ShipmentStatus::Cancelled->value(),
-        ]);
-	}
+                SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalPendingOrders,
+                SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalEscalationOrders,
+                SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalCancelledOrders,
+                SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalRelocatePoSentOrders,
+                SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalPendingForRefundOrders,
+                SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalRefundedOrders,
+                SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalPendingPartShippedOrders,
+                SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalCompletedOrders,
+                SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalChargeBackOrders,
+                SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalYardRelocateOrders
+            ", [
+                PaymentStatus::Pending->value(),
+                PaymentStatus::Paid->value(),
+                PaymentStatus::Partial->value(),
+
+                PaymentCardType::Mastercard->value(),
+                PaymentCardType::Visa->value(),
+                PaymentCardType::Amex->value(),
+                PaymentCardType::Zelle->value(),
+
+                PaymentGateway::Stripe->value(),
+                PaymentGateway::Boa->value(),
+                PaymentGateway::Zelle->value(),
+
+                InvoiceStatus::NotGenerated->value(),
+                InvoiceStatus::Generated->value(),
+                InvoiceStatus::Sent->value(),
+
+                ShipmentStatus::POPending->value(),
+                ShipmentStatus::POSent->value(),
+
+                TrackingStatus::Pending->value(),
+                TrackingStatus::Sent->value(),
+
+                OrderStatus::Pending->value(),
+                OrderStatus::Escalation->value(),
+                OrderStatus::Cancelled->value(),
+                OrderStatus::RelocatePoSent->value(),
+                OrderStatus::PendingForRefund->value(),
+                OrderStatus::Refunded->value(),
+                OrderStatus::PendingPartShipped->value(),
+                OrderStatus::Completed->value(),
+                OrderStatus::ChargeBack->value(),
+                OrderStatus::YardRelocate->value(),
+            ]);
+    }
 
     protected function query(): QueryBuilder
 	{
@@ -100,28 +146,39 @@ class ServiceTeamDashboardService
         return collect([
             "totalOrders" => 0,
             "totalWebsiteLeadOrders" => 0,
-            "totalLeadOrders" => 0,
             "totalCallOrders" => 0,
-            "totalPrice" => 0,
+            "salePrice" => 0,
             "costPrice" => 0,
             "shippingCost" => 0,
-            "salesTax" => 0,
-            "grossProfit" => 0,
+            "totalSalesTax" => 0,
+            "totalGrossProfit" => 0,
             "totalPaymentPendingOrders" => 0,
             "totalPaymentPaidOrders" => 0,
             "totalPaymentPartiallyPaidOrders" => 0,
+            "totalPaymentMastercardOrders" => 0,
+            "totalPaymentVisacardOrders" => 0,
+            "totalPaymentAmexcardOrders" => 0,
+            "totalPaymentZellecardOrders" => 0,
+            "totalPaymentStripeOrders" => 0,
+            "totalPaymentBoaOrders" => 0,
+            "totalPaymentZelleOrders" => 0,
             "totalInvoiceNotGeneratedOrders" => 0,
             "totalInvoiceGeneratedOrders" => 0,
             "totalInvoiceSentOrders" => 0,
-            "totalShipmentProcessingOrders" => 0,
-            "totalShipmentShippedOrders" => 0,
-            "totalShipmentDeliveredOrders" => 0,
-            "totalShipmentClosedOrders" => 0,
-            "totalShipmentCancelledOrders" => 0,
-            "totalDraftOrders" => 0,
-            "totalApprovalPendingOrders" => 0,
-            "totalApprovedOrders" => 0,
-            "totalRejectedOrders" => 0
+            "totalShipmentPOPendingOrders" => 0,
+            "totalShipmentPOSentOrders" => 0,
+            "totalTrackingPendingOrders" => 0,
+            "totalTrackingSentOrders" => 0,
+            "totalPendingOrders" => 0,
+            "totalEscalationOrders" => 0,
+            "totalCancelledOrders" => 0,
+            "totalRelocatePoSentOrders" => 0,
+            "totalPendingForRefundOrders" => 0,
+            "totalRefundedOrders" => 0,
+            "totalPendingPartShippedOrders" => 0,
+            "totalCompletedOrders" => 0,
+            "totalChargeBackOrders" => 0,
+            "totalYardRelocateOrders" => 0
         ])->toArray();
 	}
 }

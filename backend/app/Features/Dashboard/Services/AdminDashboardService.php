@@ -3,9 +3,14 @@
 namespace App\Features\Dashboard\Services;
 
 use App\Features\Order\Enums\InvoiceStatus;
+use App\Features\Order\Enums\OrderStatus;
+use App\Features\Order\Enums\PaymentCardType;
+use App\Features\Order\Enums\PaymentGateway;
 use App\Features\Order\Enums\PaymentStatus;
 use App\Features\Order\Enums\ShipmentStatus;
+use App\Features\Order\Enums\TrackingStatus;
 use App\Features\Order\Models\Order;
+use App\Features\Quotation\Models\Quotation;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\QueryBuilder\QueryBuilder;
 use Illuminate\Support\Facades\Auth;
@@ -13,114 +18,154 @@ use App\Http\Enums\Guards;
 
 class AdminDashboardService
 {
-    protected function model(): Builder
-	{
-		return Order::query()
-        ->selectRaw("
-            COUNT(orders.id) as totalOrders,
+    protected function quotationModel(): Builder
+    {
+        return Quotation::query()
+            ->selectRaw("
+                COUNT(*) as totalQuotations,
 
-            SUM(CASE WHEN orders.lead_source = 1 THEN 1 ELSE 0 END) as totalWebsiteLeadOrders,
+                SUM(CASE WHEN quotations.is_active = 0 THEN 1 ELSE 0 END) as totalDraftQuotations,
 
-            SUM(CASE WHEN orders.lead_source = 2 THEN 1 ELSE 0 END) as totalLeadOrders,
+                SUM(CASE WHEN quotations.is_active = 1 AND quotations.quotation_status = 0 THEN 1 ELSE 0 END) as totalApprovalPendingQuotations,
 
-            SUM(CASE WHEN orders.lead_source = 3 THEN 1 ELSE 0 END) as totalCallOrders,
+                SUM(CASE WHEN quotations.is_active = 1 AND quotations.quotation_status = 1 THEN 1 ELSE 0 END) as totalApprovedQuotations,
 
-            SUM(CASE 
-                WHEN orders.is_active = 1 AND orders.order_status = 1 AND orders.total_price IS NOT NULL 
-                THEN orders.total_price ELSE 0.00 END
-            ) as totalPrice,
+                SUM(CASE WHEN quotations.is_active = 1 AND quotations.quotation_status = 2 THEN 1 ELSE 0 END) as totalRejectedQuotations,
 
-            SUM(CASE 
-                WHEN orders.is_active = 1 AND orders.order_status = 1 AND orders.cost_price IS NOT NULL 
-                THEN orders.cost_price ELSE 0.00 END
-            ) as costPrice,
+                SUM(CASE WHEN quotations.lead_source = 1 THEN 1 ELSE 0 END) as totalWebsiteLeadQuotations,
 
-            SUM(CASE 
-                WHEN orders.is_active = 1 AND orders.order_status = 1 AND orders.shipping_cost IS NOT NULL 
-                THEN orders.shipping_cost ELSE 0.00 END
-            ) as shippingCost,
+                SUM(CASE WHEN quotations.lead_source = 2 THEN 1 ELSE 0 END) as totalCallQuotations
+            ");
+    }
 
-            SUM(
-                CASE
-                    WHEN orders.is_active = 1
-                    AND orders.order_status = 1
-                    AND orders.cost_price IS NOT NULL
-                    THEN orders.cost_price * 0.03
-                    ELSE 0.00
-                END
-            ) AS totalSalesTax,
+    protected function orderModel(): Builder
+    {
+        $completedStatus = OrderStatus::Completed->value();
+        return Order::query()
+            ->join('quotations', 'quotations.id', '=', 'orders.quotation_id')
+            ->selectRaw("
+                COUNT(orders.id) as totalOrders,
 
-            SUM(CASE 
-                WHEN orders.is_active = 1 
-                AND orders.order_status = 1
-                AND orders.total_price IS NOT NULL
-                AND orders.cost_price IS NOT NULL
-                AND orders.shipping_cost IS NOT NULL
-                THEN (
-                    orders.total_price
-                    - (orders.cost_price + orders.shipping_cost + (orders.cost_price * 0.03))
-                )
-                ELSE 0.00 END
-            ) as totalGrossProfit,
+                SUM(quotations.lead_source = 1) as totalWebsiteLeadOrders,
+                SUM(quotations.lead_source = 2) as totalCallOrders,
 
-            SUM(CASE WHEN orders.is_active = 1 AND orders.order_status = 1 AND orders.payment_status = ? THEN 1 ELSE 0 END) as totalPaymentPendingOrders,
-            SUM(CASE WHEN orders.is_active = 1 AND orders.order_status = 1 AND orders.payment_status = ? THEN 1 ELSE 0 END) as totalPaymentPaidOrders,
-            SUM(CASE WHEN orders.is_active = 1 AND orders.order_status = 1 AND orders.payment_status = ? THEN 1 ELSE 0 END) as totalPaymentPartiallyPaidOrders,
+                SUM(CASE WHEN orders.order_status = ? THEN quotations.sale_price ELSE 0 END) as salePrice,
+                SUM(CASE WHEN orders.order_status = ? THEN quotations.cost_price ELSE 0 END) as costPrice,
+                SUM(CASE WHEN orders.order_status = ? THEN quotations.shipping_cost ELSE 0 END) as shippingCost,
+                SUM(CASE WHEN orders.order_status = ? THEN quotations.cost_price * 0.03 ELSE 0 END) as totalSalesTax,
 
-            SUM(CASE WHEN orders.is_active = 1 AND orders.order_status = 1 AND orders.invoice_status = ? THEN 1 ELSE 0 END) as totalInvoiceNotGeneratedOrders,
-            SUM(CASE WHEN orders.is_active = 1 AND orders.order_status = 1 AND orders.invoice_status = ? THEN 1 ELSE 0 END) as totalInvoiceGeneratedOrders,
-            SUM(CASE WHEN orders.is_active = 1 AND orders.order_status = 1 AND orders.invoice_status = ? THEN 1 ELSE 0 END) as totalInvoiceSentOrders,
+                SUM(CASE WHEN orders.order_status = ? THEN
+                    quotations.sale_price
+                    - (quotations.cost_price + quotations.shipping_cost + (quotations.cost_price * 0.03))
+                    ELSE 0 END
+                ) as totalGrossProfit,
 
-            SUM(CASE WHEN orders.is_active = 1 AND orders.order_status = 1 AND orders.shipment_status = ? THEN 1 ELSE 0 END) as totalShipmentProcessingOrders,
-            SUM(CASE WHEN orders.is_active = 1 AND orders.order_status = 1 AND orders.shipment_status = ? THEN 1 ELSE 0 END) as totalShipmentShippedOrders,
-            SUM(CASE WHEN orders.is_active = 1 AND orders.order_status = 1 AND orders.shipment_status = ? THEN 1 ELSE 0 END) as totalShipmentDeliveredOrders,
-            SUM(CASE WHEN orders.is_active = 1 AND orders.order_status = 1 AND orders.shipment_status = ? THEN 1 ELSE 0 END) as totalShipmentClosedOrders,
-            SUM(CASE WHEN orders.is_active = 1 AND orders.order_status = 1 AND orders.shipment_status = ? THEN 1 ELSE 0 END) as totalShipmentCancelledOrders,
+                SUM(orders.payment_status = ?) as totalPaymentPendingOrders,
+                SUM(orders.payment_status = ?) as totalPaymentPaidOrders,
+                SUM(orders.payment_status = ?) as totalPaymentPartiallyPaidOrders,
 
-            SUM(CASE WHEN orders.is_active = 0 THEN 1 ELSE 0 END) as totalDraftOrders,
-            SUM(CASE WHEN orders.is_active = 1 AND orders.order_status = 0 THEN 1 ELSE 0 END) as totalApprovalPendingOrders,
-            SUM(CASE WHEN orders.is_active = 1 AND orders.order_status = 1 THEN 1 ELSE 0 END) as totalApprovedOrders,
-            SUM(CASE WHEN orders.is_active = 1 AND orders.order_status = 2 THEN 1 ELSE 0 END) as totalRejectedOrders,
+                SUM(orders.payment_status != 0 AND orders.payment_card_type = ?) as totalPaymentMastercardOrders,
+                SUM(orders.payment_status != 0 AND orders.payment_card_type = ?) as totalPaymentVisacardOrders,
+                SUM(orders.payment_status != 0 AND orders.payment_card_type = ?) as totalPaymentAmexcardOrders,
+                SUM(orders.payment_status != 0 AND orders.payment_card_type = ?) as totalPaymentZellecardOrders,
 
-            SUM(CASE WHEN orders.is_active = 1 AND orders.order_status = 1 AND orders.approval_by_id = ? THEN 1 ELSE 0 END) as totalApprovedByMeOrders,
-            SUM(CASE WHEN orders.is_active = 1 AND orders.order_status = 2 AND orders.approval_by_id = ? THEN 1 ELSE 0 END) as totalRejectedByMeOrders
+                SUM(orders.payment_status != 0 AND orders.payment_gateway = ?) as totalPaymentStripeOrders,
+                SUM(orders.payment_status != 0 AND orders.payment_gateway = ?) as totalPaymentBoaOrders,
+                SUM(orders.payment_status != 0 AND orders.payment_gateway = ?) as totalPaymentZelleOrders,
+
+                SUM(orders.invoice_status = ?) as totalInvoiceNotGeneratedOrders,
+                SUM(orders.invoice_status = ?) as totalInvoiceGeneratedOrders,
+                SUM(orders.invoice_status = ?) as totalInvoiceSentOrders,
+
+                SUM(orders.shipment_status = ?) as totalShipmentPOPendingOrders,
+                SUM(orders.shipment_status = ?) as totalShipmentPOSentOrders,
+
+                SUM(orders.tracking_status = ?) as totalTrackingPendingOrders,
+                SUM(orders.tracking_status = ?) as totalTrackingSentOrders,
+
+                SUM(orders.order_status = ?) as totalPendingOrders,
+                SUM(orders.order_status = ?) as totalEscalationOrders,
+                SUM(orders.order_status = ?) as totalCancelledOrders,
+                SUM(orders.order_status = ?) as totalRelocatePoSentOrders,
+                SUM(orders.order_status = ?) as totalPendingForRefundOrders,
+                SUM(orders.order_status = ?) as totalRefundedOrders,
+                SUM(orders.order_status = ?) as totalPendingPartShippedOrders,
+                SUM(orders.order_status = ?) as totalCompletedOrders,
+                SUM(orders.order_status = ?) as totalChargeBackOrders,
+                SUM(orders.order_status = ?) as totalYardRelocateOrders,
+
+                SUM(quotations.quotation_status = 1 AND quotations.approval_by_id = ?) as totalApprovedByMeOrders,
+                SUM(quotations.quotation_status = 2 AND quotations.approval_by_id = ?) as totalRejectedByMeOrders
         ", [
-            PaymentStatus::Pending->value(),
-            PaymentStatus::Paid->value(),
-            PaymentStatus::Partial->value(),
+                $completedStatus,
+                $completedStatus,
+                $completedStatus,
+                $completedStatus,
+                $completedStatus,
 
-            InvoiceStatus::NotGenerated->value(),
-            InvoiceStatus::Generated->value(),
-            InvoiceStatus::Sent->value(),
+                PaymentStatus::Pending->value(),
+                PaymentStatus::Paid->value(),
+                PaymentStatus::Partial->value(),
 
-            ShipmentStatus::Processing->value(),
-            ShipmentStatus::Shipped->value(),
-            ShipmentStatus::Delivered->value(),
-            ShipmentStatus::Closed->value(),
-            ShipmentStatus::Cancelled->value(),
+                PaymentCardType::Mastercard->value(),
+                PaymentCardType::Visa->value(),
+                PaymentCardType::Amex->value(),
+                PaymentCardType::Zelle->value(),
 
-            Auth::guard(Guards::API->value)->id(),
-            Auth::guard(Guards::API->value)->id(),
-        ]);
-	}
+                PaymentGateway::Stripe->value(),
+                PaymentGateway::Boa->value(),
+                PaymentGateway::Zelle->value(),
 
-    protected function query(): QueryBuilder
-	{
-		return QueryBuilder::for($this->model());
-	}
+                InvoiceStatus::NotGenerated->value(),
+                InvoiceStatus::Generated->value(),
+                InvoiceStatus::Sent->value(),
 
-    public function get()
-	{
-		$data =  $this->query()->first();
-        if($data){
-            return $data;
-        }
-        return [
+                ShipmentStatus::POPending->value(),
+                ShipmentStatus::POSent->value(),
+
+                TrackingStatus::Pending->value(),
+                TrackingStatus::Sent->value(),
+
+                OrderStatus::Pending->value(),
+                OrderStatus::Escalation->value(),
+                OrderStatus::Cancelled->value(),
+                OrderStatus::RelocatePoSent->value(),
+                OrderStatus::PendingForRefund->value(),
+                OrderStatus::Refunded->value(),
+                OrderStatus::PendingPartShipped->value(),
+                OrderStatus::Completed->value(),
+                OrderStatus::ChargeBack->value(),
+                OrderStatus::YardRelocate->value(),
+
+                Auth::guard(Guards::API->value)->id(),
+                Auth::guard(Guards::API->value)->id(),
+            ]);
+    }
+
+    protected function quotationQuery(): QueryBuilder
+    {
+        return QueryBuilder::for($this->quotationModel());
+    }
+
+    protected function orderQuery(): QueryBuilder
+    {
+        return QueryBuilder::for($this->orderModel());
+    }
+
+    protected function defaultStructure(array $data = []): array
+    {
+        return array_merge([
+            "totalQuotations" => 0,
+            "totalDraftQuotations" => 0,
+            "totalApprovalPendingQuotations" => 0,
+            "totalApprovedQuotations" => 0,
+            "totalRejectedQuotations" => 0,
+            "totalWebsiteLeadQuotations" => 0,
+            "totalCallQuotations" => 0,
             "totalOrders" => 0,
             "totalWebsiteLeadOrders" => 0,
-            "totalLeadOrders" => 0,
             "totalCallOrders" => 0,
-            "totalPrice" => 0,
+            "salePrice" => 0,
             "costPrice" => 0,
             "shippingCost" => 0,
             "totalSalesTax" => 0,
@@ -128,20 +173,46 @@ class AdminDashboardService
             "totalPaymentPendingOrders" => 0,
             "totalPaymentPaidOrders" => 0,
             "totalPaymentPartiallyPaidOrders" => 0,
+            "totalPaymentMastercardOrders" => 0,
+            "totalPaymentVisacardOrders" => 0,
+            "totalPaymentAmexcardOrders" => 0,
+            "totalPaymentZellecardOrders" => 0,
+            "totalPaymentStripeOrders" => 0,
+            "totalPaymentBoaOrders" => 0,
+            "totalPaymentZelleOrders" => 0,
             "totalInvoiceNotGeneratedOrders" => 0,
             "totalInvoiceGeneratedOrders" => 0,
             "totalInvoiceSentOrders" => 0,
-            "totalShipmentProcessingOrders" => 0,
-            "totalShipmentShippedOrders" => 0,
-            "totalShipmentDeliveredOrders" => 0,
-            "totalShipmentClosedOrders" => 0,
-            "totalShipmentCancelledOrders" => 0,
-            "totalDraftOrders" => 0,
-            "totalApprovalPendingOrders" => 0,
-            "totalApprovedOrders" => 0,
-            "totalRejectedOrders" => 0,
+            "totalShipmentPOPendingOrders" => 0,
+            "totalShipmentPOSentOrders" => 0,
+            "totalTrackingPendingOrders" => 0,
+            "totalTrackingSentOrders" => 0,
+            "totalPendingOrders" => 0,
+            "totalEscalationOrders" => 0,
+            "totalCancelledOrders" => 0,
+            "totalRelocatePoSentOrders" => 0,
+            "totalPendingForRefundOrders" => 0,
+            "totalRefundedOrders" => 0,
+            "totalPendingPartShippedOrders" => 0,
+            "totalCompletedOrders" => 0,
+            "totalChargeBackOrders" => 0,
+            "totalYardRelocateOrders" => 0,
             "totalApprovedByMeOrders" => 0,
             "totalRejectedByMeOrders" => 0
-        ];
-	}
+        ], $data);
+    }
+
+    public function get(): array
+    {
+        $quotationData = $this->quotationQuery()->first();
+        $orderData     = $this->orderQuery()->first();
+
+        // Convert to pure attribute arrays
+        $quotationArray = $quotationData?->getAttributes() ?? [];
+        $orderArray     = $orderData?->getAttributes() ?? [];
+
+        $data = array_merge($quotationArray, $orderArray);
+
+        return $this->defaultStructure($data);
+    }
 }

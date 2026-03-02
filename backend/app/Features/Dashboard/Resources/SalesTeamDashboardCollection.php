@@ -16,14 +16,18 @@ class SalesTeamDashboardCollection extends JsonResource
 	public function toArray($request)
 	{
 		return [
-			"totalOrders" => $this['totalOrders'],
-			"totalWebsiteLeadOrders" => $this['totalWebsiteLeadOrders'],
-			"totalLeadOrders" => $this['totalLeadOrders'],
-			"totalCallOrders" => $this['totalCallOrders'],
-			"totalDraftOrders" => $this['totalDraftOrders'],
-			"totalApprovalPendingOrders" => $this['totalApprovalPendingOrders'],
-			"totalApprovedOrders" => $this['totalApprovedOrders'],
-			"totalRejectedOrders" => $this['totalRejectedOrders'],
+			"totalQuotations" => $this['totalQuotations'],
+			"totalWebsiteLeadQuotations" => $this['totalWebsiteLeadQuotations'],
+			"totalCallQuotations" => $this['totalCallQuotations'],
+			"totalDraftQuotations" => $this['totalDraftQuotations'],
+			"totalApprovalPendingQuotations" => $this['totalApprovalPendingQuotations'],
+			"totalApprovedQuotations" => $this['totalApprovedQuotations'],
+			"totalRejectedQuotations" => $this['totalRejectedQuotations'],
+			"salePrice" => $this['salePrice'],
+			"costPrice" => $this['costPrice'],
+			"shippingCost" => $this['shippingCost'],
+			"totalSalesTax" => $this['totalSalesTax'],
+			"totalGrossProfit" => $this['totalGrossProfit'],
 		];
 	}
 }
