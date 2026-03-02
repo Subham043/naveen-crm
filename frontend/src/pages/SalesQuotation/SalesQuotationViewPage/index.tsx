@@ -10,6 +10,7 @@ import QuotationViewAgentInfo from "@/components/Quotation/QuotationView/Quotati
 import QuotationViewPriceInfo from "@/components/Quotation/QuotationView/QuotationViewPriceInfo";
 import QuotationViewCustomerInfo from "@/components/Quotation/QuotationView/QuotationViewCustomerInfo";
 import QuotationViewPartInfo from "@/components/Quotation/QuotationView/QuotationViewPartInfo";
+import ViewTimeline from "@/components/ViewTimeline";
 
 export default function SalesQuotationView() {
   const { id } = useParams<{ id: string }>();
@@ -98,6 +99,8 @@ export default function SalesQuotationView() {
         sales_tax={data.sales_tax}
         gross_profit={data.gross_profit}
       />
+
+      <ViewTimeline quotation_id={data.id} />
     </Box>
   );
 }

@@ -6,19 +6,20 @@ type PropType = {
 };
 
 const data = [
+  { label: "Quotation Created", value: "quotation~created" },
+  { label: "Quotation Updated", value: "quotation~updated" },
+  {
+    label: "Quotation Auto Assigned To Agent",
+    value: "quotation~quotation_auto_assigned_to_agent",
+  },
+  {
+    label: "Quotation Submitted For Approval",
+    value: "quotation~quotation_submitted_for_approval",
+  },
+  { label: "Quotation Approved", value: "quotation~quotation_approved" },
+  { label: "Quotation Rejected", value: "quotation~quotation_rejected" },
   { label: "Order Created", value: "order~created" },
   { label: "Order Updated", value: "order~updated" },
-  { label: "Order Deleted", value: "order~deleted" },
-  {
-    label: "Order Auto Assigned To Agent",
-    value: "order~order_auto_assigned_to_agent",
-  },
-  {
-    label: "Order Submitted For Approval",
-    value: "order~order_submitted_for_approval",
-  },
-  { label: "Order Approved", value: "order~order_approved" },
-  { label: "Order Rejected", value: "order~order_rejected" },
   { label: "User Created", value: "user~created" },
   { label: "User Updated", value: "user~updated" },
   { label: "User Deleted", value: "user~deleted" },

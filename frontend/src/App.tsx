@@ -96,6 +96,10 @@ function App() {
                         path={page_routes.profile.link}
                         element={<Profile />}
                       />
+                      <Route
+                        path={page_routes.activity_logs.link}
+                        element={<ActivityLog />}
+                      />
                     </Route>
                     <Route
                       element={
@@ -146,10 +150,6 @@ function App() {
                       }
                     >
                       <Route path={page_routes.users.link} element={<User />} />
-                      <Route
-                        path={page_routes.activity_logs.link}
-                        element={<ActivityLog />}
-                      />
                       <Route
                         path={page_routes.sales_reports.link}
                         element={<SalesReport />}

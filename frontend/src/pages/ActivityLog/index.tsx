@@ -33,7 +33,7 @@ export default function ActivityLog() {
             <Title order={4}>Activity Logs</Title>
             <PermittedLayout
               outletType="children"
-              allowedRoles={["Super-Admin"]}
+              allowedRoles={["Super-Admin", "Sales-Team", "Service-Team"]}
             >
               <Group gap="xs" justify="flex-end" align="center">
                 <ActivityLogExportBtn />
@@ -73,7 +73,10 @@ export default function ActivityLog() {
           <CustomPagination totalCount={data ? data.meta.total : 0} />
         )}
       </Paper>
-      <PermittedLayout outletType="children" allowedRoles={["Super-Admin"]}>
+      <PermittedLayout
+        outletType="children"
+        allowedRoles={["Super-Admin", "Sales-Team", "Service-Team"]}
+      >
         <ActivityLogView modal={modal} handleModalClose={handleModalClose} />
       </PermittedLayout>
     </>

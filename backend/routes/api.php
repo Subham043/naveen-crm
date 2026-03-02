@@ -103,18 +103,12 @@ Route::prefix('v1')->middleware([Throttle::API->middleware()])->group(function (
                 Route::get('/view/{id}', [QuotationViewController::class, 'index']);
                 Route::post('/update/{id}', [QuotationUpdateController::class, 'index']);
                 Route::post('/approval/{id}', [QuotationApprovalController::class, 'index']);
-                Route::get('/timeline/{quotation_id}', [TimelinePaginateController::class, 'index']);
             });
             Route::prefix('order')->group(function () {
                 Route::get('/excel', [OrderExportController::class, 'index']);
                 Route::get('/paginate', [OrderPaginateController::class, 'index']);
                 Route::get('/view/{id}', [OrderViewController::class, 'index']);
                 Route::post('/update/{id}', [OrderUpdateController::class, 'index']);
-            });
-            Route::prefix('activity-log')->group(function () {
-                Route::get('/excel', [ActivityLogExportController::class, 'index']);
-                Route::get('/paginate', [ActivityLogPaginateController::class, 'index']);
-                Route::get('/view/{id}', [ActivityLogViewController::class, 'index']);
             });
             Route::prefix('report')->group(function () {
                 Route::prefix('sales')->group(function () {
@@ -135,6 +129,14 @@ Route::prefix('v1')->middleware([Throttle::API->middleware()])->group(function (
         //Admin || Service Team || Sales Team Routes
         Route::middleware([Roles::customMiddleware(Roles::SuperAdmin, Roles::Service, Roles::Sales)])->group(function () {
             Route::get('/dashboard', [DashboardController::class, 'index']);
+            Route::prefix('activity-log')->group(function () {
+                Route::get('/excel', [ActivityLogExportController::class, 'index']);
+                Route::get('/paginate', [ActivityLogPaginateController::class, 'index']);
+                Route::get('/view/{id}', [ActivityLogViewController::class, 'index']);
+            });
+            Route::prefix('quotation')->group(function () {
+                Route::get('/timeline/{quotation_id}', [TimelinePaginateController::class, 'index']);
+            });
         });
 
         //Service Team Routes

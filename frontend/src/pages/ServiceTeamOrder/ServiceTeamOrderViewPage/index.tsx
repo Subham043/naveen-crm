@@ -13,6 +13,7 @@ import OrderViewCustomerInfo from "@/components/Order/OrderView/OrderViewCustome
 import OrderViewPartInfo from "@/components/Order/OrderView/OrderViewPartInfo";
 import OrderViewPriceInfo from "@/components/Order/OrderView/OrderViewPriceInfo";
 import OrderViewStatusInfo from "@/components/Order/OrderView/OrderViewStatusInfo";
+import ViewTimeline from "@/components/ViewTimeline";
 
 export default function ServiceTeamOrderView() {
   const { id } = useParams<{ id: string }>();
@@ -89,6 +90,8 @@ export default function ServiceTeamOrderView() {
         shipment_status={data.shipment_status}
         order_status={data.order_status}
       />
+
+      {data.quotation_id && <ViewTimeline quotation_id={data.quotation_id} />}
     </Box>
   );
 }

@@ -9,7 +9,7 @@ import OrderViewAgentInfo from "@/components/Order/OrderView/OrderViewAgentInfo"
 import OrderViewPaymentInfo from "@/components/Order/OrderView/OrderViewPaymentInfo";
 import OrderViewYardInfo from "@/components/Order/OrderView/OrderViewYardInfo";
 import OrderViewLogisticInfo from "@/components/Order/OrderView/OrderViewLogisticInfo";
-import OrderViewTimeline from "./OrderViewTimeline";
+import ViewTimeline from "@/components/ViewTimeline";
 import OrderViewPartInfo from "@/components/Order/OrderView/OrderViewPartInfo";
 import OrderViewPriceInfo from "@/components/Order/OrderView/OrderViewPriceInfo";
 import OrderViewStatusInfo from "@/components/Order/OrderView/OrderViewStatusInfo";
@@ -96,9 +96,7 @@ export default function OrderView() {
         order_status={data.order_status}
       />
 
-      {data.quotation_id && (
-        <OrderViewTimeline quotation_id={data.quotation_id} />
-      )}
+      {data.quotation_id && <ViewTimeline quotation_id={data.quotation_id} />}
     </Box>
   );
 }

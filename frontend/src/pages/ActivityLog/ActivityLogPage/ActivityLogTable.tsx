@@ -109,7 +109,10 @@ const ActivityLogRow = memo(
           <Datetime value={created_at} />
         </Table.Td>
         <Table.Td>
-          <PermittedLayout outletType="children" allowedRoles={["Super-Admin"]}>
+          <PermittedLayout
+            outletType="children"
+            allowedRoles={["Super-Admin", "Sales-Team", "Service-Team"]}
+          >
             <Group justify="end" gap="xs">
               <ActionIcon
                 variant="filled"

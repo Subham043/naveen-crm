@@ -6,6 +6,7 @@ import { useCallback } from "react";
 import SelectLogTypeFilter from "./SelectLogTypeFilter";
 import SelectCauserFilter from "./SelectCauserFilter";
 import type { AvailableRoles } from "@/utils/types";
+import { useAuthStore } from "@/stores/auth.store";
 
 type Props = {
   causers: {
@@ -18,6 +19,7 @@ type Props = {
 };
 
 function ActivityLogFilters({ causers }: Props) {
+  const authUser = useAuthStore((state) => state.authUser);
   const { search, setSearch } = useSearchQueryParam();
   const onSearchChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,7 +31,9 @@ function ActivityLogFilters({ causers }: Props) {
     <Group gap="xs">
       <SearchField defaultValue={search} onChange={onSearchChange} />
       <SelectLogTypeFilter />
-      <SelectCauserFilter causers={causers} />
+      {authUser?.role === "Super-Admin" && (
+        <SelectCauserFilter causers={causers} />
+      )}
       <FilterClearBtn />
     </Group>
   );

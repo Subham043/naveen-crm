@@ -2,6 +2,7 @@
 
 namespace App\Features\ActivityLogs\Services;
 
+use App\Features\Roles\Enums\Roles;
 use Spatie\QueryBuilder\QueryBuilder;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -14,11 +15,17 @@ class ActivityLogService
 
 	protected function model(): Builder
 	{
-		return Activity::with([
+		$activity = Activity::with([
 			'causer' => function ($q) {
 				$q->with(['roles', 'permissions']);
 			}
 		]);
+
+		if(request()->user()->hasRole(Roles::SuperAdmin->value())){
+			return $activity;
+		}
+
+		return $activity->where('causer_id', request()->user()->id);
 	}
 	protected function query(): QueryBuilder
 	{
@@ -30,16 +37,18 @@ class ActivityLogService
 					AllowedFilter::callback('log_name', function (Builder $query, $value) {
 						$value = explode('~', $value);
 						if(count($value) == 2){
-							$query->where('log_name', 'LIKE', $value[0] . '%')->where('event', $value[1]);
+							$query->where('log_name', 'LIKE', '%' . $value[0] . '%')->where('event', $value[1]);
 						}
 						if(count($value) == 1){
-							$query->where('log_name', 'LIKE', $value[0] . '%');
+							$query->where('log_name', 'LIKE', '%' . $value[0] . '%');
 						}
                     }),
 					AllowedFilter::callback('causer_id', function (Builder $query, $value) {
-						$query->where('causer_id', $value)->whereHas('causer', function($q) use($value){
-							$q->where('id', $value);
-						});
+						if(request()->user()->hasRole(Roles::SuperAdmin->value())){
+							$query->where('causer_id', $value)->whereHas('causer', function($q) use($value){
+								$q->where('id', $value);
+							});
+						}
                     }),
 			]);
 	}

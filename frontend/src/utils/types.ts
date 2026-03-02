@@ -120,10 +120,11 @@ export type OrderType = {
 
 export type ServiceTeamOrderType = OrderType;
 
-export type QuotationTimelineType = {
+export type TimelineType = {
   id: number;
   order_id: number;
   comment?: string;
+  additional_comment?: string;
   message: string;
   properties: Record<string, { old: string | number | boolean | null, new: string | number | boolean | null }>[];
   user_id: number;

@@ -73,12 +73,6 @@ export const menus: LinksGroupProps[] = [
     ],
   },
   {
-    link: page_routes.activity_logs.link,
-    label: page_routes.activity_logs.name,
-    icon: IconLogs,
-    canAccess: ["Super-Admin"],
-  },
-  {
     link: page_routes.sales_quotations.link,
     label: page_routes.sales_quotations.name,
     icon: IconFileSpreadsheet,
@@ -89,5 +83,11 @@ export const menus: LinksGroupProps[] = [
     label: page_routes.service_team_orders.name,
     icon: IconFileSpreadsheet,
     canAccess: ["Service-Team"],
+  },
+  {
+    link: page_routes.activity_logs.link,
+    label: page_routes.activity_logs.name,
+    icon: IconLogs,
+    canAccess: ["Super-Admin", "Sales-Team", "Service-Team"],
   },
 ];

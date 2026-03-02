@@ -14,7 +14,7 @@ import {
   ActionIcon,
 } from "@mantine/core";
 import type { QuotationType } from "@/utils/types";
-import { useQuotationTimelineQuery } from "@/utils/data/query/quotation_timeline";
+import { useTimelineQuery } from "@/utils/data/query/timeline";
 import CustomLoading from "@/components/CustomLoading";
 import Datetime from "@/components/Datetime";
 import { IconMessage, IconRefresh } from "@tabler/icons-react";
@@ -22,15 +22,15 @@ import { useCallback, useMemo, useState } from "react";
 import PermittedLayout from "@/layouts/PermittedLayout";
 
 type Props = {
-  id: QuotationType["id"];
+  quotation_id: QuotationType["id"];
 };
 
-function QuotationViewTimeline({ id }: Props) {
+function ViewTimeline({ quotation_id }: Props) {
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(10);
 
   const { data, isLoading, isFetching, isRefetching, refetch } =
-    useQuotationTimelineQuery(id, {
+    useTimelineQuery(quotation_id, {
       page,
       total,
     });
@@ -93,6 +93,12 @@ function QuotationViewTimeline({ id }: Props) {
                     mt={4}
                   >
                     <i>{item.comment}</i>
+                    {item.additional_comment && (
+                      <>
+                        <br />
+                        <i>{item.additional_comment}</i>
+                      </>
+                    )}
                   </Alert>
                 )}
                 {item.properties && item.properties.length > 0 && (
@@ -154,4 +160,4 @@ function QuotationViewTimeline({ id }: Props) {
   );
 }
 
-export default QuotationViewTimeline;
+export default ViewTimeline;
