@@ -40,7 +40,6 @@ class AdminDashboardService
 
     protected function orderModel(): Builder
     {
-        $completedStatus = OrderStatus::Completed->value();
         return Order::query()
             ->join('quotations', 'quotations.id', '=', 'orders.quotation_id')
             ->selectRaw("
@@ -49,16 +48,20 @@ class AdminDashboardService
                 SUM(quotations.lead_source = 1) as totalWebsiteLeadOrders,
                 SUM(quotations.lead_source = 2) as totalCallOrders,
 
-                SUM(CASE WHEN orders.order_status = ? THEN quotations.sale_price ELSE 0 END) as salePrice,
-                SUM(CASE WHEN orders.order_status = ? THEN quotations.cost_price ELSE 0 END) as costPrice,
-                SUM(CASE WHEN orders.order_status = ? THEN quotations.shipping_cost ELSE 0 END) as shippingCost,
-                SUM(CASE WHEN orders.order_status = ? THEN quotations.cost_price * 0.03 ELSE 0 END) as totalSalesTax,
+                SUM(COALESCE(quotations.sale_price,0)) as salePrice,
 
-                SUM(CASE WHEN orders.order_status = ? THEN
-                    quotations.sale_price
-                    - (quotations.cost_price + quotations.shipping_cost + (quotations.cost_price * 0.03))
-                    ELSE 0 END
-                ) as totalGrossProfit,
+                SUM(COALESCE(quotations.cost_price,0)) as costPrice,
+
+                SUM(COALESCE(quotations.shipping_cost,0)) as shippingCost,
+
+                SUM(COALESCE(quotations.cost_price,0) * 0.03) as totalSalesTax,
+
+                SUM(COALESCE(quotations.sale_price,0)
+                        - (
+                            COALESCE(quotations.cost_price,0)
+                            + COALESCE(quotations.shipping_cost,0)
+                            + (COALESCE(quotations.cost_price,0) * 0.03)
+                        )) as totalGrossProfit,
 
                 SUM(orders.payment_status = ?) as totalPaymentPendingOrders,
                 SUM(orders.payment_status = ?) as totalPaymentPaidOrders,
@@ -97,12 +100,6 @@ class AdminDashboardService
                 SUM(quotations.quotation_status = 1 AND quotations.approval_by_id = ?) as totalApprovedByMeOrders,
                 SUM(quotations.quotation_status = 2 AND quotations.approval_by_id = ?) as totalRejectedByMeOrders
         ", [
-                $completedStatus,
-                $completedStatus,
-                $completedStatus,
-                $completedStatus,
-                $completedStatus,
-
                 PaymentStatus::Pending->value(),
                 PaymentStatus::Paid->value(),
                 PaymentStatus::Partial->value(),

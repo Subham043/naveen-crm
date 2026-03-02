@@ -25,42 +25,20 @@ class ServiceTeamDashboardService
                 SUM(CASE WHEN quotations.lead_source = 1 THEN 1 ELSE 0 END) as totalWebsiteLeadOrders,
                 SUM(CASE WHEN quotations.lead_source = 2 THEN 1 ELSE 0 END) as totalCallOrders,
 
-                SUM(CASE 
-                    WHEN orders.order_status = 7 
-                    THEN COALESCE(quotations.sale_price,0)
-                    ELSE 0 END
-                ) as salePrice,
+                SUM(COALESCE(quotations.sale_price,0)) as salePrice,
 
-                SUM(CASE 
-                    WHEN orders.order_status = 7 
-                    THEN COALESCE(quotations.cost_price,0)
-                    ELSE 0 END
-                ) as costPrice,
+                SUM(COALESCE(quotations.cost_price,0)) as costPrice,
 
-                SUM(CASE 
-                    WHEN orders.order_status = 7 
-                    THEN COALESCE(quotations.shipping_cost,0)
-                    ELSE 0 END
-                ) as shippingCost,
+                SUM(COALESCE(quotations.shipping_cost,0)) as shippingCost,
 
-                SUM(CASE 
-                    WHEN orders.order_status = 7 
-                    THEN COALESCE(quotations.cost_price,0) * 0.03
-                    ELSE 0 END
-                ) as totalSalesTax,
+                SUM(COALESCE(quotations.cost_price,0) * 0.03) as totalSalesTax,
 
-                SUM(CASE 
-                    WHEN orders.order_status = 7
-                    THEN (
-                        COALESCE(quotations.sale_price,0)
+                SUM(COALESCE(quotations.sale_price,0)
                         - (
                             COALESCE(quotations.cost_price,0)
                             + COALESCE(quotations.shipping_cost,0)
                             + (COALESCE(quotations.cost_price,0) * 0.03)
-                        )
-                    )
-                    ELSE 0 END
-                ) as totalGrossProfit,
+                        )) as totalGrossProfit,
 
                 SUM(CASE WHEN orders.payment_status = ? THEN 1 ELSE 0 END) as totalPaymentPendingOrders,
                 SUM(CASE WHEN orders.payment_status = ? THEN 1 ELSE 0 END) as totalPaymentPaidOrders,

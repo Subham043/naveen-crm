@@ -2,7 +2,7 @@
 
 namespace App\Features\Report\Resources;
 
-use App\Features\Order\Resources\OrderUserCollection;
+use App\Features\Quotation\Resources\QuotationUserCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 
@@ -23,7 +23,7 @@ class AgentPerformanceReportCollection extends JsonResource
 			'total_profit' => $this->total_profit,
 			'converted_leads' => $this->converted_leads,
 			'conversion_rate' => $this->conversion_rate,
-			'sales_user_info' => $this->sales_user_id ? OrderUserCollection::make($this->salesUser) : null,
+			'sales_user_info' => $this->sales_user_id ? QuotationUserCollection::make($this->salesUser) : null,
 		];
 	}
 }
