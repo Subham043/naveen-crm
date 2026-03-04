@@ -1,30 +1,30 @@
 import { Box, Divider, Group, Paper, Title } from "@mantine/core";
 import CustomPagination from "@/components/CustomPagination";
-import SalesTeamLeadSourcePerformanceReportFilters from "./SalesTeamLeadSourcePerformanceReportPage/SalesTeamLeadSourcePerformanceReportFilters";
-import { useSalesTeamLeadSourcePerformanceReportTable } from "./SalesTeamLeadSourcePerformanceReportPage/useSalesTeamLeadSourcePerformanceReportTable";
-import SalesTeamLeadSourcePerformanceReportTable from "./SalesTeamLeadSourcePerformanceReportPage/SalesTeamLeadSourcePerformanceReportTable";
+import AdminOrderPaymentReportFilters from "./AdminOrderPaymentReportPage/AdminOrderPaymentReportFilters";
+import { useAdminOrderPaymentReportTable } from "./AdminOrderPaymentReportPage/useAdminOrderPaymentReportTable";
+import AdminOrderPaymentReportTable from "./AdminOrderPaymentReportPage/AdminOrderPaymentReportTable";
 import PermittedLayout from "@/layouts/PermittedLayout";
-import SalesTeamLeadSourcePerformanceReportExportBtn from "./SalesTeamLeadSourcePerformanceReportPage/SalesTeamLeadSourcePerformanceReportExportBtn";
+import AdminOrderPaymentReportExportBtn from "./AdminOrderPaymentReportPage/AdminOrderPaymentReportExportBtn";
 
 /*
- * Sales Team Lead Source Performance Report Page
+ * Admin Order Payment Report Page
  */
-export default function SalesTeamLeadSourcePerformanceReport() {
+export default function AdminOrderPaymentReport() {
   const { data, isLoading, isFetching, isRefetching } =
-    useSalesTeamLeadSourcePerformanceReportTable();
+    useAdminOrderPaymentReportTable();
 
   return (
     <>
       <Paper shadow="xs" withBorder>
         <Box p="sm" pos="relative">
           <Group justify="space-between" gap={10}>
-            <Title order={4}>Lead Source Report</Title>
+            <Title order={4}>Order Payment Report</Title>
             <PermittedLayout
               outletType="children"
               allowedRoles={["Super-Admin"]}
             >
               <Group gap="xs" justify="flex-end" align="center">
-                <SalesTeamLeadSourcePerformanceReportExportBtn />
+                <AdminOrderPaymentReportExportBtn />
               </Group>
             </PermittedLayout>
           </Group>
@@ -32,13 +32,13 @@ export default function SalesTeamLeadSourcePerformanceReport() {
         <Divider />
         <Box p="sm">
           {/* Filters */}
-          <SalesTeamLeadSourcePerformanceReportFilters />
+          <AdminOrderPaymentReportFilters />
         </Box>
         <Divider />
         <Box>
           {/* Table */}
-          <SalesTeamLeadSourcePerformanceReportTable
-            salesTeamLeadSourcePerformance={data?.data ?? []}
+          <AdminOrderPaymentReportTable
+            adminOrderPaymentReports={data?.data ?? []}
             loading={isLoading || isFetching || isRefetching}
           />
         </Box>

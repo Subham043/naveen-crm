@@ -87,11 +87,11 @@ class SalesTeamReportService
                 SUM(COALESCE(sale_price,0)) as total_revenue,
                 SUM(COALESCE(cost_price,0)) as total_cost,
                 SUM(COALESCE(shipping_cost,0)) as total_shipping,
-                SUM(COALESCE(cost_price,0) * 0.03) as total_tax,
-                SUM(
+                ROUND(SUM(COALESCE(cost_price,0) * 0.03), 2) as total_tax,
+                ROUND(SUM(
                     COALESCE(sale_price,0) -
                     (COALESCE(cost_price,0) + COALESCE(shipping_cost,0) + (COALESCE(cost_price,0) * 0.03))
-                ) as total_profit,
+                ), 2) as total_profit,
                 ROUND(
                     (
                         SUM(
@@ -132,7 +132,6 @@ class SalesTeamReportService
         $groupBy = match ($type) {
             'year'  => 'YEAR(created_at)',
             'month' => 'DATE_FORMAT(created_at, "%Y-%m")',
-            'week'  => 'YEARWEEK(created_at, 1)',
             default => 'DATE(created_at)',
         };
 
@@ -223,7 +222,7 @@ class SalesTeamReportService
         return Quotation::query()
             ->selectRaw("
                 DATE(created_at) as date,
-                AVG(TIMESTAMPDIFF(HOUR, created_at, approval_at)) as avg_approval_hours
+                ROUND(AVG(TIMESTAMPDIFF(HOUR, created_at, approval_at)), 2) as avg_approval_hours
             ")
             ->whereNotNull('approval_at')
             ->whereNotNull('sales_user_id')
@@ -253,10 +252,10 @@ class SalesTeamReportService
                 sale_price,
                 cost_price,
                 shipping_cost,
-                (COALESCE(cost_price,0) * 0.03) as tax,
-                (
+                ROUND(COALESCE(cost_price,0) * 0.03, 2) as tax,
+                ROUND(
                     COALESCE(sale_price,0) -
-                    (COALESCE(cost_price,0) + COALESCE(shipping_cost,0) + (COALESCE(cost_price,0) * 0.03))
+                    (COALESCE(cost_price,0) + COALESCE(shipping_cost,0) + (COALESCE(cost_price,0) * 0.03)), 2
                 ) as gross_profit
             ")
             ->where('quotation_status', 1)

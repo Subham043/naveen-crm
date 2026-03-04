@@ -3,6 +3,7 @@
 namespace App\Features\Timeline\Services;
 
 use App\Features\Quotation\Models\Quotation;
+use App\Features\Roles\Enums\Roles;
 use App\Features\Timeline\Collections\YardTimelineDTOCollection;
 use App\Features\Timeline\Collections\TimelineChangeCollection;
 use App\Features\Timeline\DTO\TimelineChange;
@@ -18,13 +19,38 @@ class TimelineService
 
     public function model($quotation_id): Builder
     {
-        return Timeline::select('id', 'comment', 'additional_comment', 'properties', 'message', 'user_id', 'quotation_id', 'created_at', 'updated_at')
+        $query = Timeline::select('id', 'comment', 'additional_comment', 'properties', 'message', 'user_id', 'quotation_id', 'created_at', 'updated_at')
             ->with([
                 'doneBy' => function ($query) {
                     $query->select('id', 'name', 'email', 'phone')->with(['roles', 'permissions']);
                 }
             ])
             ->where('quotation_id', $quotation_id);
+
+        if(request()->user()->hasRole(Roles::Sales->value())){
+            return $query->where(function ($q) use ($quotation_id) {
+                $q->whereNotExists(function ($sub) use ($quotation_id) {
+                    $sub->selectRaw(1)
+                        ->from('timelines as t2')
+                        ->whereColumn('t2.quotation_id', 'timelines.quotation_id')
+                        ->where(function ($q2) use ($quotation_id) {
+                            $q2->where('t2.message', 'LIKE', "Quotation#{$quotation_id} was approved%")
+                            ->orWhere('t2.message', 'LIKE', "Quotation#{$quotation_id} was rejected%");
+                        });
+                })
+                ->orWhere('id', '<=', function ($sub) use ($quotation_id) {
+                    $sub->selectRaw('MIN(id)')
+                        ->from('timelines')
+                        ->where('quotation_id', $quotation_id)
+                        ->where(function ($q2) use ($quotation_id) {
+                            $q2->where('message', 'LIKE', "Quotation#{$quotation_id} was approved%")
+                            ->orWhere('message', 'LIKE', "Quotation#{$quotation_id} was rejected%");
+                        });
+                });
+            });
+		}
+
+        return $query;
     }
 
     public function query($quotation_id): QueryBuilder
@@ -129,6 +155,9 @@ class CommonFilter implements Filter
             $q->where('comment', 'LIKE', '%' . $value . '%')
             ->orWhere('additional_comment', 'LIKE', '%' . $value . '%')
             ->orWhere('message', 'LIKE', '%' . $value . '%')
+            ->orWhereRaw("JSON_UNQUOTE(JSON_EXTRACT(properties, '$')) LIKE ?", [
+                "%{$value}%"
+            ])
             ->orWhereHas('doneBy', function ($q) use ($value) {
                 $q->where('name', 'LIKE', '%' . $value . '%')
                     ->orWhere('email', 'LIKE', '%' . $value . '%')

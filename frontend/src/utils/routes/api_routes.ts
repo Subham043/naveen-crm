@@ -54,6 +54,14 @@ export const api_routes = {
       paginate: "/api/v1/report/sales-performance/paginate",
       excel: "/api/v1/report/sales-performance/excel",
     },
+    servicePerformance: {
+      paginate: "/api/v1/report/service-performance/paginate",
+      excel: "/api/v1/report/service-performance/excel",
+    },
+    orderPayment: {
+      paginate: "/api/v1/report/order-payment/paginate",
+      excel: "/api/v1/report/order-payment/excel",
+    },
     approvalTurnAround: {
       paginate: "/api/v1/report/approval-turn-around/paginate",
       excel: "/api/v1/report/approval-turn-around/excel",

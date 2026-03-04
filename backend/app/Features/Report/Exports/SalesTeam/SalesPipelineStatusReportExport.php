@@ -2,6 +2,7 @@
 
 namespace App\Features\Report\Exports\SalesTeam;
 
+use App\Features\Quotation\Enums\QuotationStatus;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -24,7 +25,7 @@ class SalesPipelineStatusReportExport implements FromQuery, WithHeadings, WithMa
 	public function map($data): array
 	{
 		return [
-			$data->quotation_status,
+			QuotationStatus::getValue($data->quotation_status),
 			$data->total_sales,
 			$data->total_revenue,
 		];

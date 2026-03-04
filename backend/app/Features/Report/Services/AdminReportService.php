@@ -2,8 +2,10 @@
 
 namespace App\Features\Report\Services;
 
+use App\Features\Order\Models\Order;
 use App\Features\Quotation\Enums\QuotationStatus;
 use App\Features\Quotation\Models\Quotation;
+use App\Features\Timeline\Models\Timeline;
 use Spatie\QueryBuilder\QueryBuilder;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -19,7 +21,6 @@ class AdminReportService
         $groupByPeriod = match ($type) {
             'year'  => 'YEAR(created_at)',
             'month' => 'DATE_FORMAT(created_at, "%Y-%m")',
-            'week'  => 'YEARWEEK(created_at,1)',
             default => 'DATE(created_at)',
         };
 
@@ -30,11 +31,11 @@ class AdminReportService
                 COUNT(id) as total_leads,
                 SUM(CASE WHEN quotation_status = 1 THEN 1 ELSE 0 END) as converted_leads,
                 SUM(COALESCE(sale_price,0)) as total_revenue,
-                SUM(CASE WHEN quotation_status = 1 THEN 
+                ROUND(SUM(CASE WHEN quotation_status = 1 THEN 
                     (COALESCE(sale_price,0) -
                     (COALESCE(cost_price,0) + COALESCE(shipping_cost,0) + (COALESCE(cost_price,0) * 0.03))) 
                     ELSE 0 END
-                ) as total_profit,
+                ), 2) as total_profit,
                 ROUND(
                     (SUM(CASE WHEN quotation_status = 1 THEN 1 ELSE 0 END) / COUNT(id)) * 100,
                     2
@@ -83,7 +84,6 @@ class AdminReportService
         $groupBy = match ($type) {
             'year'  => 'YEAR(created_at)',
             'month' => 'DATE_FORMAT(created_at, "%Y-%m")',
-            'week'  => 'YEARWEEK(created_at,1)',
             default => 'DATE(created_at)',
         };
 
@@ -93,11 +93,11 @@ class AdminReportService
                 SUM(COALESCE(sale_price,0)) as total_revenue,
                 SUM(COALESCE(cost_price,0)) as total_cost,
                 SUM(COALESCE(shipping_cost,0)) as total_shipping,
-                SUM(COALESCE(cost_price,0) * 0.03) as total_tax,
-                SUM(
+                ROUND(SUM(COALESCE(cost_price,0) * 0.03), 2) as total_tax,
+                ROUND(SUM(
                     COALESCE(sale_price,0) -
                     (COALESCE(cost_price,0) + COALESCE(shipping_cost,0) + (COALESCE(cost_price,0) * 0.03))
-                ) as total_profit,
+                ), 2) as total_profit,
                 ROUND(
                     (
                         SUM(
@@ -136,7 +136,6 @@ class AdminReportService
         $groupBy = match ($type) {
             'year'  => 'YEAR(created_at)',
             'month' => 'DATE_FORMAT(created_at, "%Y-%m")',
-            'week'  => 'YEARWEEK(created_at,1)',
             default => 'DATE(created_at)',
         };
         return Quotation::query()
@@ -168,10 +167,10 @@ class AdminReportService
         return Quotation::query()
             ->selectRaw("
                 sales_user_id,
-                SUM(
+                ROUND(SUM(
                     COALESCE(sale_price,0) -
                     (COALESCE(cost_price,0) + COALESCE(shipping_cost,0) + (COALESCE(cost_price,0) * 0.03))
-                ) as total_profit,
+                ), 2) as total_profit,
                 SUM(COALESCE(sale_price,0)) as total_revenue
             ")
             ->where('quotation_status', 1)
@@ -199,7 +198,7 @@ class AdminReportService
         return Quotation::query()
             ->selectRaw("
                 sales_user_id,
-                AVG(TIMESTAMPDIFF(HOUR, created_at, approval_at)) as avg_approval_hours
+                ROUND(AVG(TIMESTAMPDIFF(HOUR, created_at, approval_at)), 2) as avg_approval_hours
             ")
             ->whereNotNull('approval_at')
             ->groupBy('sales_user_id')
@@ -216,6 +215,86 @@ class AdminReportService
     public function paginateAdminApprovalTurnaroundModel(Int $total = 10): LengthAwarePaginator
     {
         return $this->adminApprovalTurnaroundQuery()
+            ->paginate($total)
+            ->appends(request()->query());
+    }
+
+    public function adminOrderPaymentModel(): Builder
+    {
+        $type = request('type', 'day');
+
+        $groupByPeriod = match ($type) {
+            'year'  => 'YEAR(created_at)',
+            'month' => 'DATE_FORMAT(created_at, "%Y-%m")',
+            default => 'DATE(created_at)',
+        };
+
+        return Order::query()
+            ->selectRaw("
+                {$groupByPeriod} as period,
+                COUNT(id) as total_orders,
+                SUM(CASE WHEN payment_status = 1 THEN 1 ELSE 0 END) as paid_orders,
+                SUM(CASE WHEN payment_status = 2 THEN 1 ELSE 0 END) as partial_paid_orders,
+                SUM(CASE WHEN payment_status = 0 THEN 1 ELSE 0 END) as unpaid_orders,
+                ROUND(
+                    (SUM(CASE WHEN payment_status = 1 THEN 1 ELSE 0 END) / COUNT(id)) * 100,
+                    2
+                ) as payment_success_rate
+            ")
+            ->groupBy(DB::raw($groupByPeriod));
+    }
+
+    public function adminOrderPaymentQuery(): QueryBuilder
+    {
+        return $this->query($this->adminOrderPaymentModel())
+            ->defaultSort('-period')
+            ->allowedSorts('period', 'total_orders', 'paid_orders', 'partial_paid_orders', 'unpaid_orders', 'payment_success_rate');
+    }
+
+    public function paginateAdminOrderPaymentModel(Int $total = 10): LengthAwarePaginator
+    {
+        return $this->adminOrderPaymentQuery()
+            ->paginate($total)
+            ->appends(request()->query());
+    }
+
+    public function adminServiceTeamPerformanceModel(): Builder
+    {
+        $type = request('type', 'day');
+
+        $groupByPeriod = match ($type) {
+            'year'  => 'YEAR(timelines.created_at)',
+            'month' => 'DATE_FORMAT(timelines.created_at, "%Y-%m")',
+            default => 'DATE(timelines.created_at)',
+        };
+
+        return Timeline::query()
+            ->selectRaw("
+                {$groupByPeriod} as period,
+                user_id,
+                COUNT(id) as total_comments,
+                COUNT(DISTINCT quotation_id) as orders_handled,
+                ROUND(
+                    (COUNT(DISTINCT quotation_id) / COUNT(id)) * 100,
+                    2
+                ) as performance_percentage
+            ")
+            ->whereNotNull('user_id')
+            ->whereNotNull('comment')
+            ->groupBy(DB::raw("{$groupByPeriod}, user_id"))
+            ->with('doneBy:id,name,email');
+    }
+
+    public function adminServiceTeamPerformanceQuery(): QueryBuilder
+    {
+        return $this->query($this->adminServiceTeamPerformanceModel())
+            ->defaultSort('-period')
+            ->allowedSorts('period', 'total_comments', 'orders_handled');
+    }
+
+    public function paginateAdminServiceTeamPerformanceModel(Int $total = 10): LengthAwarePaginator
+    {
+        return $this->adminServiceTeamPerformanceQuery()
             ->paginate($total)
             ->appends(request()->query());
     }

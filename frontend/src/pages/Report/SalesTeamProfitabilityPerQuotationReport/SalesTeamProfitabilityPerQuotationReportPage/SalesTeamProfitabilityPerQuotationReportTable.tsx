@@ -1,8 +1,10 @@
 import TableRowLoading from "@/components/TableRowLoading";
 import type { SalesTeamProfitabilityPerQuotationReportType } from "@/utils/types";
-import { Table } from "@mantine/core";
+import { Anchor, Table } from "@mantine/core";
 import TableRowNotFound from "@/components/TableRowNotFound";
 import { memo } from "react";
+import { Link } from "react-router";
+import { page_routes } from "@/utils/routes/page_routes";
 
 type SalesTeamProfitabilityPerQuotationReportTableProps = {
   salesTeamProfitabilityPerQuotationReports: SalesTeamProfitabilityPerQuotationReportType[];
@@ -20,7 +22,14 @@ const SalesTeamProfitabilityPerQuotationReportRow = memo(
   }: SalesTeamProfitabilityPerQuotationReportType) => {
     return (
       <Table.Tr key={id}>
-        <Table.Td>{id}</Table.Td>
+        <Table.Td>
+          <Anchor
+            component={Link}
+            to={`${page_routes.sales_quotations.link}/${id}`}
+          >
+            {id}
+          </Anchor>
+        </Table.Td>
         <Table.Td>{sale_price}</Table.Td>
         <Table.Td>{cost_price}</Table.Td>
         <Table.Td>{shipping_cost}</Table.Td>

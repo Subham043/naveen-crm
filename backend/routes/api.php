@@ -29,12 +29,16 @@ use App\Features\Report\Controllers\Admin\AdminApprovalTurnAroundReportExportCon
 use App\Features\Report\Controllers\Admin\AdminApprovalTurnAroundReportPaginateController;
 use App\Features\Report\Controllers\Admin\AdminConversionFunnelReportExportController;
 use App\Features\Report\Controllers\Admin\AdminConversionFunnelReportPaginateController;
+use App\Features\Report\Controllers\Admin\AdminOrderPaymentReportExportController;
+use App\Features\Report\Controllers\Admin\AdminOrderPaymentReportPaginateController;
 use App\Features\Report\Controllers\Admin\AdminProfitLeaderboardReportExportController;
 use App\Features\Report\Controllers\Admin\AdminProfitLeaderboardReportPaginateController;
 use App\Features\Report\Controllers\Admin\AdminRevenueSummaryReportExportController;
 use App\Features\Report\Controllers\Admin\AdminRevenueSummaryReportPaginateController;
 use App\Features\Report\Controllers\Admin\AdminSalesPerformanceReportExportController;
 use App\Features\Report\Controllers\Admin\AdminSalesPerformanceReportPaginateController;
+use App\Features\Report\Controllers\Admin\AdminServicePerformanceReportExportController;
+use App\Features\Report\Controllers\Admin\AdminServicePerformanceReportPaginateController;
 use App\Features\Report\Controllers\SalesTeam\SalesApprovalTurnAroundReportExportController;
 use App\Features\Report\Controllers\SalesTeam\SalesApprovalTurnAroundReportPaginateController;
 use App\Features\Report\Controllers\SalesTeam\SalesLeadSourcePerformanceReportExportController;
@@ -132,6 +136,14 @@ Route::prefix('v1')->middleware([Throttle::API->middleware()])->group(function (
                 Route::prefix('sales-performance')->group(function () {
                     Route::get('/excel', [AdminSalesPerformanceReportExportController::class, 'index']);
                     Route::get('/paginate', [AdminSalesPerformanceReportPaginateController::class, 'index']);
+                });
+                Route::prefix('service-performance')->group(function () {
+                    Route::get('/excel', [AdminServicePerformanceReportExportController::class, 'index']);
+                    Route::get('/paginate', [AdminServicePerformanceReportPaginateController::class, 'index']);
+                });
+                Route::prefix('order-payment')->group(function () {
+                    Route::get('/excel', [AdminOrderPaymentReportExportController::class, 'index']);
+                    Route::get('/paginate', [AdminOrderPaymentReportPaginateController::class, 'index']);
                 });
                 Route::prefix('approval-turn-around')->group(function () {
                     Route::get('/excel', [AdminApprovalTurnAroundReportExportController::class, 'index']);

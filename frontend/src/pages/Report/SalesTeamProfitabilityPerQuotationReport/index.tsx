@@ -18,7 +18,7 @@ export default function SalesTeamProfitabilityPerQuotationReport() {
       <Paper shadow="xs" withBorder>
         <Box p="sm" pos="relative">
           <Group justify="space-between" gap={10}>
-            <Title order={4}>Profitability Per Quotation Report</Title>
+            <Title order={4}>Profit Per Quotation Report</Title>
             <PermittedLayout
               outletType="children"
               allowedRoles={["Super-Admin"]}

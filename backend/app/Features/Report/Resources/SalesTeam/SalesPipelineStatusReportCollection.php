@@ -2,6 +2,7 @@
 
 namespace App\Features\Report\Resources\SalesTeam;
 
+use App\Features\Quotation\Enums\QuotationStatus;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 
@@ -16,7 +17,7 @@ class SalesPipelineStatusReportCollection extends JsonResource
 	public function toArray($request)
 	{
 		return [
-			'quotation_status' => $this->quotation_status,
+			'quotation_status' => QuotationStatus::getValue($this->quotation_status),
 			'total_sales' => $this->total_sales,
 			'total_revenue' => $this->total_revenue,
 		];

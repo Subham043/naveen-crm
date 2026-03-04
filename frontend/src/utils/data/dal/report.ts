@@ -1,6 +1,6 @@
 import axios from "@/utils/axios";
 import { api_routes } from "../../routes/api_routes";
-import type { PaginationType, AdminRevenueSummaryReportType, AdminSalesPerformanceReportType, AdminApprovalTurnAroundReportType, AdminConversionFunnelReportType, AdminProfitLeaderboardReportType } from "../../types";
+import type { PaginationType, AdminRevenueSummaryReportType, AdminSalesPerformanceReportType, AdminApprovalTurnAroundReportType, AdminConversionFunnelReportType, AdminProfitLeaderboardReportType, AdminServicePerformanceReportType, AdminOrderPaymentReportType } from "../../types";
 import type { GenericAbortSignal } from "axios";
 
 export const getAdminSalesPerformanceReport = async (
@@ -65,6 +65,34 @@ export const getAdminProfitLeaderboardReport = async (
 ) => {
     const response = await axios.get<PaginationType<AdminProfitLeaderboardReportType>>(
         api_routes.reports.profitLeaderboard.paginate,
+        {
+            params,
+            signal,
+        }
+    );
+    return response.data;
+};
+
+export const getAdminServicePerformanceReport = async (
+    params: URLSearchParams,
+    signal?: GenericAbortSignal
+) => {
+    const response = await axios.get<PaginationType<AdminServicePerformanceReportType>>(
+        api_routes.reports.servicePerformance.paginate,
+        {
+            params,
+            signal,
+        }
+    );
+    return response.data;
+};
+
+export const getAdminOrderPaymentReport = async (
+    params: URLSearchParams,
+    signal?: GenericAbortSignal
+) => {
+    const response = await axios.get<PaginationType<AdminOrderPaymentReportType>>(
+        api_routes.reports.orderPayment.paginate,
         {
             params,
             signal,

@@ -2,10 +2,12 @@ import FilterClearBtn from "@/components/FilterClearBtn";
 import { Group } from "@mantine/core";
 import FromDateFilter from "../../../../components/CommonReportFilter/FromDateFilter";
 import ToDateFilter from "../../../../components/CommonReportFilter/ToDateFilter";
+import SelectPeriodType from "@/components/CommonReportFilter/SelectPeriodType";
 
 function SalesTeamPerformanceReportFilters() {
   return (
     <Group gap="xs">
+      <SelectPeriodType />
       <FromDateFilter />
       <ToDateFilter />
       <FilterClearBtn />

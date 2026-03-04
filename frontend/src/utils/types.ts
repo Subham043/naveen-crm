@@ -217,8 +217,31 @@ export type AdminProfitLeaderboardReportType = {
   } | null;
 }
 
+export type AdminServicePerformanceReportType = {
+  period: string;
+  user_id: number;
+  total_comments: number;
+  orders_handled: number;
+  performance_percentage: number;
+  user_info: {
+    id: number;
+    name: string;
+    email: string;
+    phone?: string;
+  } | null;
+}
+
+export type AdminOrderPaymentReportType = {
+  period: string;
+  total_orders: number;
+  paid_orders: number;
+  partial_paid_orders: number;
+  unpaid_orders: number;
+  payment_success_rate: number;
+}
+
 export type SalesTeamPipelineStatusReportType = {
-  quotation_status: number;
+  quotation_status: string;
   total_sales: number;
   total_revenue: number;
 }

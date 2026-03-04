@@ -53,7 +53,8 @@ class CreateTimelineForQuotationApprovalListener implements ShouldQueue
             }
 
             if($event->quotationApprovalDTO->quotation_status == QuotationStatus::Approved->value()){
-                $message = "Quotation#{$event->quotation->id} was approved by {$event->userName}<{$event->userEmail}>";
+                $order_id = $event->quotation->order->id;
+                $message = "Quotation#{$event->quotation->id} was approved by {$event->userName}<{$event->userEmail}>. Order#{$order_id} was created.";
             }else{
                 $message = "Quotation#{$event->quotation->id} was rejected by {$event->userName}<{$event->userEmail}>";
             }

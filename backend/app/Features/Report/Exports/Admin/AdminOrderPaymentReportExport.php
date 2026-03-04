@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Features\Report\Exports\SalesTeam;
+namespace App\Features\Report\Exports\Admin;
 
-use App\Features\Quotation\Enums\LeadSource;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Spatie\QueryBuilder\QueryBuilder;
 
 
-class SalesLeadSourcePerformanceReportExport implements FromQuery, WithHeadings, WithMapping
+class AdminOrderPaymentReportExport implements FromQuery, WithHeadings, WithMapping
 {
 
 	private QueryBuilder $query;
@@ -25,20 +24,24 @@ class SalesLeadSourcePerformanceReportExport implements FromQuery, WithHeadings,
 	public function map($data): array
 	{
 		return [
-			LeadSource::getValue($data->lead_source),
-			$data->total_leads,
-			$data->approved,
-			$data->total_revenue,
+			$data->period,
+			$data->total_orders,
+			$data->paid_orders,
+			$data->partial_paid_orders,
+			$data->unpaid_orders,
+			$data->payment_success_rate,
 		];
 	}
 
 	public function headings(): array
 	{
 		return [
-			'Lead Source',
-			'Total Leads',
-			'Approved',
-			'Total Revenue',
+			'Period',
+			'Total Orders',
+			'Paid Orders',
+			'Partial Paid Orders',
+			'Unpaid Orders',
+			'Payment Success Rate',
 		];
 	}
 }

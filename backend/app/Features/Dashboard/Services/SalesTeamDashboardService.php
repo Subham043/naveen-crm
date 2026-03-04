@@ -52,14 +52,14 @@ class SalesTeamDashboardService
                     ELSE 0 END
                 ) as shippingCost,
 
-                SUM(CASE 
+                ROUND(SUM(CASE 
                     WHEN quotations.is_active = 1 
                     AND quotations.quotation_status = 1 
                     THEN COALESCE(quotations.cost_price,0) * 0.03 
                     ELSE 0 END
-                ) as totalSalesTax,
+                ), 2) as totalSalesTax,
 
-                SUM(CASE 
+                ROUND(SUM(CASE 
                     WHEN quotations.is_active = 1 
                     AND quotations.quotation_status = 1 
                     THEN (
@@ -71,7 +71,7 @@ class SalesTeamDashboardService
                         )
                     )
                     ELSE 0 END
-                ) as totalGrossProfit
+                ), 2) as totalGrossProfit
             ");
     }
 

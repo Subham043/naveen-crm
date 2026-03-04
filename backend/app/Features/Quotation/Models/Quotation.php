@@ -96,14 +96,14 @@ class Quotation extends Model
     public function salesTax(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->cost_price ? $this->cost_price * 0.03 : 0.0,
+            get: fn () => $this->cost_price ? round(($this->cost_price * 0.03), 2) : 0.0,
         );
     }
 
     public function grossProfit(): Attribute
     {
         return Attribute::make(
-            get: fn () => !($this->cost_price || $this->shipping_cost || $this->sale_price) ? 0.0 : ($this->sale_price - ($this->cost_price + $this->shipping_cost + $this->sales_tax)),
+            get: fn () => !($this->cost_price || $this->shipping_cost || $this->sale_price) ? 0.0 : round(($this->sale_price - ($this->cost_price + $this->shipping_cost + $this->sales_tax)), 2),
         );
     }
 

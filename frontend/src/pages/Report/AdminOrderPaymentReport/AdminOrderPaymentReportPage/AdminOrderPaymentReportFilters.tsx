@@ -4,7 +4,7 @@ import FromDateFilter from "../../../../components/CommonReportFilter/FromDateFi
 import ToDateFilter from "../../../../components/CommonReportFilter/ToDateFilter";
 import SelectPeriodType from "@/components/CommonReportFilter/SelectPeriodType";
 
-function AdminSalesPerformanceReportFilters() {
+function AdminOrderPaymentReportFilters() {
   return (
     <Group gap="xs">
       <SelectPeriodType />
@@ -15,4 +15,4 @@ function AdminSalesPerformanceReportFilters() {
   );
 }
 
-export default AdminSalesPerformanceReportFilters;
+export default AdminOrderPaymentReportFilters;

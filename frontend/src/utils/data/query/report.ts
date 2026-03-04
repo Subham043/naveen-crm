@@ -1,8 +1,8 @@
 import { useAuthStore } from "@/stores/auth.store";
-import type { PaginationType, AdminSalesPerformanceReportType, AdminRevenueSummaryReportType, AdminApprovalTurnAroundReportType, AdminConversionFunnelReportType, AdminProfitLeaderboardReportType } from "@/utils/types";
+import type { PaginationType, AdminSalesPerformanceReportType, AdminRevenueSummaryReportType, AdminApprovalTurnAroundReportType, AdminConversionFunnelReportType, AdminProfitLeaderboardReportType, AdminServicePerformanceReportType, AdminOrderPaymentReportType } from "@/utils/types";
 import { useQuery, type UseQueryResult } from "@tanstack/react-query";
 import { useSearchParams } from "react-router";
-import { getAdminSalesPerformanceReport, getAdminRevenueSummaryReport, getAdminApprovalTurnAroundReport, getAdminConversionFunnelReport, getAdminProfitLeaderboardReport } from "../dal/report";
+import { getAdminSalesPerformanceReport, getAdminRevenueSummaryReport, getAdminApprovalTurnAroundReport, getAdminConversionFunnelReport, getAdminProfitLeaderboardReport, getAdminServicePerformanceReport, getAdminOrderPaymentReport } from "../dal/report";
 
 export const AdminSalesPerformanceReportsQueryKey = (params: URLSearchParams) => {
     return ["admin_sales_performance_reports", params.toString()]
@@ -24,6 +24,14 @@ export const AdminProfitLeaderboardReportsQueryKey = (params: URLSearchParams) =
     return ["admin_profit_leaderboard_reports", params.toString()]
 };
 
+export const AdminServicePerformanceReportsQueryKey = (params: URLSearchParams) => {
+    return ["admin_service_performance_reports", params.toString()]
+};
+
+export const AdminOrderPaymentReportsQueryKey = (params: URLSearchParams) => {
+    return ["admin_order_payment_reports", params.toString()]
+};
+
 export const AdminSalesPerformanceReportsQueryFn = async ({ params, signal }: { params: URLSearchParams, signal?: AbortSignal }) => {
     return await getAdminSalesPerformanceReport(params, signal);
 }
@@ -42,6 +50,14 @@ export const AdminConversionFunnelReportsQueryFn = async ({ params, signal }: { 
 
 export const AdminProfitLeaderboardReportsQueryFn = async ({ params, signal }: { params: URLSearchParams, signal?: AbortSignal }) => {
     return await getAdminProfitLeaderboardReport(params, signal);
+}
+
+export const AdminServicePerformanceReportsQueryFn = async ({ params, signal }: { params: URLSearchParams, signal?: AbortSignal }) => {
+    return await getAdminServicePerformanceReport(params, signal);
+}
+
+export const AdminOrderPaymentReportsQueryFn = async ({ params, signal }: { params: URLSearchParams, signal?: AbortSignal }) => {
+    return await getAdminOrderPaymentReport(params, signal);
 }
 
 /*
@@ -125,6 +141,41 @@ export const useAdminProfitLeaderboardReportsQuery: () => UseQueryResult<
     return useQuery({
         queryKey: AdminProfitLeaderboardReportsQueryKey(params),
         queryFn: ({ signal }) => AdminProfitLeaderboardReportsQueryFn({ params, signal }),
+        enabled: authToken !== null,
+    });
+};
+
+
+/*
+  Admin Service Performance Reports Query Hook Function: This hook is used to fetch information of all the admin service performance reports
+*/
+export const useAdminServicePerformanceReportsQuery: () => UseQueryResult<
+    PaginationType<AdminServicePerformanceReportType> | undefined,
+    unknown
+> = () => {
+    const authToken = useAuthStore((state) => state.authToken)
+    const [params] = useSearchParams();
+
+    return useQuery({
+        queryKey: AdminServicePerformanceReportsQueryKey(params),
+        queryFn: ({ signal }) => AdminServicePerformanceReportsQueryFn({ params, signal }),
+        enabled: authToken !== null,
+    });
+};
+
+/*
+  Admin Order Payment Reports Query Hook Function: This hook is used to fetch information of all the admin order payment reports
+*/
+export const useAdminOrderPaymentReportsQuery: () => UseQueryResult<
+    PaginationType<AdminOrderPaymentReportType> | undefined,
+    unknown
+> = () => {
+    const authToken = useAuthStore((state) => state.authToken)
+    const [params] = useSearchParams();
+
+    return useQuery({
+        queryKey: AdminOrderPaymentReportsQueryKey(params),
+        queryFn: ({ signal }) => AdminOrderPaymentReportsQueryFn({ params, signal }),
         enabled: authToken !== null,
     });
 };
