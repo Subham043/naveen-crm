@@ -96,6 +96,9 @@ const SalesTeamLeadSourcePerformanceReport = React.lazy(
 const SalesTeamPerformanceReport = React.lazy(
   () => import("@/pages/Report/SalesTeamPerformanceReport"),
 );
+const ServiceTeamPerformanceReport = React.lazy(
+  () => import("@/pages/Report/ServiceTeamPerformanceReport"),
+);
 
 function App() {
   return (
@@ -206,6 +209,10 @@ function App() {
                       <Route
                         path={`${page_routes.service_team_orders.link}/:id`}
                         element={<ServiceTeamOrderView />}
+                      />
+                      <Route
+                        path={page_routes.service_team_performance_report.link}
+                        element={<ServiceTeamPerformanceReport />}
                       />
                     </Route>
                     <Route

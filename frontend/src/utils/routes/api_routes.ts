@@ -125,6 +125,12 @@ export const api_routes = {
       update: "/api/v1/service-team/order/update",
       view: "/api/v1/service-team/order/view",
       excel: "/api/v1/service-team/order/excel",
+    },
+    reports: {
+      servicePerformance: {
+        paginate: "/api/v1/service-team/report/service-performance/paginate",
+        excel: "/api/v1/service-team/report/service-performance/excel",
+      },
     }
   },
   textEditor: {

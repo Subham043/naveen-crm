@@ -53,6 +53,8 @@ use App\Features\Report\Controllers\SalesTeam\SalesRevenueReportExportController
 use App\Features\Report\Controllers\SalesTeam\SalesRevenueReportPaginateController;
 use App\Features\Report\Controllers\SalesTeam\SalesTrendReportExportController;
 use App\Features\Report\Controllers\SalesTeam\SalesTrendReportPaginateController;
+use App\Features\Report\Controllers\ServiceTeam\ServiceTeamPerformanceReportExportController;
+use App\Features\Report\Controllers\ServiceTeam\ServiceTeamPerformanceReportPaginateController;
 use App\Features\Roles\Controllers\RoleAllController;
 use App\Features\Roles\Enums\Roles;
 use App\Features\SalesTeam\Controllers\SalesQuotationCreateController;
@@ -184,6 +186,12 @@ Route::prefix('v1')->middleware([Throttle::API->middleware()])->group(function (
                 Route::get('/paginate', [ServiceTeamOrderPaginateController::class, 'index']);
                 Route::post('/update/{id}', [ServiceTeamOrderUpdateController::class, 'index']);
                 Route::get('/view/{id}', [ServiceTeamOrderViewController::class, 'index']);
+            });
+            Route::prefix('report')->group(function () {
+                Route::prefix('service-performance')->group(function () {
+                    Route::get('/excel', [ServiceTeamPerformanceReportExportController::class, 'index']);
+                    Route::get('/paginate', [ServiceTeamPerformanceReportPaginateController::class, 'index']);
+                });
             });
         });
 

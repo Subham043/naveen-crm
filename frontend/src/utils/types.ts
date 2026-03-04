@@ -290,6 +290,14 @@ export type SalesTeamApprovalTurnAroundReportType = {
   avg_approval_hours: number;
 }
 
+export type ServiceTeamPerformanceReportType = {
+  period: string;
+  total_comments: number;
+  orders_handled: number;
+  performance_score: number;
+  avg_comments_per_order: number;
+}
+
 export type TexteditorImageType = {
   id: number;
   image: string;

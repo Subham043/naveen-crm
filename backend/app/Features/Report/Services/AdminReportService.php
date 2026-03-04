@@ -5,6 +5,7 @@ namespace App\Features\Report\Services;
 use App\Features\Order\Models\Order;
 use App\Features\Quotation\Enums\QuotationStatus;
 use App\Features\Quotation\Models\Quotation;
+use App\Features\Roles\Enums\Roles;
 use App\Features\Timeline\Models\Timeline;
 use Spatie\QueryBuilder\QueryBuilder;
 use Illuminate\Database\Eloquent\Builder;
@@ -49,33 +50,33 @@ class AdminReportService
     public function query(Builder $model): QueryBuilder
     {
         return QueryBuilder::for($model)
-        ->allowedFilters([
-            AllowedFilter::callback('from_date', function (Builder $query, $value) {
-                if($value){
-                    $query->whereDate('created_at', '>=', $value);
-                }
-            }),
-            AllowedFilter::callback('to_date', function (Builder $query, $value) {
-                if($value){
-                    $query->whereDate('created_at', '<=', $value);
-                }
-            }),
-        ]);
+            ->allowedFilters([
+                AllowedFilter::callback('from_date', function (Builder $query, $value) {
+                    if ($value) {
+                        $query->whereDate('created_at', '>=', $value);
+                    }
+                }),
+                AllowedFilter::callback('to_date', function (Builder $query, $value) {
+                    if ($value) {
+                        $query->whereDate('created_at', '<=', $value);
+                    }
+                }),
+            ]);
     }
 
     public function adminSalesPerformanceQuery(): QueryBuilder
     {
         return $this->query($this->adminSalesPerformanceModel())
-        ->defaultSort('-period')
-        ->allowedSorts('period', 'total_leads', 'converted_leads', 'total_revenue', 'total_profit', 'conversion_rate');
+            ->defaultSort('-period')
+            ->allowedSorts('period', 'total_leads', 'converted_leads', 'total_revenue', 'total_profit', 'conversion_rate');
     }
 
     public function paginateAdminSalesPerformanceModel(Int $total = 10): LengthAwarePaginator
-	{
-		return $this->adminSalesPerformanceQuery()
-			->paginate($total)
-			->appends(request()->query());
-	}
+    {
+        return $this->adminSalesPerformanceQuery()
+            ->paginate($total)
+            ->appends(request()->query());
+    }
 
     public function adminRevenueSummaryModel(): Builder
     {
@@ -298,5 +299,92 @@ class AdminReportService
             ->paginate($total)
             ->appends(request()->query());
     }
-}
 
+    public function adminServiceTeamWorkloadDistributionModel(): Builder
+    {
+        $type = request('type', 'day');
+
+        $groupByPeriod = match ($type) {
+            'year'  => 'YEAR(timelines.created_at)',
+            'month' => 'DATE_FORMAT(timelines.created_at, "%Y-%m")',
+            default => 'DATE(timelines.created_at)',
+        };
+
+        return Timeline::query()
+            ->selectRaw("
+                {$groupByPeriod} as period,
+                user_id,
+                COUNT(DISTINCT quotation_id) as orders_handled,
+                COUNT(id) as total_actions
+            ")
+            ->whereNotNull('user_id')
+            ->groupBy(DB::raw($groupByPeriod))
+            ->groupBy('user_id')
+            ->with('doneBy:id,name,email')
+            ->whereHas('doneBy', function (Builder $query) {
+                $query->whereHas('roles', function ($q) {
+                    $q->where('name', Roles::Service->value());
+                });
+            });
+    }
+
+    public function adminServiceTeamWorkloadDistributionQuery(): QueryBuilder
+    {
+        return $this->query($this->adminServiceTeamWorkloadDistributionModel())
+            ->defaultSort('-period')
+            ->allowedSorts('period', 'total_actions', 'orders_handled');
+    }
+
+    public function paginateAdminServiceTeamWorkloadDistributionModel(Int $total = 10): LengthAwarePaginator
+    {
+        return $this->adminServiceTeamWorkloadDistributionQuery()
+            ->paginate($total)
+            ->appends(request()->query());
+    }
+
+    public function adminServiceTeamRankingModel(): Builder
+    {
+        $type = request('type', 'day');
+
+        $groupByPeriod = match ($type) {
+            'year'  => 'YEAR(timelines.created_at)',
+            'month' => 'DATE_FORMAT(timelines.created_at, "%Y-%m")',
+            default => 'DATE(timelines.created_at)',
+        };
+
+        return Timeline::query()
+            ->selectRaw("
+                {$groupByPeriod} as period,
+                user_id,
+                COUNT(DISTINCT quotation_id) as orders_handled,
+                COUNT(id) as total_comments,
+                (
+                    COUNT(DISTINCT quotation_id) * 2 +
+                    COUNT(id)
+                ) as performance_score
+            ")
+            ->whereNotNull('user_id')
+            ->groupBy(DB::raw($groupByPeriod))
+            ->groupBy('user_id')
+            ->with('doneBy:id,name,email')
+            ->whereHas('doneBy', function (Builder $query) {
+                $query->whereHas('roles', function ($q) {
+                    $q->where('name', Roles::Service->value());
+                });
+            });
+    }
+
+    public function adminServiceTeamRankingQuery(): QueryBuilder
+    {
+        return $this->query($this->adminServiceTeamRankingModel())
+            ->defaultSort('-period')
+            ->allowedSorts('period', 'total_comments', 'orders_handled', 'performance_score');
+    }
+
+    public function paginateAdminServiceTeamRankingModel(Int $total = 10): LengthAwarePaginator
+    {
+        return $this->adminServiceTeamRankingQuery()
+            ->paginate($total)
+            ->appends(request()->query());
+    }
+}

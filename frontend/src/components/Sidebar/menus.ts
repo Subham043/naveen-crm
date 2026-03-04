@@ -65,7 +65,7 @@ export const menus: LinksGroupProps[] = [
     label: "Reports",
     icon: IconChartBar,
     initiallyOpened: false,
-    canAccess: ["Super-Admin", "Sales-Team"],
+    canAccess: ["Super-Admin", "Sales-Team", "Service-Team"],
     links: [
       {
         label: page_routes.conversion_funnel_reports.name,
@@ -136,6 +136,11 @@ export const menus: LinksGroupProps[] = [
         label: page_routes.sales_team_trend_report.name,
         link: page_routes.sales_team_trend_report.link,
         canAccess: ["Sales-Team"],
+      },
+      {
+        label: page_routes.service_team_performance_report.name,
+        link: page_routes.service_team_performance_report.link,
+        canAccess: ["Service-Team"],
       },
     ],
   },
