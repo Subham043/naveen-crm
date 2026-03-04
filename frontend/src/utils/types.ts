@@ -161,18 +161,11 @@ export type ActivityLogType = {
   updated_at: string;
 }
 
-export type SalesReportType = {
-  date: string;
-  total_orders: number;
-  total_sales: number;
-  total_tax: number;
-  total_profit: number;
-}
-
-export type AgentPerformanceReportType = {
+export type AdminSalesPerformanceReportType = {
+  period: string;
   sales_user_id: number;
   total_leads: number;
-  total_sales: number;
+  total_revenue: number;
   total_profit: number;
   converted_leads: number;
   conversion_rate: number;
@@ -184,13 +177,94 @@ export type AgentPerformanceReportType = {
   } | null;
 }
 
-export type RevenueSummaryReportType = {
+export type AdminRevenueSummaryReportType = {
   period: string;
   total_revenue: number;
   total_cost: number;
   total_shipping: number;
   total_tax: number;
   total_profit: number;
+  profit_margin_percent: number;
+}
+
+export type AdminApprovalTurnAroundReportType = {
+  sales_user_id: number;
+  avg_approval_hours: number;
+  sales_user_info: {
+    id: number;
+    name: string;
+    email: string;
+    phone?: string;
+  } | null;
+}
+
+export type AdminConversionFunnelReportType = {
+  period: string;
+  total_quotations: number;
+  approved_quotations: number;
+  rejected_quotations: number;
+}
+
+export type AdminProfitLeaderboardReportType = {
+  sales_user_id: number;
+  total_revenue: number;
+  total_profit: number;
+  sales_user_info: {
+    id: number;
+    name: string;
+    email: string;
+    phone?: string;
+  } | null;
+}
+
+export type SalesTeamPipelineStatusReportType = {
+  quotation_status: number;
+  total_sales: number;
+  total_revenue: number;
+}
+
+export type SalesTeamPerformanceReportType = {
+  period: string;
+  total_leads: number;
+  converted_leads: number;
+  conversion_rate: number;
+}
+
+export type SalesTeamProfitabilityPerQuotationReportType = {
+  id: number;
+  sale_price: number;
+  cost_price: number;
+  shipping_cost: number;
+  tax: number;
+  gross_profit: number;
+}
+
+export type SalesTeamTrendReportType = {
+  period: string;
+  total_sales: number;
+  total_revenue: number;
+}
+
+export type SalesTeamRevenueReportType = {
+  period: string;
+  total_revenue: number;
+  total_cost: number;
+  total_shipping: number;
+  total_tax: number;
+  total_profit: number;
+  profit_margin_percent: number;
+}
+
+export type SalesTeamLeadSourcePerformanceReportType = {
+  lead_source: string;
+  total_leads: number;
+  approved: number;
+  total_revenue: number;
+}
+
+export type SalesTeamApprovalTurnAroundReportType = {
+  date: string;
+  avg_approval_hours: number;
 }
 
 export type TexteditorImageType = {

@@ -4,8 +4,8 @@ import SelectQuotationLeadSource from "@/components/Quotation/SelectQuotationLea
 import SelectQuotationStatus from "@/components/Quotation/SelectQuotationStatus";
 import SearchField from "@/components/SearchField";
 import { useSearchQueryParam } from "@/hooks/useSearchQueryParam";
-import FromDateFilter from "@/pages/Report/CommonFilter/FromDateFilter";
-import ToDateFilter from "@/pages/Report/CommonFilter/ToDateFilter";
+import FromDateFilter from "@/components/CommonReportFilter/FromDateFilter";
+import ToDateFilter from "@/components/CommonReportFilter/ToDateFilter";
 import { Box, Group } from "@mantine/core";
 import { useCallback } from "react";
 

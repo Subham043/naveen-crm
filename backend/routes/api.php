@@ -25,12 +25,30 @@ use App\Features\Quotation\Controllers\QuotationExportController;
 use App\Features\Quotation\Controllers\QuotationPaginateController;
 use App\Features\Quotation\Controllers\QuotationUpdateController;
 use App\Features\Quotation\Controllers\QuotationViewController;
-use App\Features\Report\Controllers\AgentPerformanceReportExportController;
-use App\Features\Report\Controllers\AgentPerformanceReportPaginateController;
-use App\Features\Report\Controllers\RevenueSummaryExportController;
-use App\Features\Report\Controllers\RevenueSummaryPaginateController;
-use App\Features\Report\Controllers\SalesReportExportController;
-use App\Features\Report\Controllers\SalesReportPaginateController;
+use App\Features\Report\Controllers\Admin\AdminApprovalTurnAroundReportExportController;
+use App\Features\Report\Controllers\Admin\AdminApprovalTurnAroundReportPaginateController;
+use App\Features\Report\Controllers\Admin\AdminConversionFunnelReportExportController;
+use App\Features\Report\Controllers\Admin\AdminConversionFunnelReportPaginateController;
+use App\Features\Report\Controllers\Admin\AdminProfitLeaderboardReportExportController;
+use App\Features\Report\Controllers\Admin\AdminProfitLeaderboardReportPaginateController;
+use App\Features\Report\Controllers\Admin\AdminRevenueSummaryReportExportController;
+use App\Features\Report\Controllers\Admin\AdminRevenueSummaryReportPaginateController;
+use App\Features\Report\Controllers\Admin\AdminSalesPerformanceReportExportController;
+use App\Features\Report\Controllers\Admin\AdminSalesPerformanceReportPaginateController;
+use App\Features\Report\Controllers\SalesTeam\SalesApprovalTurnAroundReportExportController;
+use App\Features\Report\Controllers\SalesTeam\SalesApprovalTurnAroundReportPaginateController;
+use App\Features\Report\Controllers\SalesTeam\SalesLeadSourcePerformanceReportExportController;
+use App\Features\Report\Controllers\SalesTeam\SalesLeadSourcePerformanceReportPaginateController;
+use App\Features\Report\Controllers\SalesTeam\SalesPerformanceReportExportController;
+use App\Features\Report\Controllers\SalesTeam\SalesPerformanceReportPaginateController;
+use App\Features\Report\Controllers\SalesTeam\SalesPipelineStatusReportExportController;
+use App\Features\Report\Controllers\SalesTeam\SalesPipelineStatusReportPaginateController;
+use App\Features\Report\Controllers\SalesTeam\SalesProfitabilityPerQuotationReportExportController;
+use App\Features\Report\Controllers\SalesTeam\SalesProfitabilityPerQuotationReportPaginateController;
+use App\Features\Report\Controllers\SalesTeam\SalesRevenueReportExportController;
+use App\Features\Report\Controllers\SalesTeam\SalesRevenueReportPaginateController;
+use App\Features\Report\Controllers\SalesTeam\SalesTrendReportExportController;
+use App\Features\Report\Controllers\SalesTeam\SalesTrendReportPaginateController;
 use App\Features\Roles\Controllers\RoleAllController;
 use App\Features\Roles\Enums\Roles;
 use App\Features\SalesTeam\Controllers\SalesQuotationCreateController;
@@ -111,17 +129,25 @@ Route::prefix('v1')->middleware([Throttle::API->middleware()])->group(function (
                 Route::post('/update/{id}', [OrderUpdateController::class, 'index']);
             });
             Route::prefix('report')->group(function () {
-                Route::prefix('sales')->group(function () {
-                    Route::get('/excel', [SalesReportExportController::class, 'index']);
-                    Route::get('/paginate', [SalesReportPaginateController::class, 'index']);
+                Route::prefix('sales-performance')->group(function () {
+                    Route::get('/excel', [AdminSalesPerformanceReportExportController::class, 'index']);
+                    Route::get('/paginate', [AdminSalesPerformanceReportPaginateController::class, 'index']);
                 });
-                Route::prefix('agent-performance')->group(function () {
-                    Route::get('/excel', [AgentPerformanceReportExportController::class, 'index']);
-                    Route::get('/paginate', [AgentPerformanceReportPaginateController::class, 'index']);
+                Route::prefix('approval-turn-around')->group(function () {
+                    Route::get('/excel', [AdminApprovalTurnAroundReportExportController::class, 'index']);
+                    Route::get('/paginate', [AdminApprovalTurnAroundReportPaginateController::class, 'index']);
+                });
+                Route::prefix('conversion-funnel')->group(function () {
+                    Route::get('/excel', [AdminConversionFunnelReportExportController::class, 'index']);
+                    Route::get('/paginate', [AdminConversionFunnelReportPaginateController::class, 'index']);
+                });
+                Route::prefix('profit-leaderboard')->group(function () {
+                    Route::get('/excel', [AdminProfitLeaderboardReportExportController::class, 'index']);
+                    Route::get('/paginate', [AdminProfitLeaderboardReportPaginateController::class, 'index']);
                 });
                 Route::prefix('revenue-summary')->group(function () {
-                    Route::get('/excel', [RevenueSummaryExportController::class, 'index']);
-                    Route::get('/paginate', [RevenueSummaryPaginateController::class, 'index']);
+                    Route::get('/excel', [AdminRevenueSummaryReportExportController::class, 'index']);
+                    Route::get('/paginate', [AdminRevenueSummaryReportPaginateController::class, 'index']);
                 });
             });
         });
@@ -158,6 +184,36 @@ Route::prefix('v1')->middleware([Throttle::API->middleware()])->group(function (
                 Route::post('/update/{id}', [SalesQuotationUpdateController::class, 'index']);
                 Route::get('/view/{id}', [SalesQuotationViewController::class, 'index']);
                 Route::get('/submit-for-approval/{id}', [SalesQuotationSubmitForApprovalController::class, 'index']);
+            });
+            Route::prefix('report')->group(function () {
+                Route::prefix('sales-performance')->group(function () {
+                    Route::get('/excel', [SalesPerformanceReportExportController::class, 'index']);
+                    Route::get('/paginate', [SalesPerformanceReportPaginateController::class, 'index']);
+                });
+                Route::prefix('sales-lead-source-performance')->group(function () {
+                    Route::get('/excel', [SalesLeadSourcePerformanceReportExportController::class, 'index']);
+                    Route::get('/paginate', [SalesLeadSourcePerformanceReportPaginateController::class, 'index']);
+                });
+                Route::prefix('sales-approval-turn-around')->group(function () {
+                    Route::get('/excel', [SalesApprovalTurnAroundReportExportController::class, 'index']);
+                    Route::get('/paginate', [SalesApprovalTurnAroundReportPaginateController::class, 'index']);
+                });
+                Route::prefix('sales-trend')->group(function () {
+                    Route::get('/excel', [SalesTrendReportExportController::class, 'index']);
+                    Route::get('/paginate', [SalesTrendReportPaginateController::class, 'index']);
+                });
+                Route::prefix('sales-revenue')->group(function () {
+                    Route::get('/excel', [SalesRevenueReportExportController::class, 'index']);
+                    Route::get('/paginate', [SalesRevenueReportPaginateController::class, 'index']);
+                });
+                Route::prefix('sales-pipeline-status')->group(function () {
+                    Route::get('/excel', [SalesPipelineStatusReportExportController::class, 'index']);
+                    Route::get('/paginate', [SalesPipelineStatusReportPaginateController::class, 'index']);
+                });
+                Route::prefix('profitability-per-quotation')->group(function () {
+                    Route::get('/excel', [SalesProfitabilityPerQuotationReportExportController::class, 'index']);
+                    Route::get('/paginate', [SalesProfitabilityPerQuotationReportPaginateController::class, 'index']);
+                });
             });
         });
     });

@@ -54,14 +54,41 @@ const ServiceTeamOrderView = React.lazy(
 const QuotationPublicForm = React.lazy(
   () => import("@/pages/QuotationPublicForm"),
 );
-const SalesReport = React.lazy(
-  () => import("@/pages/Report/SalesReport/index.tsx"),
+const AdminConversionFunnelReport = React.lazy(
+  () => import("@/pages/Report/AdminConversionFunnelReport"),
 );
-const RevenueSummary = React.lazy(
-  () => import("@/pages/Report/RevenueSummary/index.tsx"),
+const AdminRevenueSummaryReport = React.lazy(
+  () => import("@/pages/Report/AdminRevenueSummaryReport"),
 );
-const AgentWisePerformanceReport = React.lazy(
-  () => import("@/pages/Report/AgentWisePerformanceReport/index.tsx"),
+const AdminSalesPerformanceReport = React.lazy(
+  () => import("@/pages/Report/AdminSalesPerformanceReport"),
+);
+const AdminApprovalTurnAroundReport = React.lazy(
+  () => import("@/pages/Report/AdminApprovalTurnAroundReport"),
+);
+const AdminProfitLeaderboardReport = React.lazy(
+  () => import("@/pages/Report/AdminProfitLeaderboardReport"),
+);
+const SalesTeamApprovalTurnAroundReport = React.lazy(
+  () => import("@/pages/Report/SalesTeamApprovalTurnAroundReport"),
+);
+const SalesTeamTrendReport = React.lazy(
+  () => import("@/pages/Report/SalesTeamTrendReport"),
+);
+const SalesTeamProfitabilityPerQuotationReport = React.lazy(
+  () => import("@/pages/Report/SalesTeamProfitabilityPerQuotationReport"),
+);
+const SalesTeamRevenueReport = React.lazy(
+  () => import("@/pages/Report/SalesTeamRevenueReport"),
+);
+const SalesTeamPipelineStatusReport = React.lazy(
+  () => import("@/pages/Report/SalesTeamPipelineStatusReport"),
+);
+const SalesTeamLeadSourcePerformanceReport = React.lazy(
+  () => import("@/pages/Report/SalesTeamLeadSourcePerformanceReport"),
+);
+const SalesTeamPerformanceReport = React.lazy(
+  () => import("@/pages/Report/SalesTeamPerformanceReport"),
 );
 
 function App() {
@@ -119,6 +146,42 @@ function App() {
                         path={`${page_routes.sales_quotations.link}/:id`}
                         element={<SalesQuotationView />}
                       />
+                      <Route
+                        path={
+                          page_routes.sales_team_approval_turn_around_report
+                            .link
+                        }
+                        element={<SalesTeamApprovalTurnAroundReport />}
+                      />
+                      <Route
+                        path={page_routes.sales_team_trend_report.link}
+                        element={<SalesTeamTrendReport />}
+                      />
+                      <Route
+                        path={
+                          page_routes
+                            .sales_team_profitability_per_quotation_report.link
+                        }
+                        element={<SalesTeamProfitabilityPerQuotationReport />}
+                      />
+                      <Route
+                        path={page_routes.sales_team_revenue_report.link}
+                        element={<SalesTeamRevenueReport />}
+                      />
+                      <Route
+                        path={
+                          page_routes.sales_team_pipeline_status_report.link
+                        }
+                        element={<SalesTeamPipelineStatusReport />}
+                      />
+                      <Route
+                        path={page_routes.sales_team_lead_source_report.link}
+                        element={<SalesTeamLeadSourcePerformanceReport />}
+                      />
+                      <Route
+                        path={page_routes.sales_team_performance_report.link}
+                        element={<SalesTeamPerformanceReport />}
+                      />
                     </Route>
                     <Route
                       element={
@@ -151,16 +214,24 @@ function App() {
                     >
                       <Route path={page_routes.users.link} element={<User />} />
                       <Route
-                        path={page_routes.sales_reports.link}
-                        element={<SalesReport />}
+                        path={page_routes.conversion_funnel_reports.link}
+                        element={<AdminConversionFunnelReport />}
                       />
                       <Route
                         path={page_routes.revenue_summary_reports.link}
-                        element={<RevenueSummary />}
+                        element={<AdminRevenueSummaryReport />}
                       />
                       <Route
-                        path={page_routes.agent_performance_reports.link}
-                        element={<AgentWisePerformanceReport />}
+                        path={page_routes.sales_performance_reports.link}
+                        element={<AdminSalesPerformanceReport />}
+                      />
+                      <Route
+                        path={page_routes.approval_turn_around_reports.link}
+                        element={<AdminApprovalTurnAroundReport />}
+                      />
+                      <Route
+                        path={page_routes.profit_leaderboard_reports.link}
+                        element={<AdminProfitLeaderboardReport />}
                       />
                       <Route
                         path={page_routes.orders.link}

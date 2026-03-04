@@ -1,82 +1,130 @@
 import { useAuthStore } from "@/stores/auth.store";
-import type { PaginationType, SalesReportType, AgentPerformanceReportType, RevenueSummaryReportType } from "@/utils/types";
+import type { PaginationType, AdminSalesPerformanceReportType, AdminRevenueSummaryReportType, AdminApprovalTurnAroundReportType, AdminConversionFunnelReportType, AdminProfitLeaderboardReportType } from "@/utils/types";
 import { useQuery, type UseQueryResult } from "@tanstack/react-query";
 import { useSearchParams } from "react-router";
-import { getSalesReport, getAgentPerformanceReport, getRevenueSummaryReport } from "../dal/report";
+import { getAdminSalesPerformanceReport, getAdminRevenueSummaryReport, getAdminApprovalTurnAroundReport, getAdminConversionFunnelReport, getAdminProfitLeaderboardReport } from "../dal/report";
 
-
-
-export const SalesReportsQueryKey = (params: URLSearchParams) => {
-    return ["sales_reports", params.toString()]
+export const AdminSalesPerformanceReportsQueryKey = (params: URLSearchParams) => {
+    return ["admin_sales_performance_reports", params.toString()]
 };
 
-export const AgentPerformanceReportsQueryKey = (params: URLSearchParams) => {
-    return ["agent_performance_reports", params.toString()]
+export const AdminRevenueSummaryReportsQueryKey = (params: URLSearchParams) => {
+    return ["admin_revenue_summary_reports", params.toString()]
 };
 
-export const RevenueSummaryReportsQueryKey = (params: URLSearchParams) => {
-    return ["revenue_summary_reports", params.toString()]
+export const AdminApprovalTurnAroundReportsQueryKey = (params: URLSearchParams) => {
+    return ["admin_approval_turn_around_reports", params.toString()]
 };
 
-export const SalesReportsQueryFn = async ({ params, signal }: { params: URLSearchParams, signal?: AbortSignal }) => {
-    return await getSalesReport(params, signal);
+export const AdminConversionFunnelReportsQueryKey = (params: URLSearchParams) => {
+    return ["admin_conversion_funnel_reports", params.toString()]
+};
+
+export const AdminProfitLeaderboardReportsQueryKey = (params: URLSearchParams) => {
+    return ["admin_profit_leaderboard_reports", params.toString()]
+};
+
+export const AdminSalesPerformanceReportsQueryFn = async ({ params, signal }: { params: URLSearchParams, signal?: AbortSignal }) => {
+    return await getAdminSalesPerformanceReport(params, signal);
 }
 
-export const AgentPerformanceReportsQueryFn = async ({ params, signal }: { params: URLSearchParams, signal?: AbortSignal }) => {
-    return await getAgentPerformanceReport(params, signal);
+export const AdminRevenueSummaryReportsQueryFn = async ({ params, signal }: { params: URLSearchParams, signal?: AbortSignal }) => {
+    return await getAdminRevenueSummaryReport(params, signal);
 }
 
-export const RevenueSummaryReportsQueryFn = async ({ params, signal }: { params: URLSearchParams, signal?: AbortSignal }) => {
-    return await getRevenueSummaryReport(params, signal);
+export const AdminApprovalTurnAroundReportsQueryFn = async ({ params, signal }: { params: URLSearchParams, signal?: AbortSignal }) => {
+    return await getAdminApprovalTurnAroundReport(params, signal);
+}
+
+export const AdminConversionFunnelReportsQueryFn = async ({ params, signal }: { params: URLSearchParams, signal?: AbortSignal }) => {
+    return await getAdminConversionFunnelReport(params, signal);
+}
+
+export const AdminProfitLeaderboardReportsQueryFn = async ({ params, signal }: { params: URLSearchParams, signal?: AbortSignal }) => {
+    return await getAdminProfitLeaderboardReport(params, signal);
 }
 
 /*
-  Sales Reports Query Hook Function: This hook is used to fetch information of all the sales reports
+  Admin Sales Performance Reports Query Hook Function: This hook is used to fetch information of all the admin sales performance reports
 */
-export const useSalesReportsQuery: () => UseQueryResult<
-    PaginationType<SalesReportType> | undefined,
+export const useAdminSalesPerformanceReportsQuery: () => UseQueryResult<
+    PaginationType<AdminSalesPerformanceReportType> | undefined,
     unknown
 > = () => {
     const authToken = useAuthStore((state) => state.authToken)
     const [params] = useSearchParams();
 
     return useQuery({
-        queryKey: SalesReportsQueryKey(params),
-        queryFn: ({ signal }) => SalesReportsQueryFn({ params, signal }),
+        queryKey: AdminSalesPerformanceReportsQueryKey(params),
+        queryFn: ({ signal }) => AdminSalesPerformanceReportsQueryFn({ params, signal }),
         enabled: authToken !== null,
     });
 };
 
 /*
-  Agent Performance Reports Query Hook Function: This hook is used to fetch information of all the agent performance reports
+  Admin Revenue Summary Reports Query Hook Function: This hook is used to fetch information of all the admin revenue summary reports
 */
-export const useAgentPerformanceReportsQuery: () => UseQueryResult<
-    PaginationType<AgentPerformanceReportType> | undefined,
+export const useAdminRevenueSummaryReportsQuery: () => UseQueryResult<
+    PaginationType<AdminRevenueSummaryReportType> | undefined,
     unknown
 > = () => {
     const authToken = useAuthStore((state) => state.authToken)
     const [params] = useSearchParams();
 
     return useQuery({
-        queryKey: AgentPerformanceReportsQueryKey(params),
-        queryFn: ({ signal }) => AgentPerformanceReportsQueryFn({ params, signal }),
+        queryKey: AdminRevenueSummaryReportsQueryKey(params),
+        queryFn: ({ signal }) => AdminRevenueSummaryReportsQueryFn({ params, signal }),
         enabled: authToken !== null,
     });
 };
 
 /*
-  Revenue Summary Reports Query Hook Function: This hook is used to fetch information of all the revenue summary reports
+  Admin Approval Turn Around Reports Query Hook Function: This hook is used to fetch information of all the admin approval turn around reports
 */
-export const useRevenueSummaryReportsQuery: () => UseQueryResult<
-    PaginationType<RevenueSummaryReportType> | undefined,
+export const useAdminApprovalTurnAroundReportsQuery: () => UseQueryResult<
+    PaginationType<AdminApprovalTurnAroundReportType> | undefined,
     unknown
 > = () => {
     const authToken = useAuthStore((state) => state.authToken)
     const [params] = useSearchParams();
 
     return useQuery({
-        queryKey: RevenueSummaryReportsQueryKey(params),
-        queryFn: ({ signal }) => RevenueSummaryReportsQueryFn({ params, signal }),
+        queryKey: AdminApprovalTurnAroundReportsQueryKey(params),
+        queryFn: ({ signal }) => AdminApprovalTurnAroundReportsQueryFn({ params, signal }),
+        enabled: authToken !== null,
+    });
+};
+
+/*
+  Admin Conversion Funnel Reports Query Hook Function: This hook is used to fetch information of all the admin conversion funnel reports
+*/
+export const useAdminConversionFunnelReportsQuery: () => UseQueryResult<
+    PaginationType<AdminConversionFunnelReportType> | undefined,
+    unknown
+> = () => {
+    const authToken = useAuthStore((state) => state.authToken)
+    const [params] = useSearchParams();
+
+    return useQuery({
+        queryKey: AdminConversionFunnelReportsQueryKey(params),
+        queryFn: ({ signal }) => AdminConversionFunnelReportsQueryFn({ params, signal }),
+        enabled: authToken !== null,
+    });
+};
+
+/*
+  Admin Profit Leaderboard Reports Query Hook Function: This hook is used to fetch information of all the admin profit leaderboard reports
+*/
+export const useAdminProfitLeaderboardReportsQuery: () => UseQueryResult<
+    PaginationType<AdminProfitLeaderboardReportType> | undefined,
+    unknown
+> = () => {
+    const authToken = useAuthStore((state) => state.authToken)
+    const [params] = useSearchParams();
+
+    return useQuery({
+        queryKey: AdminProfitLeaderboardReportsQueryKey(params),
+        queryFn: ({ signal }) => AdminProfitLeaderboardReportsQueryFn({ params, signal }),
         enabled: authToken !== null,
     });
 };

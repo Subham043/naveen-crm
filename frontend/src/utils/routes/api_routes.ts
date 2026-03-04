@@ -50,13 +50,21 @@ export const api_routes = {
     excel: "/api/v1/activity-log/excel",
   },
   reports: {
-    sales: {
-      paginate: "/api/v1/report/sales/paginate",
-      excel: "/api/v1/report/sales/excel",
+    salesPerformance: {
+      paginate: "/api/v1/report/sales-performance/paginate",
+      excel: "/api/v1/report/sales-performance/excel",
     },
-    agentPerformance: {
-      paginate: "/api/v1/report/agent-performance/paginate",
-      excel: "/api/v1/report/agent-performance/excel",
+    approvalTurnAround: {
+      paginate: "/api/v1/report/approval-turn-around/paginate",
+      excel: "/api/v1/report/approval-turn-around/excel",
+    },
+    conversionFunnel: {
+      paginate: "/api/v1/report/conversion-funnel/paginate",
+      excel: "/api/v1/report/conversion-funnel/excel",
+    },
+    profitLeaderboard: {
+      paginate: "/api/v1/report/profit-leaderboard/paginate",
+      excel: "/api/v1/report/profit-leaderboard/excel",
     },
     revenueSummary: {
       paginate: "/api/v1/report/revenue-summary/paginate",
@@ -71,7 +79,37 @@ export const api_routes = {
       view: "/api/v1/sales/quotation/view",
       excel: "/api/v1/sales/quotation/excel",
       submitForApproval: "/api/v1/sales/quotation/submit-for-approval",
-    }
+    },
+    reports: {
+      salesPerformance: {
+        paginate: "/api/v1/sales/report/sales-performance/paginate",
+        excel: "/api/v1/sales/report/sales-performance/excel",
+      },
+      salesLeadSourcePerformance: {
+        paginate: "/api/v1/sales/report/sales-lead-source-performance/paginate",
+        excel: "/api/v1/sales/report/sales-lead-source-performance/excel",
+      },
+      salesApprovalTurnAroundReport: {
+        paginate: "/api/v1/sales/report/sales-approval-turn-around/paginate",
+        excel: "/api/v1/sales/report/sales-approval-turn-around/excel",
+      },
+      salesTrendReport: {
+        paginate: "/api/v1/sales/report/sales-trend/paginate",
+        excel: "/api/v1/sales/report/sales-trend/excel",
+      },
+      salesRevenueReport: {
+        paginate: "/api/v1/sales/report/sales-revenue/paginate",
+        excel: "/api/v1/sales/report/sales-revenue/excel",
+      },
+      salesPipelineStatusReport: {
+        paginate: "/api/v1/sales/report/sales-pipeline-status/paginate",
+        excel: "/api/v1/sales/report/sales-pipeline-status/excel",
+      },
+      profitabilityPerQuotationReport: {
+        paginate: "/api/v1/sales/report/profitability-per-quotation/paginate",
+        excel: "/api/v1/sales/report/profitability-per-quotation/excel",
+      },
+    },
   },
   serviceTeam: {
     orders: {

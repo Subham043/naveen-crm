@@ -23,7 +23,7 @@ import { useCallback, useMemo, useState } from "react";
 import PermittedLayout from "@/layouts/PermittedLayout";
 import SearchField from "../SearchField";
 import { useDebouncedCallback } from "@mantine/hooks";
-import CommonDateFilter from "@/pages/Report/CommonFilter/CommonDateFilter";
+import CommonDateFilter from "@/components/CommonReportFilter/CommonDateFilter";
 
 type Props = {
   quotation_id: QuotationType["id"];

@@ -50,29 +50,6 @@ export const menus: LinksGroupProps[] = [
     canAccess: ["Super-Admin"],
   },
   {
-    label: "Reports",
-    icon: IconChartBar,
-    initiallyOpened: false,
-    canAccess: ["Super-Admin"],
-    links: [
-      {
-        label: page_routes.sales_reports.name,
-        link: page_routes.sales_reports.link,
-        canAccess: ["Super-Admin"],
-      },
-      {
-        label: page_routes.agent_performance_reports.name,
-        link: page_routes.agent_performance_reports.link,
-        canAccess: ["Super-Admin"],
-      },
-      {
-        label: page_routes.revenue_summary_reports.name,
-        link: page_routes.revenue_summary_reports.link,
-        canAccess: ["Super-Admin"],
-      },
-    ],
-  },
-  {
     link: page_routes.sales_quotations.link,
     label: page_routes.sales_quotations.name,
     icon: IconFileSpreadsheet,
@@ -83,6 +60,74 @@ export const menus: LinksGroupProps[] = [
     label: page_routes.service_team_orders.name,
     icon: IconFileSpreadsheet,
     canAccess: ["Service-Team"],
+  },
+  {
+    label: "Reports",
+    icon: IconChartBar,
+    initiallyOpened: false,
+    canAccess: ["Super-Admin", "Sales-Team"],
+    links: [
+      {
+        label: page_routes.conversion_funnel_reports.name,
+        link: page_routes.conversion_funnel_reports.link,
+        canAccess: ["Super-Admin"],
+      },
+      {
+        label: page_routes.sales_performance_reports.name,
+        link: page_routes.sales_performance_reports.link,
+        canAccess: ["Super-Admin"],
+      },
+      {
+        label: page_routes.revenue_summary_reports.name,
+        link: page_routes.revenue_summary_reports.link,
+        canAccess: ["Super-Admin"],
+      },
+      {
+        label: page_routes.approval_turn_around_reports.name,
+        link: page_routes.approval_turn_around_reports.link,
+        canAccess: ["Super-Admin"],
+      },
+      {
+        label: page_routes.profit_leaderboard_reports.name,
+        link: page_routes.profit_leaderboard_reports.link,
+        canAccess: ["Super-Admin"],
+      },
+      {
+        label: page_routes.sales_team_pipeline_status_report.name,
+        link: page_routes.sales_team_pipeline_status_report.link,
+        canAccess: ["Sales-Team"],
+      },
+      {
+        label: page_routes.sales_team_approval_turn_around_report.name,
+        link: page_routes.sales_team_approval_turn_around_report.link,
+        canAccess: ["Sales-Team"],
+      },
+      {
+        label: page_routes.sales_team_profitability_per_quotation_report.name,
+        link: page_routes.sales_team_profitability_per_quotation_report.link,
+        canAccess: ["Sales-Team"],
+      },
+      {
+        label: page_routes.sales_team_lead_source_report.name,
+        link: page_routes.sales_team_lead_source_report.link,
+        canAccess: ["Sales-Team"],
+      },
+      {
+        label: page_routes.sales_team_performance_report.name,
+        link: page_routes.sales_team_performance_report.link,
+        canAccess: ["Sales-Team"],
+      },
+      {
+        label: page_routes.sales_team_revenue_report.name,
+        link: page_routes.sales_team_revenue_report.link,
+        canAccess: ["Sales-Team"],
+      },
+      {
+        label: page_routes.sales_team_trend_report.name,
+        link: page_routes.sales_team_trend_report.link,
+        canAccess: ["Sales-Team"],
+      },
+    ],
   },
   {
     link: page_routes.activity_logs.link,
