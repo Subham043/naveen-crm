@@ -33,12 +33,14 @@ class ServiceTeamDashboardService
 
                 ROUND(SUM(COALESCE(quotations.cost_price,0) * 0.03), 2) as totalSalesTax,
 
-                ROUND(SUM(COALESCE(quotations.sale_price,0)
-                        - (
-                            COALESCE(quotations.cost_price,0)
-                            + COALESCE(quotations.shipping_cost,0)
-                            + (COALESCE(quotations.cost_price,0) * 0.03)
-                        )), 2) as totalGrossProfit,
+                ROUND(SUM(
+                    COALESCE(quotations.sale_price,0)
+                    - (
+                        COALESCE(quotations.cost_price,0)
+                        + COALESCE(quotations.shipping_cost,0)
+                        + (COALESCE(quotations.cost_price,0) * 0.03)
+                    )
+                ), 2) as totalGrossProfit,
 
                 SUM(CASE WHEN orders.payment_status = ? THEN 1 ELSE 0 END) as totalPaymentPendingOrders,
                 SUM(CASE WHEN orders.payment_status = ? THEN 1 ELSE 0 END) as totalPaymentPaidOrders,

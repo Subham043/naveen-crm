@@ -45,8 +45,8 @@ class AdminDashboardService
             ->selectRaw("
                 COUNT(orders.id) as totalOrders,
 
-                SUM(quotations.lead_source = 1) as totalWebsiteLeadOrders,
-                SUM(quotations.lead_source = 2) as totalCallOrders,
+                SUM(CASE WHEN quotations.lead_source = 1 THEN 1 ELSE 0 END) as totalWebsiteLeadOrders,
+                SUM(CASE WHEN quotations.lead_source = 2 THEN 1 ELSE 0 END) as totalCallOrders,
 
                 SUM(COALESCE(quotations.sale_price,0)) as salePrice,
 
@@ -56,49 +56,51 @@ class AdminDashboardService
 
                 ROUND(SUM(COALESCE(quotations.cost_price,0) * 0.03), 2) as totalSalesTax,
 
-                ROUND(SUM(COALESCE(quotations.sale_price,0)
-                        - (
-                            COALESCE(quotations.cost_price,0)
-                            + COALESCE(quotations.shipping_cost,0)
-                            + (COALESCE(quotations.cost_price,0) * 0.03)
-                        )) as totalGrossProfit,
+                ROUND(SUM(
+                    COALESCE(quotations.sale_price,0)
+                    - (
+                        COALESCE(quotations.cost_price,0)
+                        + COALESCE(quotations.shipping_cost,0)
+                        + (COALESCE(quotations.cost_price,0) * 0.03)
+                    )
+                ), 2) as totalGrossProfit,
 
-                SUM(orders.payment_status = ?) as totalPaymentPendingOrders,
-                SUM(orders.payment_status = ?) as totalPaymentPaidOrders,
-                SUM(orders.payment_status = ?) as totalPaymentPartiallyPaidOrders,
+                SUM(CASE WHEN orders.payment_status = ? THEN 1 ELSE 0 END) as totalPaymentPendingOrders,
+                SUM(CASE WHEN orders.payment_status = ? THEN 1 ELSE 0 END) as totalPaymentPaidOrders,
+                SUM(CASE WHEN orders.payment_status = ? THEN 1 ELSE 0 END) as totalPaymentPartiallyPaidOrders,
 
-                SUM(orders.payment_status != 0 AND orders.payment_card_type = ?) as totalPaymentMastercardOrders,
-                SUM(orders.payment_status != 0 AND orders.payment_card_type = ?) as totalPaymentVisacardOrders,
-                SUM(orders.payment_status != 0 AND orders.payment_card_type = ?) as totalPaymentAmexcardOrders,
-                SUM(orders.payment_status != 0 AND orders.payment_card_type = ?) as totalPaymentZellecardOrders,
+                SUM(CASE WHEN orders.payment_status != 0 AND orders.payment_card_type = ? THEN 1 ELSE 0 END) as totalPaymentMastercardOrders,
+                SUM(CASE WHEN orders.payment_status != 0 AND orders.payment_card_type = ? THEN 1 ELSE 0 END) as totalPaymentVisacardOrders,
+                SUM(CASE WHEN orders.payment_status != 0 AND orders.payment_card_type = ? THEN 1 ELSE 0 END) as totalPaymentAmexcardOrders,
+                SUM(CASE WHEN orders.payment_status != 0 AND orders.payment_card_type = ? THEN 1 ELSE 0 END) as totalPaymentZellecardOrders,
 
-                SUM(orders.payment_status != 0 AND orders.payment_gateway = ?) as totalPaymentStripeOrders,
-                SUM(orders.payment_status != 0 AND orders.payment_gateway = ?) as totalPaymentBoaOrders,
-                SUM(orders.payment_status != 0 AND orders.payment_gateway = ?) as totalPaymentZelleOrders,
+                SUM(CASE WHEN orders.payment_status != 0 AND orders.payment_gateway = ? THEN 1 ELSE 0 END) as totalPaymentStripeOrders,
+                SUM(CASE WHEN orders.payment_status != 0 AND orders.payment_gateway = ? THEN 1 ELSE 0 END) as totalPaymentBoaOrders,
+                SUM(CASE WHEN orders.payment_status != 0 AND orders.payment_gateway = ? THEN 1 ELSE 0 END) as totalPaymentZelleOrders,
 
-                SUM(orders.invoice_status = ?) as totalInvoiceNotGeneratedOrders,
-                SUM(orders.invoice_status = ?) as totalInvoiceGeneratedOrders,
-                SUM(orders.invoice_status = ?) as totalInvoiceSentOrders,
+                SUM(CASE WHEN orders.invoice_status = ? THEN 1 ELSE 0 END) as totalInvoiceNotGeneratedOrders,
+                SUM(CASE WHEN orders.invoice_status = ? THEN 1 ELSE 0 END) as totalInvoiceGeneratedOrders,
+                SUM(CASE WHEN orders.invoice_status = ? THEN 1 ELSE 0 END) as totalInvoiceSentOrders,
 
-                SUM(orders.shipment_status = ?) as totalShipmentPOPendingOrders,
-                SUM(orders.shipment_status = ?) as totalShipmentPOSentOrders,
+                SUM(CASE WHEN orders.shipment_status = ? THEN 1 ELSE 0 END) as totalShipmentPOPendingOrders,
+                SUM(CASE WHEN orders.shipment_status = ? THEN 1 ELSE 0 END) as totalShipmentPOSentOrders,
 
-                SUM(orders.tracking_status = ?) as totalTrackingPendingOrders,
-                SUM(orders.tracking_status = ?) as totalTrackingSentOrders,
+                SUM(CASE WHEN orders.tracking_status = ? THEN 1 ELSE 0 END) as totalTrackingPendingOrders,
+                SUM(CASE WHEN orders.tracking_status = ? THEN 1 ELSE 0 END) as totalTrackingSentOrders,
 
-                SUM(orders.order_status = ?) as totalPendingOrders,
-                SUM(orders.order_status = ?) as totalEscalationOrders,
-                SUM(orders.order_status = ?) as totalCancelledOrders,
-                SUM(orders.order_status = ?) as totalRelocatePoSentOrders,
-                SUM(orders.order_status = ?) as totalPendingForRefundOrders,
-                SUM(orders.order_status = ?) as totalRefundedOrders,
-                SUM(orders.order_status = ?) as totalPendingPartShippedOrders,
-                SUM(orders.order_status = ?) as totalCompletedOrders,
-                SUM(orders.order_status = ?) as totalChargeBackOrders,
-                SUM(orders.order_status = ?) as totalYardRelocateOrders,
+                SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalPendingOrders,
+                SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalEscalationOrders,
+                SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalCancelledOrders,
+                SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalRelocatePoSentOrders,
+                SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalPendingForRefundOrders,
+                SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalRefundedOrders,
+                SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalPendingPartShippedOrders,
+                SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalCompletedOrders,
+                SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalChargeBackOrders,
+                SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalYardRelocateOrders
 
-                SUM(quotations.quotation_status = 1 AND quotations.approval_by_id = ?) as totalApprovedByMeOrders,
-                SUM(quotations.quotation_status = 2 AND quotations.approval_by_id = ?) as totalRejectedByMeOrders
+                SUM(CASE WHEN quotations.quotation_status = 1 AND quotations.approval_by_id = ? THEN 1 ELSE 0 END) as totalApprovedByMeOrders,
+                SUM(CASE WHEN quotations.quotation_status = 2 AND quotations.approval_by_id = ? THEN 1 ELSE 0 END) as totalRejectedByMeOrders
         ", [
                 PaymentStatus::Pending->value(),
                 PaymentStatus::Paid->value(),
