@@ -97,7 +97,7 @@ class AdminDashboardService
                 SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalPendingPartShippedOrders,
                 SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalCompletedOrders,
                 SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalChargeBackOrders,
-                SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalYardRelocateOrders
+                SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalYardRelocateOrders,
 
                 SUM(CASE WHEN quotations.quotation_status = 1 AND quotations.approval_by_id = ? THEN 1 ELSE 0 END) as totalApprovedByMeOrders,
                 SUM(CASE WHEN quotations.quotation_status = 2 AND quotations.approval_by_id = ? THEN 1 ELSE 0 END) as totalRejectedByMeOrders
