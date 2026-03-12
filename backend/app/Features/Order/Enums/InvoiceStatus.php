@@ -18,7 +18,7 @@ enum InvoiceStatus: int
 		return match ($value) {
 			self::NotGenerated->value => 'Not Generated',
 			self::Generated->value => 'Generated',
-			self::Sent->value => 'Generated & Sent',
+			self::Sent->value => 'Sent',
 			null => null,
 			default => null,
 		};

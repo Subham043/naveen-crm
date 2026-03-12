@@ -11,6 +11,7 @@ import OrderStatus, {
 } from "@/components/Order/OrderStatus";
 import PermittedLayout from "@/layouts/PermittedLayout";
 import { IconEdit } from "@tabler/icons-react";
+import OrderPdfExportBtn from "./OrderPdfExportBtn";
 
 type OrderTableProps = {
   orders: OrderType[];
@@ -31,7 +32,7 @@ const OrderTableRow = memo(
     }, [onEdit, id]);
     return (
       <Table.Tr key={id}>
-        <Table.Td>{id}</Table.Td>
+        <Table.Td>#WAM{id}</Table.Td>
         <Table.Td>
           {quotation_info && (
             <Group gap={7} align="flex-start">
@@ -148,6 +149,7 @@ const OrderTableRow = memo(
                 >
                   Edit
                 </Menu.Item>
+                <OrderPdfExportBtn order_id={id} />
               </PermittedLayout>
             </TrippleDotMenu>
           </Group>

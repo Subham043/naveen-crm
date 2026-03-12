@@ -15,6 +15,7 @@ import type { PaymentStatus } from "@/components/Order/OrderPaymentStatus";
 import OrderPaymentStatus from "@/components/Order/OrderPaymentStatus";
 import type { InvoiceStatus } from "@/components/Order/OrderInvoiceStatus";
 import OrderInvoiceStatus from "@/components/Order/OrderInvoiceStatus";
+import ServiceTeamOrderPdfExportBtn from "./ServiceTeamOrderPdfExportBtn";
 
 type ServiceTeamOrderTableProps = {
   serviceTeamOrders: ServiceTeamOrderType[];
@@ -39,7 +40,7 @@ const ServiceTeamOrderTableRow = memo(
     }, [onEdit, id]);
     return (
       <Table.Tr key={id}>
-        <Table.Td>{id}</Table.Td>
+        <Table.Td>#WAM{id}</Table.Td>
         <Table.Td>
           {quotation_info && (
             <Group gap={7} align="flex-start">
@@ -167,6 +168,7 @@ const ServiceTeamOrderTableRow = memo(
                 >
                   Edit
                 </Menu.Item>
+                <ServiceTeamOrderPdfExportBtn order_id={id} />
               </PermittedLayout>
             </TrippleDotMenu>
           </Group>

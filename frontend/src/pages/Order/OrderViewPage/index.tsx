@@ -14,6 +14,7 @@ import OrderViewPartInfo from "@/components/Order/OrderView/OrderViewPartInfo";
 import OrderViewPriceInfo from "@/components/Order/OrderView/OrderViewPriceInfo";
 import OrderViewStatusInfo from "@/components/Order/OrderView/OrderViewStatusInfo";
 import OrderEditBtn from "./OrderEditBtn";
+import OrderViewPdfExportBtn from "./OrderViewPdfExportBtn";
 
 export default function OrderView() {
   const { id } = useParams<{ id: string }>();
@@ -37,7 +38,7 @@ export default function OrderView() {
   if (!isNumber || !data) {
     return (
       <Blockquote color="red" icon={<IconX />} mt="xl">
-        Order with id {id} not found
+        Order with id #WAM{id} not found
       </Blockquote>
     );
   }
@@ -46,10 +47,14 @@ export default function OrderView() {
     <Box>
       <Box p="sm" mb="md" pos="relative">
         <Group justify="space-between" align="center">
-          <Title order={3}>Order #{data.id}</Title>
+          <Title order={3}>Order #WAM{data.id}</Title>
           <Group gap="xs" justify="flex-end" align="center">
             <OrderEditBtn
               id={data.id}
+              quotation_status={data.quotation_info?.quotation_status}
+            />
+            <OrderViewPdfExportBtn
+              order_id={data.id}
               quotation_status={data.quotation_info?.quotation_status}
             />
             <Button

@@ -28,7 +28,6 @@ export const useExcelExport: ExcelExportHookType = () => {
       signal?: GenericAbortSignal | undefined,
     ) => {
       setExcelLoading(true);
-      const link = document.createElement("a");
       try {
         if (params.has(PAGEKEY)) {
           params.delete(PAGEKEY);
@@ -42,16 +41,18 @@ export const useExcelExport: ExcelExportHookType = () => {
           responseType: "blob",
         });
         const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
         link.href = url;
         link.setAttribute("download", excel_file_name);
         document.body.appendChild(link);
         link.click();
+        link.remove();
+        window.URL.revokeObjectURL(url);
         toastSuccess("Excel Exported Successfully");
       } catch (error) {
         toastError("Something went wrong. Please try again later.");
       } finally {
         setExcelLoading(false);
-        link.remove();
       }
     },
     [toastError, toastSuccess],

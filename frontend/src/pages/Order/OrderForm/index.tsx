@@ -417,7 +417,7 @@ export default function OrderForm({ modal, handleModalClose }: Props) {
                     data={[
                       { value: "0", label: "Not Generated" },
                       { value: "1", label: "Generated" },
-                      { value: "2", label: "Generated & Sent" },
+                      { value: "2", label: "Sent" },
                     ]}
                   />
                 )}

@@ -17,6 +17,7 @@ use App\Features\Authentication\Controllers\ResetPasswordController;
 use App\Features\Dashboard\Controllers\DashboardController;
 use App\Features\Quotation\Controllers\QuotationApprovalController;
 use App\Features\Order\Controllers\OrderExportController;
+use App\Features\Order\Controllers\OrderGenerateInvoiceController;
 use App\Features\Order\Controllers\OrderPaginateController;
 use App\Features\Order\Controllers\OrderUpdateController;
 use App\Features\Quotation\Controllers\QuotationPublicCreateController;
@@ -72,6 +73,7 @@ use App\Features\SalesTeam\Controllers\SalesQuotationSubmitForApprovalController
 use App\Features\SalesTeam\Controllers\SalesQuotationUpdateController;
 use App\Features\SalesTeam\Controllers\SalesQuotationViewController;
 use App\Features\ServiceTeam\Controllers\ServiceTeamOrderExportController;
+use App\Features\ServiceTeam\Controllers\ServiceTeamOrderGenerateInvoiceController;
 use App\Features\ServiceTeam\Controllers\ServiceTeamOrderPaginateController;
 use App\Features\ServiceTeam\Controllers\ServiceTeamOrderUpdateController;
 use App\Features\ServiceTeam\Controllers\ServiceTeamOrderViewController;
@@ -133,6 +135,7 @@ Route::prefix('v1')->middleware([Throttle::API->middleware()])->group(function (
                 Route::get('/paginate', [OrderPaginateController::class, 'index']);
                 Route::get('/view/{id}', [OrderViewController::class, 'index']);
                 Route::post('/update/{id}', [OrderUpdateController::class, 'index']);
+                Route::get('/generate-invoice/{id}', [OrderGenerateInvoiceController::class, 'index']);
             });
             Route::prefix('report')->group(function () {
                 Route::prefix('sales-performance')->group(function () {
@@ -186,6 +189,7 @@ Route::prefix('v1')->middleware([Throttle::API->middleware()])->group(function (
                 Route::get('/paginate', [ServiceTeamOrderPaginateController::class, 'index']);
                 Route::post('/update/{id}', [ServiceTeamOrderUpdateController::class, 'index']);
                 Route::get('/view/{id}', [ServiceTeamOrderViewController::class, 'index']);
+                Route::get('/generate-invoice/{id}', [ServiceTeamOrderGenerateInvoiceController::class, 'index']);
             });
             Route::prefix('report')->group(function () {
                 Route::prefix('service-performance')->group(function () {

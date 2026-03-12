@@ -14,6 +14,7 @@ import OrderViewPartInfo from "@/components/Order/OrderView/OrderViewPartInfo";
 import OrderViewPriceInfo from "@/components/Order/OrderView/OrderViewPriceInfo";
 import OrderViewStatusInfo from "@/components/Order/OrderView/OrderViewStatusInfo";
 import ViewTimeline from "@/components/ViewTimeline";
+import ServiceTeamOrderViewPdfExportBtn from "./ServiceTeamOrderViewPdfExportBtn";
 
 export default function ServiceTeamOrderView() {
   const { id } = useParams<{ id: string }>();
@@ -35,7 +36,7 @@ export default function ServiceTeamOrderView() {
   if (!isNumber || !data) {
     return (
       <Blockquote color="red" icon={<IconX />} mt="xl">
-        Order with id {id} not found
+        Order with id #WAM{id} not found
       </Blockquote>
     );
   }
@@ -44,9 +45,10 @@ export default function ServiceTeamOrderView() {
     <Box>
       <Box p="sm" mb="md" pos="relative">
         <Group justify="space-between" align="center">
-          <Title order={3}>Order #{data.id}</Title>
+          <Title order={3}>Order #WAM{data.id}</Title>
           <Group gap="xs" justify="flex-end" align="center">
             <ServiceTeamOrderEditBtn id={data.id} />
+            <ServiceTeamOrderViewPdfExportBtn order_id={data.id} />
             <Button
               leftSection={<IconArrowNarrowLeft size={16} />}
               variant="filled"

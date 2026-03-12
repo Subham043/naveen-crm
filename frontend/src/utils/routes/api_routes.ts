@@ -43,6 +43,7 @@ export const api_routes = {
     view: "/api/v1/order/view",
     update: "/api/v1/order/update",
     excel: "/api/v1/order/excel",
+    generateInvoice: "/api/v1/order/generate-invoice",
   },
   activityLog: {
     paginate: "/api/v1/activity-log/paginate",
@@ -125,6 +126,7 @@ export const api_routes = {
       update: "/api/v1/service-team/order/update",
       view: "/api/v1/service-team/order/view",
       excel: "/api/v1/service-team/order/excel",
+      generateInvoice: "/api/v1/service-team/order/generate-invoice",
     },
     reports: {
       servicePerformance: {
