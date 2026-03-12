@@ -41,6 +41,7 @@ class OrderService extends AbstractService
             $query
                 ->whereHas('salesUser')
                 ->whereHas('approvalBy')
+                ->where('quotation_status', QuotationStatus::Approved->value())
                 ->where('is_active', true);
         });
     }
@@ -52,18 +53,6 @@ class OrderService extends AbstractService
                 ->allowedSorts('id', 'name')
                 ->allowedFilters([
                     AllowedFilter::custom('search', new CommonFilter, null, false),
-                    AllowedFilter::callback('status', function (Builder $query, $value) {
-                        if(strtolower($value) == "approved"){
-                            $query->whereHas('quotation', function($q){
-                                $q->whereNotNull('approval_by_id')->where('quotation_status', QuotationStatus::Approved->value());
-                            });
-                        }
-                        if(strtolower($value) == "rejected"){
-                            $query->whereHas('quotation', function($q){
-                                $q->whereNotNull('approval_by_id')->where('quotation_status', QuotationStatus::Rejected->value());
-                            });
-                        }
-                    }),
                     AllowedFilter::callback('approval_by_me', function (Builder $query, $value) {
                         if(strtolower($value) == "yes"){
                             $query->whereHas('quotation', function($q){

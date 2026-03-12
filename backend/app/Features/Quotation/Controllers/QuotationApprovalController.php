@@ -33,9 +33,11 @@ class QuotationApprovalController extends Controller
             $quotation->disableLogging();
             DB::transaction(function () use ($quotation, $dto, $user) {
                 $this->quotationService->update([...$dto->toArray(), 'approval_by_id' => $user->id, 'approval_at' => now()], $quotation);
-                $quotation->order()->create([
-                    'quotation_id' => $quotation->id,
-                ]);
+                if($dto->quotation_status == QuotationStatus::Approved->value()){
+                    $quotation->order()->create([
+                        'quotation_id' => $quotation->id,
+                    ]);
+                }
             });
             event(new QuotationApproval($quotation, $dto, $user->id, $user->name, $user->email));
             $user2 = request()->user();
