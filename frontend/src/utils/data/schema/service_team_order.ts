@@ -124,7 +124,7 @@ export const serviceTeamOrderSchema = yup
         shipment_status: yup
             .number()
             .typeError("Shipment Status must be a number")
-            .oneOf([0, 1], "Shipment Status must be 0 or 1")
+            .oneOf([1, 2], "Shipment Status must be 1 or 2")
             .required("Shipment Status is required"),
         order_status: yup
             .number()
