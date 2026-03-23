@@ -27,6 +27,7 @@ const SalesQuotationTableRow = memo(
     part_model,
     part_make,
     part_name,
+    part_number,
     lead_source_info,
     sale_price,
     quotation_status,
@@ -85,9 +86,10 @@ const SalesQuotationTableRow = memo(
           </Group>
         </Table.Td>
         <Table.Td>{part_year || "N/A"}</Table.Td>
-        <Table.Td>{part_model || "N/A"}</Table.Td>
         <Table.Td>{part_make || "N/A"}</Table.Td>
+        <Table.Td>{part_model || "N/A"}</Table.Td>
         <Table.Td>{part_name || "N/A"}</Table.Td>
+        <Table.Td>{part_number || "N/A"}</Table.Td>
         <Table.Td>{sale_price || "N/A"}</Table.Td>
         <Table.Td>{lead_source_info}</Table.Td>
         <Table.Td>
@@ -139,10 +141,11 @@ function SalesQuotationTable({
           <Table.Tr bg={"var(--mantine-color-blue-light)"}>
             <Table.Th>ID</Table.Th>
             <Table.Th>CUSTOMER</Table.Th>
-            <Table.Th>PART YEAR</Table.Th>
-            <Table.Th>PART MODEL</Table.Th>
-            <Table.Th>PART MAKE</Table.Th>
-            <Table.Th>PART NAME</Table.Th>
+            <Table.Th>YEAR</Table.Th>
+            <Table.Th>MAKE</Table.Th>
+            <Table.Th>MODEL</Table.Th>
+            <Table.Th>NAME</Table.Th>
+            <Table.Th>NUMBER</Table.Th>
             <Table.Th>SALE PRICE</Table.Th>
             <Table.Th>SOURCE</Table.Th>
             <Table.Th>STATUS</Table.Th>
@@ -152,7 +155,7 @@ function SalesQuotationTable({
         </Table.Thead>
         <Table.Tbody>
           {loading ? (
-            <TableRowLoading colSpan={11} />
+            <TableRowLoading colSpan={12} />
           ) : salesQuotations.length > 0 ? (
             salesQuotations.map((item) => (
               <SalesQuotationTableRow
@@ -166,6 +169,7 @@ function SalesQuotationTable({
                 part_year={item.part_year}
                 part_model={item.part_model}
                 part_name={item.part_name}
+                part_number={item.part_number}
                 part_description={item.part_description}
                 billing_address={item.billing_address}
                 lead_source={item.lead_source}
@@ -192,7 +196,7 @@ function SalesQuotationTable({
               />
             ))
           ) : (
-            <TableRowNotFound colSpan={11} />
+            <TableRowNotFound colSpan={12} />
           )}
         </Table.Tbody>
       </Table>

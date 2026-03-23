@@ -1,6 +1,10 @@
 import { type FieldValues, type UseFormReturn, type Path } from "react-hook-form";
 import { isAxiosError } from "axios";
 import { toastError } from "@/hooks/useToast";
+import {
+  defaultCountries,
+  parseCountry,
+} from 'react-international-phone';
 
 export function handleFormServerErrors<T extends FieldValues>(
   error: unknown,
@@ -24,3 +28,8 @@ export function handleFormServerErrors<T extends FieldValues>(
     });
   });
 }
+
+export const countryData = defaultCountries.filter((country) => {
+  const { iso2 } = parseCountry(country);
+  return ['us'].includes(iso2);
+});

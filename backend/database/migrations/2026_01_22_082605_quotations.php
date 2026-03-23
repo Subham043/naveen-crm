@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('part_make')->nullable();
             $table->string('part_model')->nullable();
             $table->string('part_name')->nullable();
+            $table->string('part_number')->nullable();
             $table->text('part_description')->nullable();
             $table->boolean('quotation_sent')->default(0);
             //lead source

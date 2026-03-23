@@ -89,7 +89,7 @@ export default function ServiceTeamOrderView() {
 
       <OrderViewStatusInfo
         invoice_status={data.invoice_status}
-        shipment_status={data.shipment_status}
+        po_status={data.po_status}
         order_status={data.order_status}
       />
 

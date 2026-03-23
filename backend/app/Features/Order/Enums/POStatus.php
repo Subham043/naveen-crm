@@ -2,7 +2,7 @@
 
 namespace App\Features\Order\Enums;
 
-enum ShipmentStatus: int
+enum POStatus: int
 {
 	case POPending = 1;
 	case POSent = 2;

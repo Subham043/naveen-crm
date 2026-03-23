@@ -8,9 +8,7 @@ import TableRowNotFound from "@/components/TableRowNotFound";
 import Datetime from "@/components/Datetime";
 import { memo, useCallback } from "react";
 import ServiceTeamOrderViewBtn from "./ServiceTeamOrderViewBtn";
-import OrderShipmentStatus, {
-  type ShipmentStatus,
-} from "@/components/Order/OrderShipmentStatus";
+import OrderPOStatus, { type POStatus } from "@/components/Order/OrderPOStatus";
 import type { PaymentStatus } from "@/components/Order/OrderPaymentStatus";
 import OrderPaymentStatus from "@/components/Order/OrderPaymentStatus";
 import type { InvoiceStatus } from "@/components/Order/OrderInvoiceStatus";
@@ -29,7 +27,7 @@ const ServiceTeamOrderTableRow = memo(
     quotation_info,
     payment_status,
     invoice_status,
-    shipment_status,
+    po_status,
     created_at,
     onEdit,
   }: ServiceTeamOrderType & {
@@ -84,9 +82,10 @@ const ServiceTeamOrderTableRow = memo(
           )}
         </Table.Td>
         <Table.Td>{quotation_info?.part_year || "N/A"}</Table.Td>
-        <Table.Td>{quotation_info?.part_model || "N/A"}</Table.Td>
         <Table.Td>{quotation_info?.part_make || "N/A"}</Table.Td>
+        <Table.Td>{quotation_info?.part_model || "N/A"}</Table.Td>
         <Table.Td>{quotation_info?.part_name || "N/A"}</Table.Td>
+        <Table.Td>{quotation_info?.part_number || "N/A"}</Table.Td>
         <Table.Td>{quotation_info?.lead_source_info}</Table.Td>
         <Table.Td>
           {quotation_info?.sales_user_info ? (
@@ -146,9 +145,7 @@ const ServiceTeamOrderTableRow = memo(
           />
         </Table.Td>
         <Table.Td>
-          <OrderShipmentStatus
-            shipment_status={shipment_status as ShipmentStatus}
-          />
+          <OrderPOStatus po_status={po_status as POStatus} />
         </Table.Td>
         <Table.Td>
           <Datetime value={created_at} />
@@ -190,23 +187,24 @@ function ServiceTeamOrderTable({
           <Table.Tr bg={"var(--mantine-color-blue-light)"}>
             <Table.Th>ID</Table.Th>
             <Table.Th>CUSTOMER</Table.Th>
-            <Table.Th>PART YEAR</Table.Th>
-            <Table.Th>PART MODEL</Table.Th>
-            <Table.Th>PART MAKE</Table.Th>
-            <Table.Th>PART NAME</Table.Th>
+            <Table.Th>YEAR</Table.Th>
+            <Table.Th>MAKE</Table.Th>
+            <Table.Th>MODEL</Table.Th>
+            <Table.Th>NAME</Table.Th>
+            <Table.Th>NUMBER</Table.Th>
             <Table.Th>SOURCE</Table.Th>
             <Table.Th>AGENT</Table.Th>
             <Table.Th>TOTAL PRICE</Table.Th>
             <Table.Th>PAYMENT</Table.Th>
             <Table.Th>INVOICE</Table.Th>
-            <Table.Th>SHIPMENT</Table.Th>
+            <Table.Th>PO</Table.Th>
             <Table.Th>CREATED AT</Table.Th>
             <Table.Th />
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
           {loading ? (
-            <TableRowLoading colSpan={14} />
+            <TableRowLoading colSpan={15} />
           ) : serviceTeamOrders.length > 0 ? (
             serviceTeamOrders.map((item) => (
               <ServiceTeamOrderTableRow
@@ -227,8 +225,8 @@ function ServiceTeamOrderTable({
                 tracking_status_info={item.tracking_status_info}
                 invoice_status={item.invoice_status}
                 invoice_status_info={item.invoice_status_info}
-                shipment_status={item.shipment_status}
-                shipment_status_info={item.shipment_status_info}
+                po_status={item.po_status}
+                po_status_info={item.po_status_info}
                 order_status={item.order_status}
                 order_status_info={item.order_status_info}
                 created_at={item.created_at}
@@ -238,7 +236,7 @@ function ServiceTeamOrderTable({
               />
             ))
           ) : (
-            <TableRowNotFound colSpan={14} />
+            <TableRowNotFound colSpan={15} />
           )}
         </Table.Tbody>
       </Table>

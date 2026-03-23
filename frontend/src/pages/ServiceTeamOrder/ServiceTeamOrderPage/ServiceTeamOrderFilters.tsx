@@ -3,7 +3,7 @@ import SelectOrderInvoiceStatus from "@/components/Order/SelectOrderInvoiceStatu
 import SelectOrderPaymentCardType from "@/components/Order/SelectOrderPaymentCardType";
 import SelectOrderPaymentGateway from "@/components/Order/SelectOrderPaymentGateway";
 import SelectOrderPaymentStatus from "@/components/Order/SelectOrderPaymentStatus";
-import SelectOrderShipmentStatus from "@/components/Order/SelectOrderShipmentStatus";
+import SelectOrderPOStatus from "@/components/Order/SelectOrderPOStatus";
 import SelectOrderStatus from "@/components/Order/SelectOrderStatus";
 import SelectQuotationLeadSource from "@/components/Quotation/SelectQuotationLeadSource";
 import SearchField from "@/components/SearchField";
@@ -27,7 +27,7 @@ function ServiceTeamOrderFilters() {
       <SelectOrderPaymentCardType />
       <SelectOrderPaymentGateway />
       <SelectOrderInvoiceStatus />
-      <SelectOrderShipmentStatus />
+      <SelectOrderPOStatus />
       <SelectOrderStatus />
       <FilterClearBtn />
     </Group>

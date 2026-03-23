@@ -22,7 +22,6 @@ import {
     IconLetterS,
     IconLetterZ,
     IconLoader,
-    IconLocationUp,
     IconNotesOff,
     IconPackageImport,
     IconPhoneCalling,
@@ -76,8 +75,8 @@ const TotalInvoiceNotGeneratedOrders = "totalInvoiceNotGeneratedOrders";
 const TotalInvoiceGeneratedOrders = "totalInvoiceGeneratedOrders";
 const TotalInvoiceSentOrders = "totalInvoiceSentOrders";
 
-const TotalShipmentPOPendingOrders = "totalShipmentPOPendingOrders";
-const TotalShipmentPOSentOrders = "totalShipmentPOSentOrders";
+const TotalPOPendingOrders = "totalPOPendingOrders";
+const TotalPOSentOrders = "totalPOSentOrders";
 
 const TotalTrackingPendingOrders = "totalTrackingPendingOrders";
 const TotalTrackingSentOrders = "totalTrackingSentOrders";
@@ -85,13 +84,11 @@ const TotalTrackingSentOrders = "totalTrackingSentOrders";
 const TotalPendingOrders = "totalPendingOrders";
 const TotalEscalationOrders = "totalEscalationOrders";
 const TotalCancelledOrders = "totalCancelledOrders";
-const TotalRelocatePoSentOrders = "totalRelocatePoSentOrders";
 const TotalPendingForRefundOrders = "totalPendingForRefundOrders";
 const TotalRefundedOrders = "totalRefundedOrders";
 const TotalPendingPartShippedOrders = "totalPendingPartShippedOrders";
 const TotalCompletedOrders = "totalCompletedOrders";
 const TotalChargeBackOrders = "totalChargeBackOrders";
-const TotalYardRelocateOrders = "totalYardRelocateOrders";
 
 const TotalApprovedByMeOrders = "totalApprovedByMeOrders";
 const TotalRejectedByMeOrders = "totalRejectedByMeOrders";
@@ -135,9 +132,9 @@ const OrderInvoiceStatusGraphContent = [
     TotalInvoiceSentOrders,
 ];
 
-const OrderShipmentStatusGraphContent = [
-    TotalShipmentPOPendingOrders,
-    TotalShipmentPOSentOrders,
+const OrderPOStatusGraphContent = [
+    TotalPOPendingOrders,
+    TotalPOSentOrders,
 ];
 
 const OrderTrackingStatusGraphContent = [
@@ -149,13 +146,11 @@ const OrderStatusGraphContent = [
     TotalPendingOrders,
     TotalEscalationOrders,
     TotalCancelledOrders,
-    TotalRelocatePoSentOrders,
     TotalPendingForRefundOrders,
     TotalRefundedOrders,
     TotalPendingPartShippedOrders,
     TotalCompletedOrders,
     TotalChargeBackOrders,
-    TotalYardRelocateOrders,
 ];
 
 const OrderApprovalStatusGraphContent = [
@@ -284,11 +279,11 @@ const dashboardKeyIconMap = {
         Icon: IconPinInvoke,
         color: "var(--mantine-color-teal-filled)",
     },
-    [TotalShipmentPOPendingOrders]: {
+    [TotalPOPendingOrders]: {
         Icon: IconLoader,
         color: "var(--mantine-color-gray-filled)",
     },
-    [TotalShipmentPOSentOrders]: {
+    [TotalPOSentOrders]: {
         Icon: IconCubeSend,
         color: "var(--mantine-color-pink-filled)",
     },
@@ -312,10 +307,6 @@ const dashboardKeyIconMap = {
         Icon: IconCancel,
         color: "var(--mantine-color-red-filled)",
     },
-    [TotalRelocatePoSentOrders]: {
-        Icon: IconLocationUp,
-        color: "var(--mantine-color-blue-filled)",
-    },
     [TotalPendingForRefundOrders]: {
         Icon: IconCashMoveBack,
         color: "var(--mantine-color-yellow-filled)",
@@ -335,10 +326,6 @@ const dashboardKeyIconMap = {
     [TotalChargeBackOrders]: {
         Icon: IconCashRegister,
         color: "var(--mantine-color-dark-filled)",
-    },
-    [TotalYardRelocateOrders]: {
-        Icon: IconLocationUp,
-        color: "var(--mantine-color-grape-filled)",
     },
     [TotalApprovedByMeOrders]: {
         Icon: IconChecks,
@@ -452,8 +439,8 @@ export const DashboardQueryFn = async ({
                 dashboardKeyIconMap[key as keyof typeof dashboardKeyIconMap]?.color ??
                 "var(--mantine-color-blue-filled)",
         }));
-    const orderShipmentStatusGraphContent = Object.entries(resp)
-        .filter(([key]) => OrderShipmentStatusGraphContent.includes(key as string))
+    const orderPOStatusGraphContent = Object.entries(resp)
+        .filter(([key]) => OrderPOStatusGraphContent.includes(key as string))
         .map(([key, value]) => ({
             name: key
                 .replace(/[_-]/g, " ")
@@ -549,8 +536,8 @@ export const DashboardQueryFn = async ({
                 data: orderTrackingStatusGraphContent,
             },
             {
-                chartTitle: "Order Shipment Summary",
-                data: orderShipmentStatusGraphContent,
+                chartTitle: "Order PO Summary",
+                data: orderPOStatusGraphContent,
             },
             {
                 chartTitle: "Order Approval Summary",

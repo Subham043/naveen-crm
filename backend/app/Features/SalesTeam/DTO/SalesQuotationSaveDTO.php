@@ -21,6 +21,7 @@ final class SalesQuotationSaveDTO
         public readonly ?string $part_model,
         public readonly ?string $part_make,
         public readonly ?string $part_name,
+        public readonly ?string $part_number,
         public readonly ?string $part_description,
         public readonly ?float $sale_price,
         public readonly ?float $cost_price,
@@ -47,6 +48,7 @@ final class SalesQuotationSaveDTO
             part_model: $request->validated('part_model'),
             part_make: $request->validated('part_make'),
             part_name: $request->validated('part_name'),
+            part_number: $request->validated('part_number'),
             part_description: $request->validated('part_description'),
             sale_price: $request->validated('sale_price'),
             cost_price: $request->validated('cost_price'),
@@ -97,6 +99,10 @@ final class SalesQuotationSaveDTO
 
         if ($this->part_name) {
             $data['part_name'] = $this->part_name;
+        }
+
+        if ($this->part_number) {
+            $data['part_number'] = $this->part_number;
         }
 
         if ($this->part_description) {

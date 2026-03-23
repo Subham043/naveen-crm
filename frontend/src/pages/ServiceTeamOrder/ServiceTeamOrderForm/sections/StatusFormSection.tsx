@@ -28,10 +28,10 @@ function StatusFormSection() {
         />
         <Controller
           control={control}
-          name="shipment_status"
+          name="po_status"
           render={({ field, fieldState }) => (
             <Select
-              label="Shipment Status"
+              label="PO Status"
               value={field.value ? field.value.toString() : "1"}
               onChange={(val) => field.onChange(val ? Number(val) : undefined)}
               error={fieldState.error?.message}
@@ -57,13 +57,11 @@ function StatusFormSection() {
                 { value: "0", label: "Pending" },
                 { value: "1", label: "Escalation" },
                 { value: "2", label: "Cancelled" },
-                { value: "3", label: "Relocate Po Sent" },
-                { value: "4", label: "Pending For Refund" },
-                { value: "5", label: "Refunded" },
-                { value: "6", label: "Pending Part Shipped" },
-                { value: "7", label: "Completed" },
-                { value: "8", label: "ChargeBack" },
-                { value: "9", label: "Yard Relocate" },
+                { value: "3", label: "Pending For Refund" },
+                { value: "4", label: "Refunded" },
+                { value: "5", label: "Pending Part Shipped" },
+                { value: "6", label: "Completed" },
+                { value: "7", label: "ChargeBack" },
               ]}
             />
           )}

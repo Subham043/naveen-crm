@@ -42,6 +42,7 @@ class SalesQuotationSaveRequests extends InputRequest
             'part_model' => ['required_if:is_active,1', 'string', 'max:255'],
             'part_make' => ['required_if:is_active,1', 'string', 'max:255'],
             'part_name' => ['required_if:is_active,1', 'string', 'max:255'],
+            'part_number' => ['required_if:is_active,1', 'string', 'max:255'],
             'part_description' => ['required_if:is_active,1', 'string'],
             'sale_price' => ['required_if:is_active,1', 'numeric'],
             'cost_price' => ['required_if:is_active,1', 'numeric'],

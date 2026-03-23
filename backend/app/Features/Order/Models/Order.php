@@ -31,7 +31,7 @@ class Order extends Model
         'tracking_details',
         'tracking_status',
         'invoice_status',
-        'shipment_status',
+        'po_status',
         'order_status',
         'quotation_id',
     ];
@@ -45,7 +45,7 @@ class Order extends Model
         'tracking_details' => null,
         'tracking_status' => 0,
         'invoice_status' => 0,
-        'shipment_status' => 1,
+        'po_status' => 1,
         'order_status' => 0,
         'quotation_id' => null,
     ];

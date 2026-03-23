@@ -7,7 +7,7 @@ use App\Features\Order\Enums\OrderStatus;
 use App\Features\Order\Enums\PaymentCardType;
 use App\Features\Order\Enums\PaymentGateway;
 use App\Features\Order\Enums\PaymentStatus;
-use App\Features\Order\Enums\ShipmentStatus;
+use App\Features\Order\Enums\POStatus;
 use App\Features\Order\Enums\TrackingStatus;
 use App\Features\Order\Models\Order;
 use App\Features\Quotation\Models\Quotation;
@@ -82,8 +82,8 @@ class AdminDashboardService
                 SUM(CASE WHEN orders.invoice_status = ? THEN 1 ELSE 0 END) as totalInvoiceGeneratedOrders,
                 SUM(CASE WHEN orders.invoice_status = ? THEN 1 ELSE 0 END) as totalInvoiceSentOrders,
 
-                SUM(CASE WHEN orders.shipment_status = ? THEN 1 ELSE 0 END) as totalShipmentPOPendingOrders,
-                SUM(CASE WHEN orders.shipment_status = ? THEN 1 ELSE 0 END) as totalShipmentPOSentOrders,
+                SUM(CASE WHEN orders.po_status = ? THEN 1 ELSE 0 END) as totalPOPendingOrders,
+                SUM(CASE WHEN orders.po_status = ? THEN 1 ELSE 0 END) as totalPOSentOrders,
 
                 SUM(CASE WHEN orders.tracking_status = ? THEN 1 ELSE 0 END) as totalTrackingPendingOrders,
                 SUM(CASE WHEN orders.tracking_status = ? THEN 1 ELSE 0 END) as totalTrackingSentOrders,
@@ -91,13 +91,11 @@ class AdminDashboardService
                 SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalPendingOrders,
                 SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalEscalationOrders,
                 SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalCancelledOrders,
-                SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalRelocatePoSentOrders,
                 SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalPendingForRefundOrders,
                 SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalRefundedOrders,
                 SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalPendingPartShippedOrders,
                 SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalCompletedOrders,
                 SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalChargeBackOrders,
-                SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalYardRelocateOrders,
 
                 SUM(CASE WHEN quotations.quotation_status = 1 AND quotations.approval_by_id = ? THEN 1 ELSE 0 END) as totalApprovedByMeOrders,
                 SUM(CASE WHEN quotations.quotation_status = 2 AND quotations.approval_by_id = ? THEN 1 ELSE 0 END) as totalRejectedByMeOrders
@@ -119,8 +117,8 @@ class AdminDashboardService
                 InvoiceStatus::Generated->value(),
                 InvoiceStatus::Sent->value(),
 
-                ShipmentStatus::POPending->value(),
-                ShipmentStatus::POSent->value(),
+                POStatus::POPending->value(),
+                POStatus::POSent->value(),
 
                 TrackingStatus::Pending->value(),
                 TrackingStatus::Sent->value(),
@@ -128,13 +126,11 @@ class AdminDashboardService
                 OrderStatus::Pending->value(),
                 OrderStatus::Escalation->value(),
                 OrderStatus::Cancelled->value(),
-                OrderStatus::RelocatePoSent->value(),
                 OrderStatus::PendingForRefund->value(),
                 OrderStatus::Refunded->value(),
                 OrderStatus::PendingPartShipped->value(),
                 OrderStatus::Completed->value(),
                 OrderStatus::ChargeBack->value(),
-                OrderStatus::YardRelocate->value(),
 
                 Auth::guard(Guards::API->value)->id(),
                 Auth::guard(Guards::API->value)->id(),
@@ -182,20 +178,18 @@ class AdminDashboardService
             "totalInvoiceNotGeneratedOrders" => 0,
             "totalInvoiceGeneratedOrders" => 0,
             "totalInvoiceSentOrders" => 0,
-            "totalShipmentPOPendingOrders" => 0,
-            "totalShipmentPOSentOrders" => 0,
+            "totalPOPendingOrders" => 0,
+            "totalPOSentOrders" => 0,
             "totalTrackingPendingOrders" => 0,
             "totalTrackingSentOrders" => 0,
             "totalPendingOrders" => 0,
             "totalEscalationOrders" => 0,
             "totalCancelledOrders" => 0,
-            "totalRelocatePoSentOrders" => 0,
             "totalPendingForRefundOrders" => 0,
             "totalRefundedOrders" => 0,
             "totalPendingPartShippedOrders" => 0,
             "totalCompletedOrders" => 0,
             "totalChargeBackOrders" => 0,
-            "totalYardRelocateOrders" => 0,
             "totalApprovedByMeOrders" => 0,
             "totalRejectedByMeOrders" => 0
         ], $data);

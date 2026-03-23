@@ -22,6 +22,7 @@ import { useQuotationPublicForm } from "./useQuotationPublicForm";
 import CaptchaInput from "@/components/CaptchaInput";
 import { Controller } from "react-hook-form";
 import { PhoneInput } from "react-international-phone";
+import { countryData } from "@/utils/helper";
 
 export default function QuotationPublicForm() {
   const { form, loading, onSubmit, captchaRef } = useQuotationPublicForm();
@@ -89,6 +90,9 @@ export default function QuotationPublicForm() {
                     defaultCountry="us"
                     value={field.value}
                     disableFormatting={true}
+                    hideDropdown={true}
+                    preferredCountries={["us"]}
+                    countries={countryData}
                     onChange={(phoneNumber, meta) => {
                       const [countryCode, phone] = meta.inputValue.split(" ");
                       field.onChange(phoneNumber);
@@ -101,7 +105,7 @@ export default function QuotationPublicForm() {
               )}
             />
           </SimpleGrid>
-          <SimpleGrid cols={{ base: 1, sm: 2 }}>
+          <SimpleGrid cols={{ base: 1, sm: 3 }}>
             <Controller
               control={form.control}
               name="part_year"
@@ -111,6 +115,21 @@ export default function QuotationPublicForm() {
                   type="number"
                   placeholder="Part Year"
                   value={field.value ? field.value : undefined}
+                  onChange={field.onChange}
+                  error={fieldState.error?.message}
+                  withAsterisk
+                  mt="sm"
+                />
+              )}
+            />
+            <Controller
+              control={form.control}
+              name="part_make"
+              render={({ field, fieldState }) => (
+                <TextInput
+                  label="Part Make"
+                  placeholder="Part Make"
+                  value={field.value ? field.value : ""}
                   onChange={field.onChange}
                   error={fieldState.error?.message}
                   withAsterisk
@@ -137,11 +156,11 @@ export default function QuotationPublicForm() {
           <SimpleGrid cols={{ base: 1, sm: 2 }}>
             <Controller
               control={form.control}
-              name="part_make"
+              name="part_name"
               render={({ field, fieldState }) => (
                 <TextInput
-                  label="Part Make"
-                  placeholder="Part Make"
+                  label="Part Name"
+                  placeholder="Part Name"
                   value={field.value ? field.value : ""}
                   onChange={field.onChange}
                   error={fieldState.error?.message}
@@ -152,11 +171,11 @@ export default function QuotationPublicForm() {
             />
             <Controller
               control={form.control}
-              name="part_name"
+              name="part_number"
               render={({ field, fieldState }) => (
                 <TextInput
-                  label="Part Name"
-                  placeholder="Part Name"
+                  label="Part Number"
+                  placeholder="Part Number"
                   value={field.value ? field.value : ""}
                   onChange={field.onChange}
                   error={fieldState.error?.message}

@@ -32,6 +32,7 @@ class QuotationPublicCreateRequests extends InputRequest
             'part_model' => ['required', 'string', 'max:255'],
             'part_make' => ['required', 'string', 'max:255'],
             'part_name' => ['required', 'string', 'max:255'],
+            'part_number' => ['required', 'string', 'max:255'],
             'part_description' => ['required', 'string'],
             'captcha' => 'required|captcha'
         ];

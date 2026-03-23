@@ -10,8 +10,8 @@ const data = [
   { value: "2", label: "PO Sent" },
 ];
 
-const SelectOrderShipmentStatus = (props: PropType) => {
-  const { key = "filter[shipment_status]" } = props;
+const SelectOrderPOStatus = (props: PropType) => {
+  const { key = "filter[po_status]" } = props;
   const { paramValue, setParamValue } = useCustomQueryParam(key);
   return (
     <Select
@@ -20,7 +20,7 @@ const SelectOrderShipmentStatus = (props: PropType) => {
       value={paramValue}
       key={paramValue}
       onChange={(value) => setParamValue(value || "")}
-      placeholder={"Shipment Status"}
+      placeholder={"PO Status"}
       w="150px"
       clearable={true}
       allowDeselect={false}
@@ -28,4 +28,4 @@ const SelectOrderShipmentStatus = (props: PropType) => {
   );
 };
 
-export default SelectOrderShipmentStatus;
+export default SelectOrderPOStatus;

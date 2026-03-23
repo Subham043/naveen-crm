@@ -54,6 +54,10 @@ export const serviceTeamOrderSchema = yup
             .string()
             .typeError("Part Name must contain characters only")
             .required("Part Name is required"),
+        part_number: yup
+            .string()
+            .typeError("Part Number must contain characters only")
+            .required("Part Number is required"),
         part_description: yup
             .string()
             .typeError("Part Description must contain characters only")
@@ -121,15 +125,15 @@ export const serviceTeamOrderSchema = yup
             .typeError("Invoice Status must be a number")
             .oneOf([0, 1, 2], "Invoice Status must be 0 or 1 or 2")
             .required("Invoice Status is required"),
-        shipment_status: yup
+        po_status: yup
             .number()
-            .typeError("Shipment Status must be a number")
-            .oneOf([1, 2], "Shipment Status must be 1 or 2")
-            .required("Shipment Status is required"),
+            .typeError("PO Status must be a number")
+            .oneOf([1, 2], "PO Status must be 1 or 2")
+            .required("PO Status is required"),
         order_status: yup
             .number()
             .typeError("Order Status must be a number")
-            .oneOf([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], "Order Status must be 0 or 1 or 2 or 3 or 4 or 5 or 6 or 7 or 8 or 9")
+            .oneOf([0, 1, 2, 3, 4, 5, 6, 7], "Order Status must be 0 or 1 or 2 or 3 or 4 or 5 or 6 or 7")
             .required("Order Status is required"),
         yard_located: yup
             .number()

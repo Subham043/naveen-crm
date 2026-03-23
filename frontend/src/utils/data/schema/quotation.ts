@@ -55,6 +55,10 @@ export const quotationPublicCreateSchema = yup
             .string()
             .typeError("Part Name must contain characters only")
             .required("Part Name is required"),
+        part_number: yup
+            .string()
+            .typeError("Part Number must contain characters only")
+            .required("Part Number is required"),
         part_description: yup
             .string()
             .typeError("Part Description must contain characters only")
@@ -143,6 +147,10 @@ export const quotationUpdateSchema = yup
             .string()
             .typeError("Part Name must contain characters only")
             .required("Part Name is required"),
+        part_number: yup
+            .string()
+            .typeError("Part Number must contain characters only")
+            .required("Part Number is required"),
         part_description: yup
             .string()
             .typeError("Part Description must contain characters only")

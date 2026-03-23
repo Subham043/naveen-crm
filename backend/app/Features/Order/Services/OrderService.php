@@ -19,7 +19,7 @@ class OrderService extends AbstractService
 
     public function model(): Builder
     {
-        return Order::select('id', 'quotation_id', 'payment_status', 'payment_card_type', 'payment_gateway', 'transaction_id', 'yard_located', 'tracking_details', 'tracking_status', 'invoice_status', 'shipment_status', 'order_status', 'created_at', 'updated_at')
+        return Order::select('id', 'quotation_id', 'payment_status', 'payment_card_type', 'payment_gateway', 'transaction_id', 'yard_located', 'tracking_details', 'tracking_status', 'invoice_status', 'po_status', 'order_status', 'created_at', 'updated_at')
         ->with([
             'quotation' => function($query){
                 $query
@@ -31,7 +31,7 @@ class OrderService extends AbstractService
                         $query->select('id', 'name', 'email', 'phone');
                     },
                 ])
-                ->select('id', 'name', 'email', 'phone', 'country_code', 'billing_address', 'shipping_address', 'part_year', 'part_model', 'part_make', 'part_name', 'part_description', 'lead_source', 'sales_user_id', 'is_created_by_agent', 'assigned_at', 'sale_price', 'cost_price', 'shipping_cost', 'quotation_status', 'approval_by_id', 'approval_at', 'is_active', 'quotation_sent', 'created_at', 'updated_at');
+                ->select('id', 'name', 'email', 'phone', 'country_code', 'billing_address', 'shipping_address', 'part_year', 'part_model', 'part_make', 'part_name', 'part_number', 'part_description', 'lead_source', 'sales_user_id', 'is_created_by_agent', 'assigned_at', 'sale_price', 'cost_price', 'shipping_cost', 'quotation_status', 'approval_by_id', 'approval_at', 'is_active', 'quotation_sent', 'created_at', 'updated_at');
             },
             'yards' => function($query){
                 $query->select('id', 'yard', 'order_id', 'service_team_id', 'created_at', 'updated_at');
@@ -77,8 +77,8 @@ class OrderService extends AbstractService
                     AllowedFilter::callback('invoice_status', function (Builder $query, $value) {
                         $query->where('invoice_status', $value);
                     }),
-                    AllowedFilter::callback('shipment_status', function (Builder $query, $value) {
-                        $query->where('shipment_status', $value);
+                    AllowedFilter::callback('po_status', function (Builder $query, $value) {
+                        $query->where('po_status', $value);
                     }),
                     AllowedFilter::callback('order_status', function (Builder $query, $value) {
                         $query->where('order_status', $value);
@@ -148,6 +148,7 @@ class CommonFilter implements Filter
                 ->orWhere('part_make', 'LIKE', '%' . $value . '%')
                 ->orWhere('part_model', 'LIKE', '%' . $value . '%')
                 ->orWhere('part_name', 'LIKE', '%' . $value . '%')
+                ->orWhere('part_number', 'LIKE', '%' . $value . '%')
                 ->orWhereHas('salesUser', function($q) use($value){
                     $q->where('name', 'LIKE', '%' . $value . '%')
                     ->orWhere('email', 'LIKE', '%' . $value . '%')

@@ -37,20 +37,18 @@ class ServiceTeamDashboardCollection extends JsonResource
 			"totalInvoiceNotGeneratedOrders" => $this['totalInvoiceNotGeneratedOrders'],
 			"totalInvoiceGeneratedOrders" => $this['totalInvoiceGeneratedOrders'],
 			"totalInvoiceSentOrders" => $this['totalInvoiceSentOrders'],
-			"totalShipmentPOPendingOrders" => $this['totalShipmentPOPendingOrders'],
-			"totalShipmentPOSentOrders" => $this['totalShipmentPOSentOrders'],
+			"totalPOPendingOrders" => $this['totalPOPendingOrders'],
+			"totalPOSentOrders" => $this['totalPOSentOrders'],
 			"totalTrackingPendingOrders" => $this['totalTrackingPendingOrders'],
 			"totalTrackingSentOrders" => $this['totalTrackingSentOrders'],
 			"totalPendingOrders" => $this['totalPendingOrders'],
 			"totalEscalationOrders" => $this['totalEscalationOrders'],
 			"totalCancelledOrders" => $this['totalCancelledOrders'],
-			"totalRelocatePoSentOrders" => $this['totalRelocatePoSentOrders'],
 			"totalPendingForRefundOrders" => $this['totalPendingForRefundOrders'],
 			"totalRefundedOrders" => $this['totalRefundedOrders'],
 			"totalPendingPartShippedOrders" => $this['totalPendingPartShippedOrders'],
 			"totalCompletedOrders" => $this['totalCompletedOrders'],
 			"totalChargeBackOrders" => $this['totalChargeBackOrders'],
-			"totalYardRelocateOrders" => $this['totalYardRelocateOrders'],
 		];
 	}
 }

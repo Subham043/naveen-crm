@@ -26,6 +26,7 @@ const QuotationTableRow = memo(
     part_year,
     part_model,
     part_name,
+    part_number,
     part_make,
     lead_source_info,
     quotation_status,
@@ -86,9 +87,10 @@ const QuotationTableRow = memo(
           </Group>
         </Table.Td>
         <Table.Td>{part_year || "N/A"}</Table.Td>
-        <Table.Td>{part_model || "N/A"}</Table.Td>
         <Table.Td>{part_make || "N/A"}</Table.Td>
+        <Table.Td>{part_model || "N/A"}</Table.Td>
         <Table.Td>{part_name || "N/A"}</Table.Td>
+        <Table.Td>{part_number || "N/A"}</Table.Td>
         <Table.Td>{lead_source_info}</Table.Td>
         <Table.Td>
           {sales_user_info ? (
@@ -197,10 +199,11 @@ function QuotationTable({ loading, quotations, onEdit }: QuotationTableProps) {
           <Table.Tr bg={"var(--mantine-color-blue-light)"}>
             <Table.Th>ID</Table.Th>
             <Table.Th>CUSTOMER</Table.Th>
-            <Table.Th>PART YEAR</Table.Th>
-            <Table.Th>PART MODEL</Table.Th>
-            <Table.Th>PART MAKE</Table.Th>
-            <Table.Th>PART NAME</Table.Th>
+            <Table.Th>YEAR</Table.Th>
+            <Table.Th>MAKE</Table.Th>
+            <Table.Th>MODEL</Table.Th>
+            <Table.Th>NAME</Table.Th>
+            <Table.Th>NUMBER</Table.Th>
             <Table.Th>SOURCE</Table.Th>
             <Table.Th>AGENT</Table.Th>
             <Table.Th>SALE PRICE</Table.Th>
@@ -211,7 +214,7 @@ function QuotationTable({ loading, quotations, onEdit }: QuotationTableProps) {
         </Table.Thead>
         <Table.Tbody>
           {loading ? (
-            <TableRowLoading colSpan={12} />
+            <TableRowLoading colSpan={13} />
           ) : quotations.length > 0 ? (
             quotations.map((item) => (
               <QuotationTableRow
@@ -225,6 +228,7 @@ function QuotationTable({ loading, quotations, onEdit }: QuotationTableProps) {
                 part_year={item.part_year}
                 part_model={item.part_model}
                 part_name={item.part_name}
+                part_number={item.part_number}
                 part_description={item.part_description}
                 billing_address={item.billing_address}
                 lead_source={item.lead_source}
@@ -251,7 +255,7 @@ function QuotationTable({ loading, quotations, onEdit }: QuotationTableProps) {
               />
             ))
           ) : (
-            <TableRowNotFound colSpan={12} />
+            <TableRowNotFound colSpan={13} />
           )}
         </Table.Tbody>
       </Table>

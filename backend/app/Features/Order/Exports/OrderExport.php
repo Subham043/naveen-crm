@@ -10,7 +10,7 @@ use App\Features\Order\Enums\PaymentStatus;
 use App\Features\Order\Enums\PaymentCardType;
 use App\Features\Order\Enums\PaymentGateway;
 use App\Features\Order\Enums\TrackingStatus;
-use App\Features\Order\Enums\ShipmentStatus;
+use App\Features\Order\Enums\POStatus;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -39,9 +39,10 @@ class OrderExport implements FromQuery, WithHeadings, WithMapping
 			$data->quotation->country_code,
 			$data->quotation->phone,
 			$data->quotation->part_year,
-			$data->quotation->part_model,
 			$data->quotation->part_make,
+			$data->quotation->part_model,
 			$data->quotation->part_name,
+			$data->quotation->part_number,
 			$data->quotation->part_description,
 			$data->quotation->billing_address,
 			LeadSource::getValue($data->quotation->lead_source),
@@ -62,7 +63,7 @@ class OrderExport implements FromQuery, WithHeadings, WithMapping
 			$data->tracking_details ?? 'N/A',
 			TrackingStatus::getValue($data->tracking_status),
 			InvoiceStatus::getValue($data->invoice_status),
-			ShipmentStatus::getValue($data->shipment_status),
+			POStatus::getValue($data->po_status),
 			$data->yard_located ? 'Yes' : 'No',
 			OrderStatus::getValue($data->order_status),
 			$data->quotation->approval_by_id,
@@ -83,9 +84,10 @@ class OrderExport implements FromQuery, WithHeadings, WithMapping
 			'Country Code',
 			'Phone',
 			'Part Year',
-			'Part Model',
 			'Part Make',
+			'Part Model',
 			'Part Name',
+			'Part Number',
 			'Part Description',
 			'Billing Address',
 			'Lead Source',
@@ -106,7 +108,7 @@ class OrderExport implements FromQuery, WithHeadings, WithMapping
 			'Tracking Details',
 			'Tracking Status',
 			'Invoice Status',
-			'Shipment Status',
+			'PO Status',
 			'Yard Located',
 			'Order Status',
 			'Approval By Id',

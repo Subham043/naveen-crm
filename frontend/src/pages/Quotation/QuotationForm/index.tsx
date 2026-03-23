@@ -15,6 +15,7 @@ import {
 import type { ExtendedModalProps } from "@/utils/types";
 import { useQuotationForm } from "./useQuotationForm";
 import { PhoneInput } from "react-international-phone";
+import { countryData } from "@/utils/helper";
 
 type Props = {
   modal: ExtendedModalProps<{ id: undefined }, { id: number }>;
@@ -90,6 +91,9 @@ export default function QuotationForm({ modal, handleModalClose }: Props) {
                       defaultCountry="us"
                       value={field.value}
                       disableFormatting={true}
+                      hideDropdown={true}
+                      preferredCountries={["us"]}
+                      countries={countryData}
                       onChange={(phoneNumber, meta) => {
                         const [countryCode, phone] = meta.inputValue.split(" ");
                         field.onChange(phoneNumber);
@@ -104,28 +108,15 @@ export default function QuotationForm({ modal, handleModalClose }: Props) {
             </SimpleGrid>
           </Fieldset>
           <Fieldset legend="Part Information" variant="filled" mt="md">
-            <SimpleGrid cols={{ base: 1, md: 2, lg: 4 }}>
+            <SimpleGrid cols={{ base: 1, md: 3, lg: 3 }}>
               <Controller
                 control={form.control}
                 name="part_year"
                 render={({ field, fieldState }) => (
                   <TextInput
-                    label="Part Year"
+                    label="Year"
                     type="number"
                     value={field.value ? field.value : undefined}
-                    onChange={field.onChange}
-                    error={fieldState.error?.message}
-                    withAsterisk
-                  />
-                )}
-              />
-              <Controller
-                control={form.control}
-                name="part_model"
-                render={({ field, fieldState }) => (
-                  <TextInput
-                    label="Part Model"
-                    value={field.value ? field.value : ""}
                     onChange={field.onChange}
                     error={fieldState.error?.message}
                     withAsterisk
@@ -137,7 +128,7 @@ export default function QuotationForm({ modal, handleModalClose }: Props) {
                 name="part_make"
                 render={({ field, fieldState }) => (
                   <TextInput
-                    label="Part Make"
+                    label="Make"
                     value={field.value ? field.value : ""}
                     onChange={field.onChange}
                     error={fieldState.error?.message}
@@ -147,10 +138,38 @@ export default function QuotationForm({ modal, handleModalClose }: Props) {
               />
               <Controller
                 control={form.control}
+                name="part_model"
+                render={({ field, fieldState }) => (
+                  <TextInput
+                    label="Model"
+                    value={field.value ? field.value : ""}
+                    onChange={field.onChange}
+                    error={fieldState.error?.message}
+                    withAsterisk
+                  />
+                )}
+              />
+            </SimpleGrid>
+            <SimpleGrid cols={{ base: 1, md: 2, lg: 2 }} mt="md">
+              <Controller
+                control={form.control}
                 name="part_name"
                 render={({ field, fieldState }) => (
                   <TextInput
-                    label="Part Name"
+                    label="Name"
+                    value={field.value ? field.value : ""}
+                    onChange={field.onChange}
+                    error={fieldState.error?.message}
+                    withAsterisk
+                  />
+                )}
+              />
+              <Controller
+                control={form.control}
+                name="part_number"
+                render={({ field, fieldState }) => (
+                  <TextInput
+                    label="Number"
                     value={field.value ? field.value : ""}
                     onChange={field.onChange}
                     error={fieldState.error?.message}
@@ -164,7 +183,7 @@ export default function QuotationForm({ modal, handleModalClose }: Props) {
               name="part_description"
               render={({ field, fieldState }) => (
                 <Textarea
-                  label="Part Description"
+                  label="Description"
                   value={field.value ? field.value : ""}
                   onChange={field.onChange}
                   error={fieldState.error?.message}

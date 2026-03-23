@@ -52,6 +52,7 @@ export type QuotationType = {
   part_model?: string;
   part_make?: string;
   part_name?: string;
+  part_number?: string;
   part_description?: string;
   lead_source: number;
   lead_source_info?: string;
@@ -104,8 +105,8 @@ export type OrderType = {
   tracking_status_info?: string;
   invoice_status: number;
   invoice_status_info?: string;
-  shipment_status: number;
-  shipment_status_info?: string;
+  po_status: number;
+  po_status_info?: string;
   order_status: number;
   order_status_info?: string;
   created_at: string;

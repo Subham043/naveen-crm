@@ -93,6 +93,7 @@ export default function QuotationView() {
         part_model={data.part_model}
         part_name={data.part_name}
         part_make={data.part_make}
+        part_number={data.part_number}
         part_description={data.part_description}
         quotation_sent={data.quotation_sent}
       />

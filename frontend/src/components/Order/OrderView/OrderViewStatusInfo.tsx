@@ -3,20 +3,18 @@ import type { OrderType } from "@/utils/types";
 import OrderInvoiceStatus, {
   type InvoiceStatus,
 } from "@/components/Order/OrderInvoiceStatus";
-import OrderShipmentStatus, {
-  type ShipmentStatus,
-} from "@/components/Order/OrderShipmentStatus";
+import OrderPOStatus, { type POStatus } from "@/components/Order/OrderPOStatus";
 import OrderStatus, { type OrderStatusType } from "../OrderStatus";
 
 type Props = {
   invoice_status: OrderType["invoice_status"];
-  shipment_status: OrderType["shipment_status"];
+  po_status: OrderType["po_status"];
   order_status: OrderType["order_status"];
 };
 
 function OrderViewStatusInfo({
   invoice_status,
-  shipment_status,
+  po_status,
   order_status,
 }: Props) {
   return (
@@ -37,11 +35,9 @@ function OrderViewStatusInfo({
           </Box>
           <Box>
             <Text fw={600} c="blue">
-              Shipping Status
+              PO Status
             </Text>
-            <OrderShipmentStatus
-              shipment_status={shipment_status as ShipmentStatus}
-            />
+            <OrderPOStatus po_status={po_status as POStatus} />
           </Box>
           <Box>
             <Text fw={600} c="blue">

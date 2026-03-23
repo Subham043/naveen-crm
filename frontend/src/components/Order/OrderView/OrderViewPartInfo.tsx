@@ -17,7 +17,7 @@ function OrderViewPartInfo({ quotation_info }: Props) {
         <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }}>
           <Box>
             <Text fw={600} c="blue">
-              Part Year
+              Year
             </Text>
             <Text size="sm" c="dimmed">
               {quotation_info.part_year || "N/A"}
@@ -25,15 +25,7 @@ function OrderViewPartInfo({ quotation_info }: Props) {
           </Box>
           <Box>
             <Text fw={600} c="blue">
-              Part Model
-            </Text>
-            <Text size="sm" c="dimmed">
-              {quotation_info.part_model || "N/A"}
-            </Text>
-          </Box>
-          <Box>
-            <Text fw={600} c="blue">
-              Part Make
+              Make
             </Text>
             <Text size="sm" c="dimmed">
               {quotation_info.part_make || "N/A"}
@@ -41,7 +33,15 @@ function OrderViewPartInfo({ quotation_info }: Props) {
           </Box>
           <Box>
             <Text fw={600} c="blue">
-              Part Name
+              Model
+            </Text>
+            <Text size="sm" c="dimmed">
+              {quotation_info.part_model || "N/A"}
+            </Text>
+          </Box>
+          <Box>
+            <Text fw={600} c="blue">
+              Name
             </Text>
             <Text size="sm" c="dimmed">
               {quotation_info.part_name || "N/A"}
@@ -49,7 +49,15 @@ function OrderViewPartInfo({ quotation_info }: Props) {
           </Box>
           <Box>
             <Text fw={600} c="blue">
-              Part Description
+              Number
+            </Text>
+            <Text size="sm" c="dimmed">
+              {quotation_info.part_number || "N/A"}
+            </Text>
+          </Box>
+          <Box>
+            <Text fw={600} c="blue">
+              Description
             </Text>
             <Text size="sm" c="dimmed">
               {quotation_info.part_description || "N/A"}

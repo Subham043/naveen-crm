@@ -6,6 +6,7 @@ type Props = {
   part_model: QuotationType["part_model"];
   part_make: QuotationType["part_make"];
   part_name: QuotationType["part_name"];
+  part_number: QuotationType["part_number"];
   part_description: QuotationType["part_description"];
   quotation_sent: QuotationType["quotation_sent"];
 };
@@ -15,6 +16,7 @@ function QuotationViewPartInfo({
   part_model,
   part_make,
   part_name,
+  part_number,
   part_description,
   quotation_sent,
 }: Props) {
@@ -28,7 +30,7 @@ function QuotationViewPartInfo({
         <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }}>
           <Box>
             <Text fw={600} c="blue">
-              Part Year
+              Year
             </Text>
             <Text size="sm" c="dimmed">
               {part_year || "N/A"}
@@ -36,15 +38,7 @@ function QuotationViewPartInfo({
           </Box>
           <Box>
             <Text fw={600} c="blue">
-              Part Model
-            </Text>
-            <Text size="sm" c="dimmed">
-              {part_model || "N/A"}
-            </Text>
-          </Box>
-          <Box>
-            <Text fw={600} c="blue">
-              Part Make
+              Make
             </Text>
             <Text size="sm" c="dimmed">
               {part_make || "N/A"}
@@ -52,7 +46,15 @@ function QuotationViewPartInfo({
           </Box>
           <Box>
             <Text fw={600} c="blue">
-              Part Name
+              Model
+            </Text>
+            <Text size="sm" c="dimmed">
+              {part_model || "N/A"}
+            </Text>
+          </Box>
+          <Box>
+            <Text fw={600} c="blue">
+              Name
             </Text>
             <Text size="sm" c="dimmed">
               {part_name || "N/A"}
@@ -60,7 +62,15 @@ function QuotationViewPartInfo({
           </Box>
           <Box>
             <Text fw={600} c="blue">
-              Part Description
+              Number
+            </Text>
+            <Text size="sm" c="dimmed">
+              {part_number || "N/A"}
+            </Text>
+          </Box>
+          <Box>
+            <Text fw={600} c="blue">
+              Description
             </Text>
             <Text size="sm" c="dimmed">
               {part_description || "N/A"}

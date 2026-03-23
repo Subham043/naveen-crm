@@ -107,6 +107,14 @@ export const salesQuotationSchema = yup
                 then: (schema) => schema.required("Part Name is required"),
                 otherwise: (schema) => schema.optional(),
             }),
+        part_number: yup
+            .string()
+            .typeError("Part Number must contain characters only")
+            .when("is_active", {
+                is: (val: number | undefined) => val === 1,
+                then: (schema) => schema.required("Part Number is required"),
+                otherwise: (schema) => schema.optional(),
+            }),
         part_description: yup
             .string()
             .typeError("Part Description must contain characters only")

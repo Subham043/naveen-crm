@@ -1,6 +1,6 @@
 import { Badge } from "@mantine/core";
 
-export type OrderStatusType = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
+export type OrderStatusType = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
 interface OrderStatusProps {
   order_status: OrderStatusType;
@@ -10,13 +10,11 @@ const orderStatusMap = {
   0: { label: "Pending", color: "yellow" },
   1: { label: "Escalation", color: "orange" },
   2: { label: "Cancelled", color: "red" },
-  3: { label: "Relocate Po Sent", color: "blue" },
-  4: { label: "Pending For Refund", color: "orange" },
-  5: { label: "Refunded", color: "indigo" },
-  6: { label: "Pending Part Shipped", color: "cyan" },
-  7: { label: "Completed", color: "green" },
-  8: { label: "ChargeBack", color: "red" },
-  9: { label: "Yard Relocate", color: "teal" },
+  3: { label: "Pending For Refund", color: "orange" },
+  4: { label: "Refunded", color: "indigo" },
+  5: { label: "Pending Part Shipped", color: "cyan" },
+  6: { label: "Completed", color: "green" },
+  7: { label: "ChargeBack", color: "red" },
 };
 
 function OrderStatus({ order_status }: OrderStatusProps) {

@@ -24,7 +24,7 @@ return new class extends Migration
             $table->text('tracking_details')->nullable();
             $table->tinyInteger('tracking_status')->nullable()->default(0);
             $table->tinyInteger('invoice_status')->nullable()->default(0);
-            $table->tinyInteger('shipment_status')->nullable()->default(1);
+            $table->tinyInteger('po_status')->nullable()->default(1);
             //order status
             $table->tinyInteger('order_status')->nullable()->default(0);
             $table->foreignId('quotation_id')->unique()->nullable()->index();

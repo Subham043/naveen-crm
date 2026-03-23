@@ -37,6 +37,7 @@ class QuotationSaveRequests extends InputRequest
             'part_model' => ['required', 'string', 'max:255'],
             'part_make' => ['required', 'string', 'max:255'],
             'part_name' => ['required', 'string', 'max:255'],
+            'part_number' => ['required', 'string', 'max:255'],
             'part_description' => ['required', 'string'],
             'sale_price' => ['required', 'numeric'],
             'cost_price' => ['required', 'numeric'],

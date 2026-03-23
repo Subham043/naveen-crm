@@ -76,9 +76,10 @@ const OrderTableRow = memo(
           )}
         </Table.Td>
         <Table.Td>{quotation_info?.part_year || "N/A"}</Table.Td>
-        <Table.Td>{quotation_info?.part_model || "N/A"}</Table.Td>
         <Table.Td>{quotation_info?.part_make || "N/A"}</Table.Td>
+        <Table.Td>{quotation_info?.part_model || "N/A"}</Table.Td>
         <Table.Td>{quotation_info?.part_name || "N/A"}</Table.Td>
+        <Table.Td>{quotation_info?.part_number || "N/A"}</Table.Td>
         <Table.Td>{quotation_info?.lead_source_info}</Table.Td>
         <Table.Td>
           {quotation_info?.sales_user_info ? (
@@ -167,10 +168,11 @@ function OrderTable({ loading, orders, onEdit }: OrderTableProps) {
           <Table.Tr bg={"var(--mantine-color-blue-light)"}>
             <Table.Th>ID</Table.Th>
             <Table.Th>CUSTOMER</Table.Th>
-            <Table.Th>PART YEAR</Table.Th>
-            <Table.Th>PART MODEL</Table.Th>
-            <Table.Th>PART MAKE</Table.Th>
-            <Table.Th>PART NAME</Table.Th>
+            <Table.Th>YEAR</Table.Th>
+            <Table.Th>MAKE</Table.Th>
+            <Table.Th>MODEL</Table.Th>
+            <Table.Th>NAME</Table.Th>
+            <Table.Th>NUMBER</Table.Th>
             <Table.Th>SOURCE</Table.Th>
             <Table.Th>AGENT</Table.Th>
             <Table.Th>SALE PRICE</Table.Th>
@@ -181,7 +183,7 @@ function OrderTable({ loading, orders, onEdit }: OrderTableProps) {
         </Table.Thead>
         <Table.Tbody>
           {loading ? (
-            <TableRowLoading colSpan={11} />
+            <TableRowLoading colSpan={12} />
           ) : orders.length > 0 ? (
             orders.map((item) => (
               <OrderTableRow
@@ -202,8 +204,8 @@ function OrderTable({ loading, orders, onEdit }: OrderTableProps) {
                 tracking_status_info={item.tracking_status_info}
                 invoice_status={item.invoice_status}
                 invoice_status_info={item.invoice_status_info}
-                shipment_status={item.shipment_status}
-                shipment_status_info={item.shipment_status_info}
+                po_status={item.po_status}
+                po_status_info={item.po_status_info}
                 order_status={item.order_status}
                 order_status_info={item.order_status_info}
                 created_at={item.created_at}
@@ -213,7 +215,7 @@ function OrderTable({ loading, orders, onEdit }: OrderTableProps) {
               />
             ))
           ) : (
-            <TableRowNotFound colSpan={11} />
+            <TableRowNotFound colSpan={12} />
           )}
         </Table.Tbody>
       </Table>

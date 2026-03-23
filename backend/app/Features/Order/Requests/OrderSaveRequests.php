@@ -7,7 +7,7 @@ use App\Features\Order\Enums\OrderStatus;
 use App\Features\Order\Enums\PaymentCardType;
 use App\Features\Order\Enums\PaymentGateway;
 use App\Features\Order\Enums\PaymentStatus;
-use App\Features\Order\Enums\ShipmentStatus;
+use App\Features\Order\Enums\POStatus;
 use App\Features\Order\Enums\TrackingStatus;
 use App\Http\Enums\Guards;
 use App\Http\Requests\InputRequest;
@@ -45,6 +45,7 @@ class OrderSaveRequests extends InputRequest
             'part_model' => ['required', 'string', 'max:255'],
             'part_make' => ['required', 'string', 'max:255'],
             'part_name' => ['required', 'string', 'max:255'],
+            'part_number' => ['required', 'string', 'max:255'],
             'part_description' => ['required', 'string'],
             'sale_price' => 'required|numeric',
             'cost_price' => 'required|numeric',
@@ -60,7 +61,7 @@ class OrderSaveRequests extends InputRequest
             'payment_gateway' => ['required_if:payment_status,1', 'required_if:payment_status,2', 'numeric', new Enum(PaymentGateway::class)],
             'transaction_id' => ['required_if:payment_status,1', 'required_if:payment_status,2', 'string'],
             'invoice_status' => ['required', 'numeric', new Enum(InvoiceStatus::class)],
-            'shipment_status' => ['required', 'numeric', new Enum(ShipmentStatus::class)],
+            'po_status' => ['required', 'numeric', new Enum(POStatus::class)],
             'order_status' => ['required', 'numeric', new Enum(OrderStatus::class)],
         ];
     }

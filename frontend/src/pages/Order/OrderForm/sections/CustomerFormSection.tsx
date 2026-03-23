@@ -1,4 +1,5 @@
 import type { OrderUpdateFormValuesType } from "@/utils/data/schema/order";
+import { countryData } from "@/utils/helper";
 import { Fieldset, Input, SimpleGrid, TextInput } from "@mantine/core";
 import { memo } from "react";
 import { Controller, useFormContext } from "react-hook-form";
@@ -51,6 +52,9 @@ function CustomerFormSection() {
                 defaultCountry="us"
                 value={field.value}
                 disableFormatting={true}
+                hideDropdown={true}
+                preferredCountries={["us"]}
+                countries={countryData}
                 onChange={(phoneNumber, meta) => {
                   const [countryCode, phone] = meta.inputValue.split(" ");
                   field.onChange(phoneNumber);
