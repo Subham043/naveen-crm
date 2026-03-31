@@ -32,7 +32,7 @@ class ServiceTeamOrderService extends AbstractService
                         $query->select('id', 'name', 'email', 'phone');
                     },
                 ])
-                ->select('id', 'name', 'email', 'phone', 'country_code', 'billing_address', 'shipping_address', 'part_year', 'part_model', 'part_make', 'part_name', 'part_number', 'part_description', 'lead_source', 'sales_user_id', 'is_created_by_agent', 'assigned_at', 'sale_price', 'cost_price', 'shipping_cost', 'quotation_status', 'approval_by_id', 'approval_at', 'is_active', 'quotation_sent', 'created_at', 'updated_at');
+                ->select('id', 'name', 'email', 'phone', 'country_code', 'billing_address', 'shipping_address', 'part_year', 'part_model', 'part_make', 'part_name', 'part_number', 'part_warranty', 'part_vin', 'part_description', 'lead_source', 'sales_user_id', 'is_created_by_agent', 'assigned_at', 'sale_price', 'cost_price', 'shipping_cost', 'quotation_status', 'approval_by_id', 'approval_at', 'is_active', 'quotation_sent', 'created_at', 'updated_at');
             },
             'yards' => function($query){
                 $query->select('id', 'yard', 'order_id', 'service_team_id', 'created_at', 'updated_at');

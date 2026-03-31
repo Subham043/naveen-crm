@@ -32,28 +32,7 @@ function PaymentFormSection() {
         )}
       />
       {paymentStatus !== 0 && (
-        <SimpleGrid cols={{ base: 1, md: 2, lg: 3 }} mt="md">
-          <Controller
-            control={control}
-            name="payment_card_type"
-            render={({ field, fieldState }) => (
-              <Select
-                label="Payment Card Type"
-                value={field.value !== undefined ? field.value.toString() : ""}
-                onChange={(val) =>
-                  field.onChange(val ? Number(val) : undefined)
-                }
-                error={fieldState.error?.message}
-                withAsterisk
-                data={[
-                  { value: "1", label: "Mastercard" },
-                  { value: "2", label: "Visa" },
-                  { value: "3", label: "Amex" },
-                  { value: "4", label: "Zelle" },
-                ]}
-              />
-            )}
-          />
+        <SimpleGrid cols={{ base: 1, md: 2, lg: 2 }} mt="md">
           <Controller
             control={control}
             name="payment_gateway"

@@ -9,7 +9,7 @@ const ServiceTeamPerformanceReportExportBtn = () => {
   const onExportHandler = useCallback(async () => {
     await exportExcel(
       api_routes.serviceTeam.reports.servicePerformance.excel,
-      "sales_performance_report.xlsx",
+      "service_team_performance_report.xlsx",
     );
   }, [exportExcel]);
 

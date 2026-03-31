@@ -47,6 +47,8 @@ class ServiceTeamOrderSaveRequests extends InputRequest
             'part_name' => ['required', 'string', 'max:255'],
             'part_number' => ['required', 'string', 'max:255'],
             'part_description' => ['required', 'string'],
+            'part_warranty' => ['required', 'numeric', 'min:0', 'max:12'],
+            'part_vin' => ['nullable', 'string', 'max:255'],
             'sale_price' => 'required|numeric',
             'cost_price' => 'required|numeric',
             'shipping_cost' => 'required|numeric',
@@ -56,9 +58,9 @@ class ServiceTeamOrderSaveRequests extends InputRequest
             'yards' => [Rule::excludeIf(fn() => $this->yard_located == 0), 'array', 'min:1'],
             'yards.*.yard' => [Rule::excludeIf(fn() => $this->yard_located == 0), 'string'],
             'yards.*.id' => ['nullable', 'numeric', 'exists:yards,id'],
+            'payment_gateway' => ['nullable', 'numeric', new Enum(PaymentGateway::class)],
             'payment_status' => ['required', 'numeric', new Enum(PaymentStatus::class)],
             'payment_card_type' => ['required_if:payment_status,1', 'required_if:payment_status,2', 'numeric', new Enum(PaymentCardType::class)],
-            'payment_gateway' => ['required_if:payment_status,1', 'required_if:payment_status,2', 'numeric', new Enum(PaymentGateway::class)],
             'transaction_id' => ['required_if:payment_status,1', 'required_if:payment_status,2', 'string'],
             'invoice_status' => ['required', 'numeric', new Enum(InvoiceStatus::class)],
             'po_status' => ['required', 'numeric', new Enum(POStatus::class)],
@@ -66,6 +68,26 @@ class ServiceTeamOrderSaveRequests extends InputRequest
             'comment' => 'required|string',
             'additional_comment_required' => 'required|boolean',
             'additional_comment' => ['required_if:additional_comment_required,1', 'string'],
+        ];
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function attributes(): array
+    {
+        return [
+            'part_name' => 'part',
+            'part_number' => 'part#',
+            'part_description' => 'description',
+            'part_year' => 'year',
+            'part_make' => 'make',
+            'part_model' => 'model',
+            'part_vin' => 'vin',
+            'part_warranty' => 'warranty',
+            'payment_gateway' => 'yard payment details',
         ];
     }
 

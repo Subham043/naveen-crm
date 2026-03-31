@@ -157,13 +157,13 @@ export default function SalesQuotationForm({ modal, handleModalClose }: Props) {
                 )}
               />
             </SimpleGrid>
-            <SimpleGrid cols={{ base: 1, md: 2, lg: 2 }} mt="md">
+            <SimpleGrid cols={{ base: 1, md: 3, lg: 3 }} mt="md">
               <Controller
                 control={form.control}
                 name="part_name"
                 render={({ field, fieldState }) => (
                   <TextInput
-                    label="Name"
+                    label="Part"
                     value={field.value ? field.value : ""}
                     onChange={field.onChange}
                     error={fieldState.error?.message}
@@ -176,8 +176,25 @@ export default function SalesQuotationForm({ modal, handleModalClose }: Props) {
                 name="part_number"
                 render={({ field, fieldState }) => (
                   <TextInput
-                    label="Number"
+                    label="Part#"
                     value={field.value ? field.value : ""}
+                    onChange={field.onChange}
+                    error={fieldState.error?.message}
+                    withAsterisk={isActive === 1}
+                  />
+                )}
+              />
+              <Controller
+                control={form.control}
+                name="part_warranty"
+                render={({ field, fieldState }) => (
+                  <Select
+                    label="Warranty (In Months)"
+                    data={Array.from({ length: 12 }, (_, i) => ({
+                      value: (i + 1).toString(),
+                      label: (i + 1).toString(),
+                    }))}
+                    value={field.value ? field.value.toString() : undefined}
                     onChange={field.onChange}
                     error={fieldState.error?.message}
                     withAsterisk={isActive === 1}

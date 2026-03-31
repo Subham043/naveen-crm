@@ -1,14 +1,16 @@
 import { Box, Divider, Paper, SimpleGrid, Text, Title } from "@mantine/core";
 import type { OrderType } from "@/utils/types";
+import OrderPaymentCardType, {
+  type PaymentCardType,
+} from "../OrderPaymentCardType";
 
 type Props = {
-  yard_located: OrderType["yard_located"];
   yards: OrderType["yards"];
+  payment_card_type: OrderType["payment_card_type"];
 };
 
-function OrderViewYardInfo({ yard_located, yards }: Props) {
-  if (!yard_located || yards.length === 0) return null;
-
+function OrderViewYardInfo({ yards, payment_card_type }: Props) {
+  if (payment_card_type === null && yards.length === 0) return null;
   return (
     <Paper shadow="xs" mb="lg" withBorder>
       <Box p="sm" pos="relative">
@@ -17,6 +19,16 @@ function OrderViewYardInfo({ yard_located, yards }: Props) {
       <Divider />
       <Box p="sm">
         <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }}>
+          <Box>
+            <Text fw={600} c="blue">
+              Yard Payment Details
+            </Text>
+            <Text size="sm" c="dimmed">
+              <OrderPaymentCardType
+                payment_card_type={payment_card_type as PaymentCardType}
+              />
+            </Text>
+          </Box>
           {yards.map((yard, index) => (
             <Box key={yard.id}>
               <Text fw={600} c="blue">

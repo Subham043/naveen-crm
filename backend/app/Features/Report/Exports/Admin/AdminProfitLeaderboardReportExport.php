@@ -24,7 +24,6 @@ class AdminProfitLeaderboardReportExport implements FromQuery, WithHeadings, Wit
 	public function map($data): array
 	{
 		return [
-			$data->period,
 			$data->salesUser->name,
 			$data->salesUser->email,
 			$data->salesUser->phone,
@@ -36,7 +35,6 @@ class AdminProfitLeaderboardReportExport implements FromQuery, WithHeadings, Wit
 	public function headings(): array
 	{
 		return [
-			'Period',
 			'Sales User Name',
 			'Sales User Email',
 			'Sales User Phone',

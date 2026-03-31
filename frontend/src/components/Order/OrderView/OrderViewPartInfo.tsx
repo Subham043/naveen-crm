@@ -41,7 +41,7 @@ function OrderViewPartInfo({ quotation_info }: Props) {
           </Box>
           <Box>
             <Text fw={600} c="blue">
-              Name
+              Part
             </Text>
             <Text size="sm" c="dimmed">
               {quotation_info.part_name || "N/A"}
@@ -49,10 +49,26 @@ function OrderViewPartInfo({ quotation_info }: Props) {
           </Box>
           <Box>
             <Text fw={600} c="blue">
-              Number
+              Part#
             </Text>
             <Text size="sm" c="dimmed">
               {quotation_info.part_number || "N/A"}
+            </Text>
+          </Box>
+          <Box>
+            <Text fw={600} c="blue">
+              Warranty (In Months)
+            </Text>
+            <Text size="sm" c="dimmed">
+              {quotation_info.part_warranty || "N/A"}
+            </Text>
+          </Box>
+          <Box>
+            <Text fw={600} c="blue">
+              Vin
+            </Text>
+            <Text size="sm" c="dimmed">
+              {quotation_info.part_vin || "N/A"}
             </Text>
           </Box>
           <Box>

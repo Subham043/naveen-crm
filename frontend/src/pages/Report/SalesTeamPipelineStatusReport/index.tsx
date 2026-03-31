@@ -21,7 +21,7 @@ export default function SalesTeamPipelineStatusReport() {
             <Title order={4}>Pipeline Status Report</Title>
             <PermittedLayout
               outletType="children"
-              allowedRoles={["Super-Admin"]}
+              allowedRoles={["Sales-Team"]}
             >
               <Group gap="xs" justify="flex-end" align="center">
                 <SalesTeamPipelineStatusReportExportBtn />

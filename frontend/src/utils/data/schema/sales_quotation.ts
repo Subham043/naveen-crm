@@ -101,18 +101,28 @@ export const salesQuotationSchema = yup
             }),
         part_name: yup
             .string()
-            .typeError("Part Name must contain characters only")
+            .typeError("Part must contain characters only")
             .when("is_active", {
                 is: (val: number | undefined) => val === 1,
-                then: (schema) => schema.required("Part Name is required"),
+                then: (schema) => schema.required("Part is required"),
                 otherwise: (schema) => schema.optional(),
             }),
         part_number: yup
             .string()
-            .typeError("Part Number must contain characters only")
+            .typeError("Part# must contain characters only")
             .when("is_active", {
                 is: (val: number | undefined) => val === 1,
-                then: (schema) => schema.required("Part Number is required"),
+                then: (schema) => schema.required("Part# is required"),
+                otherwise: (schema) => schema.optional(),
+            }),
+        part_warranty: yup
+            .number()
+            .typeError("Part Warranty must be a number")
+            .min(0, "Part Warranty must be greater than 0")
+            .max(12, "Part Warranty must be less than 12")
+            .when("is_active", {
+                is: (val: number | undefined) => val === 1,
+                then: (schema) => schema.required("Part Warranty is required"),
                 otherwise: (schema) => schema.optional(),
             }),
         part_description: yup

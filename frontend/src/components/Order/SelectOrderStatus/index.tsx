@@ -11,7 +11,7 @@ const data = [
   { value: "2", label: "Cancelled" },
   { value: "3", label: "Pending For Refund" },
   { value: "4", label: "Refunded" },
-  { value: "5", label: "Pending Part Shipped" },
+  { value: "5", label: "Part Shipped" },
   { value: "6", label: "Completed" },
   { value: "7", label: "ChargeBack" },
 ];

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->tinyInteger('payment_gateway')->nullable()->default(null);
             $table->string('transaction_id')->nullable();
             //yard info
-            $table->boolean('yard_located')->default(0);
+            $table->tinyInteger('yard_located')->default(0);
             //logistic info
             $table->text('tracking_details')->nullable();
             $table->tinyInteger('tracking_status')->nullable()->default(0);

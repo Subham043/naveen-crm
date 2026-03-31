@@ -21,7 +21,7 @@ export default function SalesTeamTrendReport() {
             <Title order={4}>Trend Report</Title>
             <PermittedLayout
               outletType="children"
-              allowedRoles={["Super-Admin"]}
+              allowedRoles={["Sales-Team"]}
             >
               <Group gap="xs" justify="flex-end" align="center">
                 <SalesTeamTrendReportExportBtn />

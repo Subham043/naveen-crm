@@ -21,7 +21,7 @@ export default function SalesTeamApprovalTurnAroundReport() {
             <Title order={4}>Approval Turn Around Report</Title>
             <PermittedLayout
               outletType="children"
-              allowedRoles={["Super-Admin"]}
+              allowedRoles={["Sales-Team"]}
             >
               <Group gap="xs" justify="flex-end" align="center">
                 <SalesTeamApprovalTurnAroundReportExportBtn />

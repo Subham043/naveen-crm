@@ -53,6 +53,8 @@ export type QuotationType = {
   part_make?: string;
   part_name?: string;
   part_number?: string;
+  part_warranty?: number;
+  part_vin?: string;
   part_description?: string;
   lead_source: number;
   lead_source_info?: string;
@@ -94,7 +96,7 @@ export type OrderType = {
   quotation_info: QuotationType | null;
   payment_status: number;
   payment_status_info?: string;
-  payment_card_type: number;
+  payment_card_type?: number;
   payment_card_type_info?: string;
   payment_gateway: number;
   payment_gateway_info?: string;

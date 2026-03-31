@@ -52,12 +52,22 @@ export const serviceTeamOrderSchema = yup
             .required("Part Make is required"),
         part_name: yup
             .string()
-            .typeError("Part Name must contain characters only")
-            .required("Part Name is required"),
+            .typeError("Part must contain characters only")
+            .required("Part is required"),
         part_number: yup
             .string()
-            .typeError("Part Number must contain characters only")
-            .required("Part Number is required"),
+            .typeError("Part# must contain characters only")
+            .required("Part# is required"),
+        part_warranty: yup
+            .number()
+            .typeError("Part Warranty must be a number")
+            .min(0, "Part Warranty must be greater than 0")
+            .max(12, "Part Warranty must be less than 12")
+            .required("Part Warranty is required"),
+        part_vin: yup
+            .string()
+            .typeError("VIN must contain characters only")
+            .optional(),
         part_description: yup
             .string()
             .typeError("Part Description must contain characters only")
@@ -96,14 +106,6 @@ export const serviceTeamOrderSchema = yup
             .typeError("Payment Status must be a number")
             .oneOf([0, 1, 2], "Payment Status must be 0 or 1 or 2")
             .required("Payment Status is required"),
-        payment_card_type: yup
-            .number()
-            .typeError("Payment Card Type must be a number")
-            .when("payment_status", {
-                is: (val: number | undefined) => val === 1 || val === 2,
-                then: (schema) => schema.oneOf([1, 2, 3, 4], "Payment Card Type must be 1 or 2 or 3 or 4").required("Payment Card Type is required"),
-                otherwise: (schema) => schema.optional(),
-            }),
         payment_gateway: yup
             .number()
             .typeError("Payment Gateway must be a number")
@@ -135,10 +137,15 @@ export const serviceTeamOrderSchema = yup
             .typeError("Order Status must be a number")
             .oneOf([0, 1, 2, 3, 4, 5, 6, 7], "Order Status must be 0 or 1 or 2 or 3 or 4 or 5 or 6 or 7")
             .required("Order Status is required"),
+        payment_card_type: yup
+            .number()
+            .typeError("Yard Payment Details must be a number")
+            .oneOf([1, 2, 3, 4], "Yard Payment Details must be 1 or 2 or 3 or 4")
+            .optional(),
         yard_located: yup
             .number()
             .typeError("Yard Located must be a number")
-            .oneOf([0, 1], "Yard Located must be 0 or 1")
+            .oneOf([0, 1, 2], "Yard Located must be 0 or 1 or 2")
             .required("Yard Located is required"),
         yards: yup
             .array()

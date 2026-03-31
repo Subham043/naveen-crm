@@ -11,6 +11,7 @@ use App\Features\Order\Enums\PaymentCardType;
 use App\Features\Order\Enums\PaymentGateway;
 use App\Features\Order\Enums\TrackingStatus;
 use App\Features\Order\Enums\POStatus;
+use App\Features\Order\Enums\YardLocated;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -43,6 +44,8 @@ class OrderExport implements FromQuery, WithHeadings, WithMapping
 			$data->quotation->part_model,
 			$data->quotation->part_name,
 			$data->quotation->part_number,
+			$data->quotation->part_warranty,
+			$data->quotation->part_vin,
 			$data->quotation->part_description,
 			$data->quotation->billing_address,
 			LeadSource::getValue($data->quotation->lead_source),
@@ -54,7 +57,6 @@ class OrderExport implements FromQuery, WithHeadings, WithMapping
 			QuotationStatus::getValue($data->quotation->quotation_status),
 			PaymentStatus::getValue($data->payment_status),
 			PaymentCardType::getValue($data->payment_card_type),
-			PaymentGateway::getValue($data->payment_gateway),
 			$data->quotation->sale_price ?? 'N/A',
 			$data->quotation->cost_price ?? 'N/A',
 			$data->quotation->shipping_cost ?? 'N/A',
@@ -64,7 +66,8 @@ class OrderExport implements FromQuery, WithHeadings, WithMapping
 			TrackingStatus::getValue($data->tracking_status),
 			InvoiceStatus::getValue($data->invoice_status),
 			POStatus::getValue($data->po_status),
-			$data->yard_located ? 'Yes' : 'No',
+			YardLocated::getValue($data->yard_located),
+			PaymentGateway::getValue($data->payment_gateway),
 			OrderStatus::getValue($data->order_status),
 			$data->quotation->approval_by_id,
 			$data->quotation->approvalBy->name,
@@ -83,12 +86,14 @@ class OrderExport implements FromQuery, WithHeadings, WithMapping
 			'Email',
 			'Country Code',
 			'Phone',
-			'Part Year',
-			'Part Make',
-			'Part Model',
-			'Part Name',
-			'Part Number',
-			'Part Description',
+			'Year',
+			'Make',
+			'Model',
+			'Part',
+			'Part#',
+			'Warranty',
+			'Vin',
+			'Description',
 			'Billing Address',
 			'Lead Source',
 			'Sales User Id',
@@ -99,7 +104,6 @@ class OrderExport implements FromQuery, WithHeadings, WithMapping
 			'Quotation Status',
 			'Payment Status',
 			'Payment Card Type',
-			'Payment Gateway',
 			'Sale Price',
 			'Cost Price',
 			'Shipment Price',
@@ -110,6 +114,7 @@ class OrderExport implements FromQuery, WithHeadings, WithMapping
 			'Invoice Status',
 			'PO Status',
 			'Yard Located',
+			'Yard Payment Details',
 			'Order Status',
 			'Approval By Id',
 			'Approval By Name',

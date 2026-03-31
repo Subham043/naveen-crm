@@ -105,7 +105,7 @@ export default function QuotationPublicForm() {
               )}
             />
           </SimpleGrid>
-          <SimpleGrid cols={{ base: 1, sm: 3 }}>
+          <SimpleGrid cols={{ base: 1, sm: 2 }}>
             <Controller
               control={form.control}
               name="part_year"
@@ -137,6 +137,8 @@ export default function QuotationPublicForm() {
                 />
               )}
             />
+          </SimpleGrid>
+          <SimpleGrid cols={{ base: 1, sm: 2 }}>
             <Controller
               control={form.control}
               name="part_model"
@@ -152,30 +154,13 @@ export default function QuotationPublicForm() {
                 />
               )}
             />
-          </SimpleGrid>
-          <SimpleGrid cols={{ base: 1, sm: 2 }}>
             <Controller
               control={form.control}
               name="part_name"
               render={({ field, fieldState }) => (
                 <TextInput
-                  label="Part Name"
-                  placeholder="Part Name"
-                  value={field.value ? field.value : ""}
-                  onChange={field.onChange}
-                  error={fieldState.error?.message}
-                  withAsterisk
-                  mt="sm"
-                />
-              )}
-            />
-            <Controller
-              control={form.control}
-              name="part_number"
-              render={({ field, fieldState }) => (
-                <TextInput
-                  label="Part Number"
-                  placeholder="Part Number"
+                  label="Part"
+                  placeholder="Part"
                   value={field.value ? field.value : ""}
                   onChange={field.onChange}
                   error={fieldState.error?.message}

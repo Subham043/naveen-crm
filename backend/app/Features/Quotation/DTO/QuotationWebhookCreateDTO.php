@@ -16,7 +16,6 @@ final class QuotationWebhookCreateDTO
         public readonly string $part_model,
         public readonly string $part_make,
         public readonly string $part_name,
-        public readonly string $part_number,
         public readonly string $part_description,
     ) {}
 
@@ -35,7 +34,6 @@ final class QuotationWebhookCreateDTO
             part_model: $request->validated('part_model'),
             part_make: $request->validated('part_make'),
             part_name: $request->validated('part_name'),
-            part_number: $request->validated('part_number'),
             part_description: $request->validated('part_description'),
         );
     }
@@ -54,7 +52,6 @@ final class QuotationWebhookCreateDTO
             'part_model' => $this->part_model,
             'part_make' => $this->part_make,
             'part_name' => $this->part_name,
-            'part_number' => $this->part_number,
             'part_description' => $this->part_description,
         ];
 

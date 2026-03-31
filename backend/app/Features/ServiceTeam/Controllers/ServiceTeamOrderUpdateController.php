@@ -2,6 +2,7 @@
 
 namespace App\Features\ServiceTeam\Controllers;
 
+use App\Features\Order\Enums\YardLocated;
 use App\Features\Timeline\Collections\YardTimelineDTOCollection;
 use App\Features\ServiceTeam\DTO\ServiceTeamOrderSaveDTO;
 use App\Features\ServiceTeam\DTO\ServiceTeamQuotationSaveDTO;
@@ -47,7 +48,7 @@ class ServiceTeamOrderUpdateController extends Controller
             $oldYardValues = new YardTimelineDTOCollection($oldYardArray);
             $user = Auth::guard(Guards::API->value())->user();
 
-            if ($request->yard_located && $request->has('yards')) {
+            if ($request->yard_located != YardLocated::No->value() && $request->has('yards')) {
                 $yards = YardTimelineDTOCollection::fromRequest($request->safe()->input('yards'));
             }else{
                 $yards = null;
@@ -59,7 +60,7 @@ class ServiceTeamOrderUpdateController extends Controller
                     $order
                 );
                 $updated_order->quotation->update($quotationDto->toArray());
-                if ($request->yard_located && $request->has('yards')) {
+                if ($request->yard_located != YardLocated::No->value() && $request->has('yards')) {
                     $this->serviceTeamOrderService->syncYards(
                         YardTimelineDTOCollection::fromRequest($request->yards), 
                         $updated_order

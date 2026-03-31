@@ -93,7 +93,7 @@ class AdminDashboardService
                 SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalCancelledOrders,
                 SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalPendingForRefundOrders,
                 SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalRefundedOrders,
-                SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalPendingPartShippedOrders,
+                SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalPartShippedOrders,
                 SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalCompletedOrders,
                 SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalChargeBackOrders,
 
@@ -128,7 +128,7 @@ class AdminDashboardService
                 OrderStatus::Cancelled->value(),
                 OrderStatus::PendingForRefund->value(),
                 OrderStatus::Refunded->value(),
-                OrderStatus::PendingPartShipped->value(),
+                OrderStatus::PartShipped->value(),
                 OrderStatus::Completed->value(),
                 OrderStatus::ChargeBack->value(),
 
@@ -187,7 +187,7 @@ class AdminDashboardService
             "totalCancelledOrders" => 0,
             "totalPendingForRefundOrders" => 0,
             "totalRefundedOrders" => 0,
-            "totalPendingPartShippedOrders" => 0,
+            "totalPartShippedOrders" => 0,
             "totalCompletedOrders" => 0,
             "totalChargeBackOrders" => 0,
             "totalApprovedByMeOrders" => 0,

@@ -41,7 +41,7 @@ class Order extends Model
         'payment_card_type' => null,
         'payment_gateway' => null,
         'transaction_id' => null,
-        'yard_located' => false,
+        'yard_located' => 0,
         'tracking_details' => null,
         'tracking_status' => 0,
         'invoice_status' => 0,
@@ -51,7 +51,6 @@ class Order extends Model
     ];
 
     protected $casts = [
-        'yard_located' => 'boolean',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];

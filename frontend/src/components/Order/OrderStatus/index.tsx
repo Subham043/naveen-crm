@@ -12,7 +12,7 @@ const orderStatusMap = {
   2: { label: "Cancelled", color: "red" },
   3: { label: "Pending For Refund", color: "orange" },
   4: { label: "Refunded", color: "indigo" },
-  5: { label: "Pending Part Shipped", color: "cyan" },
+  5: { label: "Part Shipped", color: "cyan" },
   6: { label: "Completed", color: "green" },
   7: { label: "ChargeBack", color: "red" },
 };

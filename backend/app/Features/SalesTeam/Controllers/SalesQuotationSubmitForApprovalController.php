@@ -23,7 +23,7 @@ class SalesQuotationSubmitForApprovalController extends Controller
      */
     public function index($id){
         $quotation = $this->salesQuotationService->getByIdAndIsInactive($id);
-        if(empty($quotation->country_code) || empty($quotation->phone) || empty($quotation->billing_address) || empty($quotation->shipping_address) || empty($quotation->part_year) || empty($quotation->part_model) || empty($quotation->part_make) || empty($quotation->part_name) || empty($quotation->part_number) || empty($quotation->part_description) || empty($quotation->sale_price) || empty($quotation->cost_price) || empty($quotation->shipping_cost)){
+        if(empty($quotation->country_code) || empty($quotation->phone) || empty($quotation->billing_address) || empty($quotation->shipping_address) || empty($quotation->part_year) || empty($quotation->part_model) || empty($quotation->part_make) || empty($quotation->part_name) || empty($quotation->part_number) || empty($quotation->part_warranty) || empty($quotation->part_description) || empty($quotation->sale_price) || empty($quotation->cost_price) || empty($quotation->shipping_cost)){
             return response()->json(["message" => "Please fill all the required fields to submit for approval."], 400);
         }
         try {

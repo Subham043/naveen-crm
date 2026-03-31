@@ -83,12 +83,14 @@ export default function OrderView() {
 
       <OrderViewPaymentInfo
         payment_status={data.payment_status}
-        payment_card_type={data.payment_card_type}
         payment_gateway={data.payment_gateway}
         transaction_id={data.transaction_id}
       />
 
-      <OrderViewYardInfo yard_located={data.yard_located} yards={data.yards} />
+      <OrderViewYardInfo
+        payment_card_type={data.payment_card_type}
+        yards={data.yards}
+      />
 
       <OrderViewLogisticInfo
         tracking_details={data.tracking_details}

@@ -9,7 +9,7 @@ enum OrderStatus: int
 	case Cancelled = 2;
     case PendingForRefund = 3;
     case Refunded = 4;
-	case PendingPartShipped = 5;
+	case PartShipped = 5;
 	case Completed = 6;
 	case ChargeBack = 7;
     
@@ -26,7 +26,7 @@ enum OrderStatus: int
 			self::Cancelled->value => 'Cancelled',
 			self::PendingForRefund->value => 'Pending For Refund',
 			self::Refunded->value => 'Refunded',
-			self::PendingPartShipped->value => 'Pending Part Shipped',
+			self::PartShipped->value => 'Part Shipped',
 			self::Completed->value => 'Completed',
 			self::ChargeBack->value => 'ChargeBack',
 			null => null,

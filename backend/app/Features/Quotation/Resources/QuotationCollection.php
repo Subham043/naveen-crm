@@ -31,6 +31,8 @@ class QuotationCollection extends JsonResource
 			'part_make' => $this->part_make,
 			'part_name' => $this->part_name,
 			'part_number' => $this->part_number,
+			'part_warranty' => $this->part_warranty,
+			'part_vin' => $this->part_vin ?? null,
 			'part_description' => $this->part_description,
 			'lead_source' => $this->lead_source,
 			'lead_source_info' => LeadSource::getValue($this->lead_source),

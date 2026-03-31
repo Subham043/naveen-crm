@@ -39,12 +39,31 @@ class QuotationSaveRequests extends InputRequest
             'part_name' => ['required', 'string', 'max:255'],
             'part_number' => ['required', 'string', 'max:255'],
             'part_description' => ['required', 'string'],
+            'part_warranty' => ['required', 'numeric', 'min:0', 'max:12'],
             'sale_price' => ['required', 'numeric'],
             'cost_price' => ['required', 'numeric'],
             'shipping_cost' => ['required', 'numeric'],
         ];
 
         return $rules;
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function attributes(): array
+    {
+        return [
+            'part_name' => 'part',
+            'part_number' => 'part#',
+            'part_description' => 'description',
+            'part_year' => 'year',
+            'part_make' => 'make',
+            'part_model' => 'model',
+            'part_warranty' => 'warranty',
+        ];
     }
 
 }

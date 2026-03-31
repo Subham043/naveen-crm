@@ -9,6 +9,7 @@ use App\Features\Order\Enums\PaymentGateway;
 use App\Features\Order\Enums\PaymentStatus;
 use App\Features\Order\Enums\POStatus;
 use App\Features\Order\Enums\TrackingStatus;
+use App\Features\Order\Enums\YardLocated;
 use App\Http\Enums\Guards;
 use App\Http\Requests\InputRequest;
 use Illuminate\Support\Facades\Auth;
@@ -45,6 +46,8 @@ class OrderSaveRequests extends InputRequest
             'part_model' => ['required', 'string', 'max:255'],
             'part_make' => ['required', 'string', 'max:255'],
             'part_name' => ['required', 'string', 'max:255'],
+            'part_vin' => ['nullable', 'string', 'max:255'],
+            'part_warranty' => ['required', 'numeric', 'min:0', 'max:12'],
             'part_number' => ['required', 'string', 'max:255'],
             'part_description' => ['required', 'string'],
             'sale_price' => 'required|numeric',
@@ -52,17 +55,37 @@ class OrderSaveRequests extends InputRequest
             'shipping_cost' => 'required|numeric',
             'tracking_details' => 'nullable|string',
             'tracking_status' => ['required', 'numeric', new Enum(TrackingStatus::class)],
-            'yard_located' => 'required|boolean',
-            'yards' => [Rule::excludeIf(fn() => $this->yard_located == 0), 'array', 'min:1'],
-            'yards.*.yard' => [Rule::excludeIf(fn() => $this->yard_located == 0), 'string'],
+            'yard_located' => ['required', 'numeric', new Enum(YardLocated::class)],
+            'yards' => [Rule::excludeIf(fn() => $this->yard_located == YardLocated::No->value()), 'array', 'min:1'],
+            'yards.*.yard' => [Rule::excludeIf(fn() => $this->yard_located == YardLocated::No->value()), 'string'],
             'yards.*.id' => ['nullable', 'numeric', 'exists:yards,id'],
+            'payment_gateway' => ['nullable', 'numeric', new Enum(PaymentGateway::class)],
             'payment_status' => ['required', 'numeric', new Enum(PaymentStatus::class)],
             'payment_card_type' => ['required_if:payment_status,1', 'required_if:payment_status,2', 'numeric', new Enum(PaymentCardType::class)],
-            'payment_gateway' => ['required_if:payment_status,1', 'required_if:payment_status,2', 'numeric', new Enum(PaymentGateway::class)],
             'transaction_id' => ['required_if:payment_status,1', 'required_if:payment_status,2', 'string'],
             'invoice_status' => ['required', 'numeric', new Enum(InvoiceStatus::class)],
             'po_status' => ['required', 'numeric', new Enum(POStatus::class)],
             'order_status' => ['required', 'numeric', new Enum(OrderStatus::class)],
+        ];
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function attributes(): array
+    {
+        return [
+            'part_name' => 'part',
+            'part_number' => 'part#',
+            'part_description' => 'description',
+            'part_year' => 'year',
+            'part_make' => 'make',
+            'part_model' => 'model',
+            'part_vin' => 'vin',
+            'part_warranty' => 'warranty',
+            'payment_gateway' => 'yard payment details',
         ];
     }
 

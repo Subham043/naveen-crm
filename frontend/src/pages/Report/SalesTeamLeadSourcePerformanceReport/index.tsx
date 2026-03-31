@@ -21,7 +21,7 @@ export default function SalesTeamLeadSourcePerformanceReport() {
             <Title order={4}>Lead Source Report</Title>
             <PermittedLayout
               outletType="children"
-              allowedRoles={["Super-Admin"]}
+              allowedRoles={["Sales-Team"]}
             >
               <Group gap="xs" justify="flex-end" align="center">
                 <SalesTeamLeadSourcePerformanceReportExportBtn />

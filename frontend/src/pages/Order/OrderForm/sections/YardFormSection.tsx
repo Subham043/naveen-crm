@@ -1,7 +1,6 @@
 import TableRowNotFound from "@/components/TableRowNotFound";
 import type { OrderUpdateFormValuesType } from "@/utils/data/schema/order";
 import {
-  Switch,
   Paper,
   Box,
   Group,
@@ -11,6 +10,8 @@ import {
   Divider,
   Table,
   Textarea,
+  Select,
+  SimpleGrid,
 } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { memo } from "react";
@@ -36,20 +37,46 @@ function YardFormSection() {
 
   return (
     <>
-      <Controller
-        name="yard_located"
-        control={control}
-        render={({ field, fieldState }) => (
-          <Switch
-            label="Is Yard Located?"
-            checked={field.value === 1}
-            onChange={(e) => field.onChange(e.target.checked ? 1 : 0)}
-            error={fieldState.error?.message}
-            mt="md"
-          />
-        )}
-      />
-      {yardLocated === 1 && (
+      <SimpleGrid cols={{ base: 1, md: 2, lg: 2 }} mt="md">
+        <Controller
+          control={control}
+          name="yard_located"
+          render={({ field, fieldState }) => (
+            <Select
+              label="Is Yard Located?"
+              value={field.value !== undefined ? field.value.toString() : ""}
+              onChange={(val) => field.onChange(val ? Number(val) : undefined)}
+              error={fieldState.error?.message}
+              withAsterisk
+              data={[
+                { value: "0", label: "No" },
+                { value: "1", label: "Located" },
+                { value: "2", label: "Relocate" },
+              ]}
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name="payment_card_type"
+          render={({ field, fieldState }) => (
+            <Select
+              label="Yard Payment Details"
+              value={field.value !== undefined ? field.value.toString() : ""}
+              onChange={(val) => field.onChange(val ? Number(val) : undefined)}
+              error={fieldState.error?.message}
+              withAsterisk
+              data={[
+                { value: "1", label: "Mastercard" },
+                { value: "2", label: "Visa" },
+                { value: "3", label: "Amex" },
+                { value: "4", label: "Zelle" },
+              ]}
+            />
+          )}
+        />
+      </SimpleGrid>
+      {yardLocated !== 0 && (
         <Paper shadow="xs" withBorder mt="md">
           <Box p="sm" pos="relative" bg={"var(--mantine-color-cyan-light)"}>
             <Group justify="space-between" gap={10}>

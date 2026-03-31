@@ -1,5 +1,11 @@
 import type { OrderUpdateFormValuesType } from "@/utils/data/schema/order";
-import { Fieldset, SimpleGrid, TextInput, Textarea } from "@mantine/core";
+import {
+  Fieldset,
+  Select,
+  SimpleGrid,
+  TextInput,
+  Textarea,
+} from "@mantine/core";
 import { memo } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 
@@ -55,7 +61,7 @@ function PartFormSection() {
           name="part_name"
           render={({ field, fieldState }) => (
             <TextInput
-              label="Name"
+              label="Part"
               value={field.value ? field.value : ""}
               onChange={field.onChange}
               error={fieldState.error?.message}
@@ -68,11 +74,42 @@ function PartFormSection() {
           name="part_number"
           render={({ field, fieldState }) => (
             <TextInput
-              label="Number"
+              label="Part#"
               value={field.value ? field.value : ""}
               onChange={field.onChange}
               error={fieldState.error?.message}
               withAsterisk
+            />
+          )}
+        />
+      </SimpleGrid>
+      <SimpleGrid cols={{ base: 1, md: 2, lg: 2 }} mt="md">
+        <Controller
+          control={control}
+          name="part_warranty"
+          render={({ field, fieldState }) => (
+            <Select
+              label="Warranty (In Months)"
+              data={Array.from({ length: 12 }, (_, i) => ({
+                value: (i + 1).toString(),
+                label: (i + 1).toString(),
+              }))}
+              value={field.value ? field.value.toString() : "1"}
+              onChange={field.onChange}
+              error={fieldState.error?.message}
+              withAsterisk
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name="part_vin"
+          render={({ field, fieldState }) => (
+            <TextInput
+              label="Vin"
+              value={field.value ? field.value : ""}
+              onChange={field.onChange}
+              error={fieldState.error?.message}
             />
           )}
         />

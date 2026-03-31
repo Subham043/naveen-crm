@@ -51,8 +51,23 @@ class QuotationWebhookCreateRequests extends InputRequest
             'part_model' => ['required', 'string', 'max:255'],
             'part_make' => ['required', 'string', 'max:255'],
             'part_name' => ['required', 'string', 'max:255'],
-            'part_number' => ['required', 'string', 'max:255'],
             'part_description' => ['required', 'string'],
+        ];
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function attributes(): array
+    {
+        return [
+            'part_name' => 'part',
+            'part_description' => 'description',
+            'part_year' => 'year',
+            'part_make' => 'make',
+            'part_model' => 'model',
         ];
     }
 

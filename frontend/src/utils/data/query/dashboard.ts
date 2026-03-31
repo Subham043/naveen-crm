@@ -86,7 +86,7 @@ const TotalEscalationOrders = "totalEscalationOrders";
 const TotalCancelledOrders = "totalCancelledOrders";
 const TotalPendingForRefundOrders = "totalPendingForRefundOrders";
 const TotalRefundedOrders = "totalRefundedOrders";
-const TotalPendingPartShippedOrders = "totalPendingPartShippedOrders";
+const TotalPartShippedOrders = "totalPartShippedOrders";
 const TotalCompletedOrders = "totalCompletedOrders";
 const TotalChargeBackOrders = "totalChargeBackOrders";
 
@@ -148,7 +148,7 @@ const OrderStatusGraphContent = [
     TotalCancelledOrders,
     TotalPendingForRefundOrders,
     TotalRefundedOrders,
-    TotalPendingPartShippedOrders,
+    TotalPartShippedOrders,
     TotalCompletedOrders,
     TotalChargeBackOrders,
 ];
@@ -315,7 +315,7 @@ const dashboardKeyIconMap = {
         Icon: IconCashMoveBack,
         color: "var(--mantine-color-indigo-filled)",
     },
-    [TotalPendingPartShippedOrders]: {
+    [TotalPartShippedOrders]: {
         Icon: IconPackageImport,
         color: "var(--mantine-color-cyan-filled)",
     },

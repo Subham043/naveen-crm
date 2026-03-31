@@ -3,23 +3,18 @@ import type { OrderType } from "@/utils/types";
 import OrderPaymentStatus, {
   type PaymentStatus,
 } from "@/components/Order/OrderPaymentStatus";
-import OrderPaymentCardType, {
-  type PaymentCardType,
-} from "../OrderPaymentCardType";
 import OrderPaymentGateway, {
   type PaymentGateway,
 } from "../OrderPaymentGateway";
 
 type Props = {
   payment_status: OrderType["payment_status"];
-  payment_card_type: OrderType["payment_card_type"];
   payment_gateway: OrderType["payment_gateway"];
   transaction_id: OrderType["transaction_id"];
 };
 
 function OrderViewPaymentInfo({
   payment_status,
-  payment_card_type,
   payment_gateway,
   transaction_id,
 }: Props) {
@@ -38,16 +33,6 @@ function OrderViewPaymentInfo({
             <OrderPaymentStatus
               payment_status={payment_status as PaymentStatus}
             />
-          </Box>
-          <Box>
-            <Text fw={600} c="blue">
-              Payment Card Type
-            </Text>
-            <Text size="sm" c="dimmed">
-              <OrderPaymentCardType
-                payment_card_type={payment_card_type as PaymentCardType}
-              />
-            </Text>
           </Box>
           <Box>
             <Text fw={600} c="blue">

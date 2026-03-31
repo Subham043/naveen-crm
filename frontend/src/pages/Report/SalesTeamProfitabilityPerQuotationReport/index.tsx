@@ -21,7 +21,7 @@ export default function SalesTeamProfitabilityPerQuotationReport() {
             <Title order={4}>Profit Per Quotation Report</Title>
             <PermittedLayout
               outletType="children"
-              allowedRoles={["Super-Admin"]}
+              allowedRoles={["Sales-Team"]}
             >
               <Group gap="xs" justify="flex-end" align="center">
                 <SalesTeamProfitabilityPerQuotationReportExportBtn />

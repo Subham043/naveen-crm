@@ -44,6 +44,7 @@ class SalesQuotationSaveRequests extends InputRequest
             'part_name' => ['required_if:is_active,1', 'string', 'max:255'],
             'part_number' => ['required_if:is_active,1', 'string', 'max:255'],
             'part_description' => ['required_if:is_active,1', 'string'],
+            'part_warranty' => ['required_if:is_active,1', 'numeric', 'min:0', 'max:12'],
             'sale_price' => ['required_if:is_active,1', 'numeric'],
             'cost_price' => ['required_if:is_active,1', 'numeric'],
             'shipping_cost' => ['required_if:is_active,1', 'numeric'],
@@ -61,6 +62,24 @@ class SalesQuotationSaveRequests extends InputRequest
         }
 
         return $rules;
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function attributes(): array
+    {
+        return [
+            'part_name' => 'part',
+            'part_number' => 'part#',
+            'part_description' => 'description',
+            'part_year' => 'year',
+            'part_make' => 'make',
+            'part_model' => 'model',
+            'part_warranty' => 'warranty',
+        ];
     }
 
 }

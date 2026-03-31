@@ -8,7 +8,7 @@ use Illuminate\Support\Collection;
 final class OrderSaveDTO
 {
     public function __construct(
-        public readonly bool $yard_located,
+        public readonly int $yard_located,
         public readonly int $payment_status,
         public readonly ?int $payment_card_type,
         public readonly ?int $payment_gateway,
@@ -49,7 +49,6 @@ final class OrderSaveDTO
             'yard_located' => $this->yard_located,
             'payment_status' => $this->payment_status,
             'payment_card_type' => $this->payment_card_type,
-            'payment_gateway' => $this->payment_gateway,
             'transaction_id' => $this->transaction_id,
             'invoice_status' => $this->invoice_status,
             'po_status' => $this->po_status,
@@ -59,6 +58,10 @@ final class OrderSaveDTO
 
         if ($this->tracking_details) {
             $data['tracking_details'] = $this->tracking_details;
+        }
+        
+        if ($this->payment_gateway) {
+            $data['payment_gateway'] = $this->payment_gateway;
         }
 
         return $data;

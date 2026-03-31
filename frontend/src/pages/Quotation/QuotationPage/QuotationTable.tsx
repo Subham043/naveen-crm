@@ -202,8 +202,8 @@ function QuotationTable({ loading, quotations, onEdit }: QuotationTableProps) {
             <Table.Th>YEAR</Table.Th>
             <Table.Th>MAKE</Table.Th>
             <Table.Th>MODEL</Table.Th>
-            <Table.Th>NAME</Table.Th>
-            <Table.Th>NUMBER</Table.Th>
+            <Table.Th>PART</Table.Th>
+            <Table.Th>PART#</Table.Th>
             <Table.Th>SOURCE</Table.Th>
             <Table.Th>AGENT</Table.Th>
             <Table.Th>SALE PRICE</Table.Th>

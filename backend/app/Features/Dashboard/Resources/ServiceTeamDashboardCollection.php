@@ -46,7 +46,7 @@ class ServiceTeamDashboardCollection extends JsonResource
 			"totalCancelledOrders" => $this['totalCancelledOrders'],
 			"totalPendingForRefundOrders" => $this['totalPendingForRefundOrders'],
 			"totalRefundedOrders" => $this['totalRefundedOrders'],
-			"totalPendingPartShippedOrders" => $this['totalPendingPartShippedOrders'],
+			"totalPartShippedOrders" => $this['totalPartShippedOrders'],
 			"totalCompletedOrders" => $this['totalCompletedOrders'],
 			"totalChargeBackOrders" => $this['totalChargeBackOrders'],
 		];

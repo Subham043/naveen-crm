@@ -21,7 +21,7 @@ export default function ServiceTeamPerformanceReport() {
             <Title order={4}>Performance Report</Title>
             <PermittedLayout
               outletType="children"
-              allowedRoles={["Super-Admin"]}
+              allowedRoles={["Service-Team"]}
             >
               <Group gap="xs" justify="flex-end" align="center">
                 <ServiceTeamPerformanceReportExportBtn />

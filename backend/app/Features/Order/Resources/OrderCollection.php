@@ -9,6 +9,7 @@ use App\Features\Order\Enums\PaymentCardType;
 use App\Features\Order\Enums\PaymentGateway;
 use App\Features\Order\Enums\TrackingStatus;
 use App\Features\Order\Enums\POStatus;
+use App\Features\Order\Enums\YardLocated;
 use App\Features\Quotation\Resources\QuotationCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -33,6 +34,7 @@ class OrderCollection extends JsonResource
 			'payment_gateway_info' => PaymentGateway::getValue($this->payment_gateway),
 			'transaction_id' => $this->transaction_id,
 			'yard_located' => $this->yard_located,
+			'yard_located_info' => YardLocated::getValue($this->yard_located),
 			'tracking_details' => $this->tracking_details,
 			'tracking_status' => $this->tracking_status,
 			'tracking_status_info' => TrackingStatus::getValue($this->tracking_status),

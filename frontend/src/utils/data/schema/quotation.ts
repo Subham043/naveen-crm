@@ -53,12 +53,8 @@ export const quotationPublicCreateSchema = yup
             .required("Part Make is required"),
         part_name: yup
             .string()
-            .typeError("Part Name must contain characters only")
-            .required("Part Name is required"),
-        part_number: yup
-            .string()
-            .typeError("Part Number must contain characters only")
-            .required("Part Number is required"),
+            .typeError("Part must contain characters only")
+            .required("Part is required"),
         part_description: yup
             .string()
             .typeError("Part Description must contain characters only")
@@ -145,12 +141,18 @@ export const quotationUpdateSchema = yup
             .required("Part Make is required"),
         part_name: yup
             .string()
-            .typeError("Part Name must contain characters only")
-            .required("Part Name is required"),
+            .typeError("Part must contain characters only")
+            .required("Part is required"),
         part_number: yup
             .string()
-            .typeError("Part Number must contain characters only")
-            .required("Part Number is required"),
+            .typeError("Part# must contain characters only")
+            .required("Part# is required"),
+        part_warranty: yup
+            .number()
+            .typeError("Part Warranty must be a number")
+            .min(0, "Part Warranty must be greater than 0")
+            .max(12, "Part Warranty must be less than 12")
+            .required("Part Warranty is required"),
         part_description: yup
             .string()
             .typeError("Part Description must contain characters only")

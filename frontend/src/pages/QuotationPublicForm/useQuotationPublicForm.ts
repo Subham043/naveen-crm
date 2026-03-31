@@ -17,7 +17,6 @@ const quotationPublicDefaultValues: QuotationPublicCreateFormValuesType = {
   part_model: "",
   part_make: "",
   part_name: "",
-  part_number: "",
   part_description: "",
   captcha: "",
 }
