@@ -282,16 +282,16 @@
 						<td>:</td>
 						<td>{{$order->quotation->part_description}}</td>
 					</tr>
-					{{-- <tr>
+					<tr>
 						<td>VIN</td>
 						<td>:</td>
-						<td>1C4NJCEB9GD620699</td>
+						<td>{{$order->quotation->part_vin}}</td>
 					</tr>
 					<tr>
 						<td>Warranty</td>
 						<td>:</td>
-						<td>6 Months</td>
-					</tr> --}}
+						<td>{{$order->quotation->part_warranty}} Months</td>
+					</tr>
 				</table>
 			</td>
 			<td style="border-left:1px solid #000;border-top:1px solid #000;text-align:center;vertical-align:middle;">
@@ -313,7 +313,7 @@
 				</ol>
 			</td>
 			<td style="text-align:center;border-left:1px solid #000;border-top:1px solid #000;border-bottom:1px solid #000;font-weight:bold;">Taxable</td>
-			<td style="border-left:1px solid #000;text-align:center;border-top:1px solid #000;border-bottom:1px solid #000;">-</td>
+			<td style="border-left:1px solid #000;text-align:center;border-top:1px solid #000;border-bottom:1px solid #000;font-weight:bold;">${{$order->quotation->sales_tax}}</td>
 		</tr>
 		<tr>
 			<td></td>
