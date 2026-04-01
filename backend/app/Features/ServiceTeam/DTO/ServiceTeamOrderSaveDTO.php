@@ -60,8 +60,8 @@ final class ServiceTeamOrderSaveDTO
             $data['tracking_details'] = $this->tracking_details;
         }
 
-        if ($this->payment_gateway) {
-            $data['payment_gateway'] = $this->payment_gateway;
+        if ($this->payment_card_type) {
+            $data['payment_card_type'] = $this->payment_card_type;
         }
 
         return $data;

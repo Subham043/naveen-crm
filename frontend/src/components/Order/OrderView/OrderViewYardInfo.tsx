@@ -7,9 +7,14 @@ import OrderPaymentCardType, {
 type Props = {
   yards: OrderType["yards"];
   payment_card_type: OrderType["payment_card_type"];
+  yard_located_info: OrderType["yard_located_info"];
 };
 
-function OrderViewYardInfo({ yards, payment_card_type }: Props) {
+function OrderViewYardInfo({
+  yards,
+  payment_card_type,
+  yard_located_info,
+}: Props) {
   if (payment_card_type === null && yards.length === 0) return null;
   return (
     <Paper shadow="xs" mb="lg" withBorder>
@@ -29,6 +34,16 @@ function OrderViewYardInfo({ yards, payment_card_type }: Props) {
               />
             </Text>
           </Box>
+          {yard_located_info !== undefined && (
+            <Box>
+              <Text fw={600} c="blue">
+                Yard Located
+              </Text>
+              <Text size="sm" c="dimmed">
+                {yard_located_info}
+              </Text>
+            </Box>
+          )}
           {yards.map((yard, index) => (
             <Box key={yard.id}>
               <Text fw={600} c="blue">

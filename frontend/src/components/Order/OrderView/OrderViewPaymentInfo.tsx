@@ -34,24 +34,28 @@ function OrderViewPaymentInfo({
               payment_status={payment_status as PaymentStatus}
             />
           </Box>
-          <Box>
-            <Text fw={600} c="blue">
-              Payment Gateway
-            </Text>
-            <Text size="sm" c="dimmed">
-              <OrderPaymentGateway
-                payment_gateway={payment_gateway as PaymentGateway}
-              />
-            </Text>
-          </Box>
-          <Box>
-            <Text fw={600} c="blue">
-              Transaction ID
-            </Text>
-            <Text size="sm" c="dimmed">
-              {transaction_id || "N/A"}
-            </Text>
-          </Box>
+          {payment_status !== 0 && (
+            <>
+              <Box>
+                <Text fw={600} c="blue">
+                  Payment Gateway
+                </Text>
+                <Text size="sm" c="dimmed">
+                  <OrderPaymentGateway
+                    payment_gateway={payment_gateway as PaymentGateway}
+                  />
+                </Text>
+              </Box>
+              <Box>
+                <Text fw={600} c="blue">
+                  Transaction ID
+                </Text>
+                <Text size="sm" c="dimmed">
+                  {transaction_id || "N/A"}
+                </Text>
+              </Box>
+            </>
+          )}
         </SimpleGrid>
       </Box>
     </Paper>

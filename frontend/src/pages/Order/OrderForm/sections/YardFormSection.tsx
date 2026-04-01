@@ -82,8 +82,12 @@ function YardFormSection() {
             <Group justify="space-between" gap={10}>
               <Box>
                 <Title order={5}>Yard Information</Title>
-                {formState.errors.yards?.message && (
-                  <Input.Error>{formState.errors.yards?.message}</Input.Error>
+                {(formState.errors.yards?.message ||
+                  formState.errors.yards?.root?.message) && (
+                  <Input.Error>
+                    {formState.errors.yards?.message ||
+                      formState.errors.yards?.root?.message}
+                  </Input.Error>
                 )}
               </Box>
               <ActionIcon

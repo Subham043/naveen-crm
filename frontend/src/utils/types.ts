@@ -101,7 +101,8 @@ export type OrderType = {
   payment_gateway: number;
   payment_gateway_info?: string;
   transaction_id?: string;
-  yard_located: boolean;
+  yard_located: number;
+  yard_located_info?: string;
   tracking_details?: string;
   tracking_status: number;
   tracking_status_info?: string;

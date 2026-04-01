@@ -151,11 +151,13 @@ export const serviceTeamOrderSchema = yup
             .array()
             .typeError("Yard must be an array")
             .when("yard_located", {
-                is: (val: number | undefined) => val === 1,
-                then: (schema) => schema.of(yup.object({
-                    yard: yup.string().typeError("Yard must contain characters only").required("Yard is required"),
-                    id: yup.number().typeError("Yard ID must be a number").optional(),
-                })).min(1, "Yard is required").required("Yard is required"),
+                is: (val: number | undefined) => val === 1 || val === 2,
+                then: (schema) => schema.of(
+                    yup.object({
+                        yard: yup.string().typeError("Yard must contain characters only").required("Yard is required"),
+                        id: yup.number().typeError("Yard ID must be a number").optional(),
+                    })
+                ).min(1, "Yard is required").required("Yard is required"),
                 otherwise: (schema) => schema.optional(),
             }),
         comment: yup
