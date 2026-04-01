@@ -8,7 +8,7 @@ use Illuminate\Support\Collection;
 final class ServiceTeamOrderSaveDTO
 {
     public function __construct(
-        public readonly bool $yard_located,
+        public readonly int $yard_located,
         public readonly int $payment_status,
         public readonly ?int $payment_card_type,
         public readonly ?int $payment_gateway,
