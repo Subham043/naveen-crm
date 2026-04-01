@@ -93,7 +93,7 @@ export function useServiceTeamOrderForm({ modal, closeModal }: Props) {
         invoice_status: data.invoice_status && data.invoice_status !== undefined ? data.invoice_status : 0,
         po_status: data.po_status && data.po_status !== undefined ? data.po_status : 1,
         order_status: data.order_status !== 0 ? data.order_status : 0,
-        yard_located: data.yard_located ? 1 : 0,
+        yard_located: data.yard_located !== 0 ? data.yard_located : 0,
         yards: data.yards.length > 0 ? data.yards.map((yard) => ({ yard: yard.yard, id: yard.id })) : [],
         comment: "",
         additional_comment_required: 0,
