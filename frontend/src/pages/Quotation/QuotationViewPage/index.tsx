@@ -95,6 +95,7 @@ export default function QuotationView() {
         part_make={data.part_make}
         part_number={data.part_number}
         part_warranty={data.part_warranty}
+        part_vin={data.part_vin}
         part_description={data.part_description}
         quotation_sent={data.quotation_sent}
       />

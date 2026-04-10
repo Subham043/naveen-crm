@@ -45,6 +45,7 @@ class SalesQuotationSaveRequests extends InputRequest
             'part_number' => ['required_if:is_active,1', 'string', 'max:255'],
             'part_description' => ['required_if:is_active,1', 'string'],
             'part_warranty' => ['required_if:is_active,1', 'numeric', 'min:0', 'max:12'],
+            'part_vin' => ['required_if:is_active,1', 'string', 'max:255'],
             'sale_price' => ['required_if:is_active,1', 'numeric'],
             'cost_price' => ['required_if:is_active,1', 'numeric'],
             'shipping_cost' => ['required_if:is_active,1', 'numeric'],
@@ -79,6 +80,7 @@ class SalesQuotationSaveRequests extends InputRequest
             'part_make' => 'make',
             'part_model' => 'model',
             'part_warranty' => 'warranty',
+            'part_warranty' => 'vin',
         ];
     }
 

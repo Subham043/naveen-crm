@@ -46,7 +46,7 @@ class OrderSaveRequests extends InputRequest
             'part_model' => ['required', 'string', 'max:255'],
             'part_make' => ['required', 'string', 'max:255'],
             'part_name' => ['required', 'string', 'max:255'],
-            'part_vin' => ['nullable', 'string', 'max:255'],
+            'part_vin' => ['required', 'string', 'max:255'],
             'part_warranty' => ['required', 'numeric', 'min:0', 'max:12'],
             'part_number' => ['required', 'string', 'max:255'],
             'part_description' => ['required', 'string'],

@@ -72,15 +72,12 @@ final class OrderQuotationSaveDTO
             'part_name' => $this->part_name,
             'part_number' => $this->part_number,
             'part_warranty' => $this->part_warranty,
+            'part_vin' => $this->part_vin,
             'part_description' => $this->part_description,
             'sale_price' => $this->sale_price,
             'cost_price' => $this->cost_price,
             'shipping_cost' => $this->shipping_cost,
         ];
-
-        if ($this->part_vin) {
-            $data['part_vin'] = $this->part_vin;
-        }
 
         return $data;
     }

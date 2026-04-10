@@ -68,7 +68,7 @@ export const orderUpdateSchema = yup
         part_vin: yup
             .string()
             .typeError("VIN must contain characters only")
-            .optional(),
+            .required("VIN is required"),
         part_description: yup
             .string()
             .typeError("Part Description must contain characters only")

@@ -157,7 +157,7 @@ export default function SalesQuotationForm({ modal, handleModalClose }: Props) {
                 )}
               />
             </SimpleGrid>
-            <SimpleGrid cols={{ base: 1, md: 3, lg: 3 }} mt="md">
+            <SimpleGrid cols={{ base: 1, md: 2, lg: 2 }} mt="md">
               <Controller
                 control={form.control}
                 name="part_name"
@@ -184,6 +184,8 @@ export default function SalesQuotationForm({ modal, handleModalClose }: Props) {
                   />
                 )}
               />
+            </SimpleGrid>
+            <SimpleGrid cols={{ base: 1, md: 2, lg: 2 }} mt="md">
               <Controller
                 control={form.control}
                 name="part_warranty"
@@ -195,6 +197,19 @@ export default function SalesQuotationForm({ modal, handleModalClose }: Props) {
                       label: (i + 1).toString(),
                     }))}
                     value={field.value ? field.value.toString() : undefined}
+                    onChange={field.onChange}
+                    error={fieldState.error?.message}
+                    withAsterisk={isActive === 1}
+                  />
+                )}
+              />
+              <Controller
+                control={form.control}
+                name="part_vin"
+                render={({ field, fieldState }) => (
+                  <TextInput
+                    label="Vin"
+                    value={field.value ? field.value : ""}
                     onChange={field.onChange}
                     error={fieldState.error?.message}
                     withAsterisk={isActive === 1}

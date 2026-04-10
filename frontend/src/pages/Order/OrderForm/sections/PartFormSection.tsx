@@ -110,6 +110,7 @@ function PartFormSection() {
               value={field.value ? field.value : ""}
               onChange={field.onChange}
               error={fieldState.error?.message}
+              withAsterisk
             />
           )}
         />

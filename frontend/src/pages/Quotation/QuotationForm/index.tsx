@@ -150,7 +150,7 @@ export default function QuotationForm({ modal, handleModalClose }: Props) {
                 )}
               />
             </SimpleGrid>
-            <SimpleGrid cols={{ base: 1, md: 3, lg: 3 }} mt="md">
+            <SimpleGrid cols={{ base: 1, md: 2, lg: 2 }} mt="md">
               <Controller
                 control={form.control}
                 name="part_name"
@@ -177,6 +177,8 @@ export default function QuotationForm({ modal, handleModalClose }: Props) {
                   />
                 )}
               />
+            </SimpleGrid>
+            <SimpleGrid cols={{ base: 1, md: 2, lg: 2 }} mt="md">
               <Controller
                 control={form.control}
                 name="part_warranty"
@@ -188,6 +190,19 @@ export default function QuotationForm({ modal, handleModalClose }: Props) {
                       label: (i + 1).toString(),
                     }))}
                     value={field.value ? field.value.toString() : "1"}
+                    onChange={field.onChange}
+                    error={fieldState.error?.message}
+                    withAsterisk
+                  />
+                )}
+              />
+              <Controller
+                control={form.control}
+                name="part_vin"
+                render={({ field, fieldState }) => (
+                  <TextInput
+                    label="Vin"
+                    value={field.value ? field.value : ""}
                     onChange={field.onChange}
                     error={fieldState.error?.message}
                     withAsterisk

@@ -49,7 +49,7 @@ class ServiceTeamOrderSaveRequests extends InputRequest
             'part_number' => ['required', 'string', 'max:255'],
             'part_description' => ['required', 'string'],
             'part_warranty' => ['required', 'numeric', 'min:0', 'max:12'],
-            'part_vin' => ['nullable', 'string', 'max:255'],
+            'part_vin' => ['required', 'string', 'max:255'],
             'sale_price' => 'required|numeric',
             'cost_price' => 'required|numeric',
             'shipping_cost' => 'required|numeric',

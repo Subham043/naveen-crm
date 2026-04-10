@@ -8,6 +8,7 @@ type Props = {
   part_name: QuotationType["part_name"];
   part_number: QuotationType["part_number"];
   part_warranty: QuotationType["part_warranty"];
+  part_vin: QuotationType["part_vin"];
   part_description: QuotationType["part_description"];
   quotation_sent: QuotationType["quotation_sent"];
 };
@@ -19,6 +20,7 @@ function QuotationViewPartInfo({
   part_name,
   part_number,
   part_warranty,
+  part_vin,
   part_description,
   quotation_sent,
 }: Props) {
@@ -76,6 +78,14 @@ function QuotationViewPartInfo({
             </Text>
             <Text size="sm" c="dimmed">
               {part_warranty || "N/A"}
+            </Text>
+          </Box>
+          <Box>
+            <Text fw={600} c="blue">
+              Vin
+            </Text>
+            <Text size="sm" c="dimmed">
+              {part_vin || "N/A"}
             </Text>
           </Box>
           <Box>

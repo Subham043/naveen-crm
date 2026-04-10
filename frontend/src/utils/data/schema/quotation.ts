@@ -153,6 +153,10 @@ export const quotationUpdateSchema = yup
             .min(0, "Part Warranty must be greater than 0")
             .max(12, "Part Warranty must be less than 12")
             .required("Part Warranty is required"),
+        part_vin: yup
+            .string()
+            .typeError("VIN must contain characters only")
+            .required("VIN is required"),
         part_description: yup
             .string()
             .typeError("Part Description must contain characters only")

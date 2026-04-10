@@ -84,6 +84,7 @@ export default function SalesQuotationView() {
         part_name={data.part_name}
         part_number={data.part_number}
         part_warranty={data.part_warranty}
+        part_vin={data.part_vin}
         part_description={data.part_description}
         quotation_sent={data.quotation_sent}
       />
