@@ -313,7 +313,7 @@
 				</ol>
 			</td>
 			<td style="text-align:center;border-left:1px solid #000;border-top:1px solid #000;border-bottom:1px solid #000;font-weight:bold;">Taxable</td>
-			<td style="border-left:1px solid #000;text-align:center;border-top:1px solid #000;border-bottom:1px solid #000;font-weight:bold;">{{$order->quotation->sales_tax}}%</td>
+			<td style="border-left:1px solid #000;text-align:center;border-top:1px solid #000;border-bottom:1px solid #000;font-weight:bold;">4%</td>
 		</tr>
 		<tr>
 			<td></td>

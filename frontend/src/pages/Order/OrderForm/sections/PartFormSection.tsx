@@ -86,6 +86,19 @@ function PartFormSection() {
       <SimpleGrid cols={{ base: 1, md: 2, lg: 2 }} mt="md">
         <Controller
           control={control}
+          name="part_vin"
+          render={({ field, fieldState }) => (
+            <TextInput
+              label="Vin"
+              value={field.value ? field.value : ""}
+              onChange={field.onChange}
+              error={fieldState.error?.message}
+              withAsterisk
+            />
+          )}
+        />
+        <Controller
+          control={control}
           name="part_warranty"
           render={({ field, fieldState }) => (
             <Select
@@ -95,19 +108,6 @@ function PartFormSection() {
                 label: (i + 1).toString(),
               }))}
               value={field.value ? field.value.toString() : "1"}
-              onChange={field.onChange}
-              error={fieldState.error?.message}
-              withAsterisk
-            />
-          )}
-        />
-        <Controller
-          control={control}
-          name="part_vin"
-          render={({ field, fieldState }) => (
-            <TextInput
-              label="Vin"
-              value={field.value ? field.value : ""}
               onChange={field.onChange}
               error={fieldState.error?.message}
               withAsterisk
@@ -125,7 +125,7 @@ function PartFormSection() {
             onChange={field.onChange}
             error={fieldState.error?.message}
             withAsterisk
-            rows={5}
+            rows={2}
             mt="md"
           />
         )}

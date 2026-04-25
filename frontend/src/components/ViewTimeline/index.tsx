@@ -135,7 +135,9 @@ function ViewTimeline({ quotation_id }: Props) {
                 {item.comment && (
                   <Alert
                     variant="light"
-                    color="blue"
+                    color={
+                      item.done_by.role === "Sales-Team" ? "orange" : "blue"
+                    }
                     title={`${item.done_by.name} (${item.done_by.role})`}
                     icon={<IconMessage />}
                     w="fit-content"

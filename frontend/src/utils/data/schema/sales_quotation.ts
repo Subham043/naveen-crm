@@ -170,6 +170,18 @@ export const salesQuotationSchema = yup
             .typeError("Lead Source must be a number")
             .oneOf([1, 2], "Lead Source must be 1 or 2")
             .required(),
+        is_edit: yup
+            .boolean()
+            .optional()
+            .default(false),
+        comment: yup
+            .string()
+            .typeError("Comment must contain characters only")
+            .when("is_edit", {
+                is: (val: boolean | undefined) => val === true,
+                then: (schema) => schema.required("Comment is required"),
+                otherwise: (schema) => schema.optional(),
+            }),
     })
     .required();
 

@@ -87,16 +87,16 @@ class SalesTeamReportService
                 SUM(COALESCE(sale_price,0)) as total_revenue,
                 SUM(COALESCE(cost_price,0)) as total_cost,
                 SUM(COALESCE(shipping_cost,0)) as total_shipping,
-                ROUND(SUM(COALESCE(cost_price,0) * 0.03), 2) as total_tax,
+                ROUND(SUM(((COALESCE(cost_price,0) + COALESCE(shipping_cost,0)) * 0.04)), 2) as total_tax,
                 ROUND(SUM(
                     COALESCE(sale_price,0) -
-                    (COALESCE(cost_price,0) + COALESCE(shipping_cost,0) + (COALESCE(cost_price,0) * 0.03))
+                    (COALESCE(cost_price,0) + COALESCE(shipping_cost,0) + ((COALESCE(cost_price,0) + COALESCE(shipping_cost,0)) * 0.04))
                 ), 2) as total_profit,
                 ROUND(
                     (
                         SUM(
                             COALESCE(sale_price,0) -
-                            (COALESCE(cost_price,0) + COALESCE(shipping_cost,0) + (COALESCE(cost_price,0) * 0.03))
+                            (COALESCE(cost_price,0) + COALESCE(shipping_cost,0) + ((COALESCE(cost_price,0) + COALESCE(shipping_cost,0)) * 0.04))
                         )
                         / NULLIF(SUM(COALESCE(sale_price,0)),0)
                     ) * 100,
@@ -252,10 +252,10 @@ class SalesTeamReportService
                 sale_price,
                 cost_price,
                 shipping_cost,
-                ROUND(COALESCE(cost_price,0) * 0.03, 2) as tax,
+                ROUND(((COALESCE(cost_price,0) + COALESCE(shipping_cost,0)) * 0.04), 2) as tax,
                 ROUND(
                     COALESCE(sale_price,0) -
-                    (COALESCE(cost_price,0) + COALESCE(shipping_cost,0) + (COALESCE(cost_price,0) * 0.03)), 2
+                    (COALESCE(cost_price,0) + COALESCE(shipping_cost,0) + ((COALESCE(cost_price,0) + COALESCE(shipping_cost,0)) * 0.04)), 2
                 ) as gross_profit
             ")
             ->where('quotation_status', 1)

@@ -55,7 +55,7 @@ class SalesTeamDashboardService
                 ROUND(SUM(CASE 
                     WHEN quotations.is_active = 1 
                     AND quotations.quotation_status = 1 
-                    THEN COALESCE(quotations.cost_price,0) * 0.03 
+                    THEN (COALESCE(quotations.cost_price,0) + COALESCE(quotations.shipping_cost,0)) * 0.04 
                     ELSE 0 END
                 ), 2) as totalSalesTax,
 
@@ -67,7 +67,7 @@ class SalesTeamDashboardService
                         - (
                             COALESCE(quotations.cost_price,0)
                             + COALESCE(quotations.shipping_cost,0)
-                            + (COALESCE(quotations.cost_price,0) * 0.03)
+                            + ((COALESCE(quotations.cost_price,0) + COALESCE(quotations.shipping_cost,0)) * 0.04)
                         )
                     )
                     ELSE 0 END

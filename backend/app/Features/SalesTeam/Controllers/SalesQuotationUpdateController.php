@@ -42,7 +42,7 @@ class SalesQuotationUpdateController extends Controller
                 );
             });
             
-            event(new SalesQuotationUpdated($updated_quotation, $oldValues, $dto, $user->id, $user->name, $user->email));
+            event(new SalesQuotationUpdated($updated_quotation, $oldValues, $dto, $user->id, $user->name, $user->email, $request->safe()->input('comment')));
             return response()->json(["message" => "Quotation updated successfully.", "data" => SalesQuotationCollection::make($updated_quotation)], 200);
         } catch (\Throwable $th) {
             return response()->json(["message" => "Something went wrong. Please try again"], 400);

@@ -34,6 +34,8 @@ const salesQuotationDefaultValues: SalesQuotationFormValuesType = {
   lead_source: 2,
   quotation_sent: 0,
   is_active: 0,
+  is_edit: false,
+  comment: undefined
 }
 
 export function useSalesQuotationForm({ modal, closeModal }: Props) {
@@ -77,6 +79,8 @@ export function useSalesQuotationForm({ modal, closeModal }: Props) {
         lead_source: data.lead_source ?? 2,
         is_active: data.is_active ? 1 : 0,
         quotation_sent: data.quotation_sent ? 1 : 0,
+        is_edit: true,
+        comment: ""
       });
     }
 

@@ -52,6 +52,7 @@ class SalesQuotationSaveRequests extends InputRequest
         ];
 
         if ($this->route('id')) {
+            $rules['comment'] = ['required', 'string'];
             $data = (new SalesQuotationService)->getByIdAndIsInactive($this->route('id'));
             if ($data->lead_source === LeadSource::Website->value()) {
                 $rules['lead_source'] = ['required', 'numeric', new Enum(LeadSource::class), Rule::in([LeadSource::Website->value])];

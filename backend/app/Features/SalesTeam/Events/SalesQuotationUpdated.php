@@ -23,6 +23,7 @@ class SalesQuotationUpdated implements ShouldDispatchAfterCommit
         public int $userId,
         public string $userName,
         public string $userEmail,
+        public string $comment
     ) {
     }
 }

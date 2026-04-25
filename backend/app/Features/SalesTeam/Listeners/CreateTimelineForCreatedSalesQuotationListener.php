@@ -2,6 +2,7 @@
 
 namespace App\Features\SalesTeam\Listeners;
 
+use App\Features\Roles\Enums\Roles;
 use App\Features\SalesTeam\Events\SalesQuotationCreated;
 use App\Features\SalesTeam\Mail\QuotationApprovalPendingMail;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -10,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use App\Features\Timeline\Collections\TimelineChangeCollection;
 use App\Features\Timeline\DTO\TimelineChange;
 use App\Features\Timeline\Services\TimelineService;
+use App\Features\Users\Models\User;
 use Illuminate\Support\Facades\Mail;
 
 class CreateTimelineForCreatedSalesQuotationListener implements ShouldQueue
@@ -56,9 +58,22 @@ class CreateTimelineForCreatedSalesQuotationListener implements ShouldQueue
             if($event->salesQuotationSaveDTO->is_active){
                 $message = "Quotation#{$event->quotation->id} was created and submitted for approval by agent named {$event->userName}<{$event->userEmail}>";
 
-                Mail::to(config('mail.mailers.smtp.admin_email'))->send(
-                    (new QuotationApprovalPendingMail($event->userName, $event->quotation->id))->afterCommit()
-                );
+                // Mail::to(config('mail.mailers.smtp.admin_email'))->send(
+                //     (new QuotationApprovalPendingMail($event->userName, $event->quotation->id))->afterCommit()
+                // );
+                User::whereHas('roles', function ($q) {
+                    $q->where('name', Roles::SuperAdmin->value());
+                })
+                ->select('email') // keep it lightweight
+                ->cursor()
+                ->each(function ($admin) use ($event) {
+                    Mail::to($admin->email)->queue(
+                        (new QuotationApprovalPendingMail(
+                            $event->userName,
+                            $event->quotation->id
+                        ))->afterCommit()
+                    );
+                });
             }
             
             $this->timelineService->createTimeline($event->quotation, $changes, $message, $event->userId, null, null);

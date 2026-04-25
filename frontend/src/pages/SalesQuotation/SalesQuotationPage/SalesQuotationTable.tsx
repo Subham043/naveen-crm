@@ -168,6 +168,7 @@ function SalesQuotationTable({
                 phone_number={item.phone_number}
                 part_year={item.part_year}
                 part_model={item.part_model}
+                part_make={item.part_make}
                 part_name={item.part_name}
                 part_number={item.part_number}
                 part_description={item.part_description}

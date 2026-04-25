@@ -34,7 +34,7 @@ class AdminReportService
                 SUM(COALESCE(sale_price,0)) as total_revenue,
                 ROUND(SUM(CASE WHEN quotation_status = 1 THEN 
                     (COALESCE(sale_price,0) -
-                    (COALESCE(cost_price,0) + COALESCE(shipping_cost,0) + (COALESCE(cost_price,0) * 0.03))) 
+                    (COALESCE(cost_price,0) + COALESCE(shipping_cost,0) + ((COALESCE(cost_price,0) + COALESCE(shipping_cost,0)) * 0.04))) 
                     ELSE 0 END
                 ), 2) as total_profit,
                 ROUND(
@@ -94,16 +94,16 @@ class AdminReportService
                 SUM(COALESCE(sale_price,0)) as total_revenue,
                 SUM(COALESCE(cost_price,0)) as total_cost,
                 SUM(COALESCE(shipping_cost,0)) as total_shipping,
-                ROUND(SUM(COALESCE(cost_price,0) * 0.03), 2) as total_tax,
+                ROUND(SUM(((COALESCE(cost_price,0) + COALESCE(shipping_cost,0)) * 0.04)), 2) as total_tax,
                 ROUND(SUM(
                     COALESCE(sale_price,0) -
-                    (COALESCE(cost_price,0) + COALESCE(shipping_cost,0) + (COALESCE(cost_price,0) * 0.03))
+                    (COALESCE(cost_price,0) + COALESCE(shipping_cost,0) + ((COALESCE(cost_price,0) + COALESCE(shipping_cost,0)) * 0.04))
                 ), 2) as total_profit,
                 ROUND(
                     (
                         SUM(
                             COALESCE(sale_price,0) -
-                            (COALESCE(cost_price,0) + COALESCE(shipping_cost,0) + (COALESCE(cost_price,0) * 0.03))
+                            (COALESCE(cost_price,0) + COALESCE(shipping_cost,0) + ((COALESCE(cost_price,0) + COALESCE(shipping_cost,0)) * 0.04))
                         )
                         / NULLIF(SUM(COALESCE(sale_price,0)),0)
                     ) * 100,
@@ -170,14 +170,19 @@ class AdminReportService
                 sales_user_id,
                 ROUND(SUM(
                     COALESCE(sale_price,0) -
-                    (COALESCE(cost_price,0) + COALESCE(shipping_cost,0) + (COALESCE(cost_price,0) * 0.03))
+                    (COALESCE(cost_price,0) + COALESCE(shipping_cost,0) + ((COALESCE(cost_price,0) + COALESCE(shipping_cost,0)) * 0.04))
                 ), 2) as total_profit,
                 SUM(COALESCE(sale_price,0)) as total_revenue
             ")
             ->where('quotation_status', 1)
             ->groupBy('sales_user_id')
             ->orderByDesc('total_profit')
-            ->with('salesUser:id,name,email');
+            ->with('salesUser:id,name,email')
+            ->whereHas('salesUser', function (Builder $query) {
+                $query->whereHas('roles', function ($q) {
+                    $q->where('name', Roles::Sales->value());
+                });
+            });
     }
 
     public function adminProfitLeaderboardQuery(): QueryBuilder
@@ -203,7 +208,12 @@ class AdminReportService
             ")
             ->whereNotNull('approval_at')
             ->groupBy('sales_user_id')
-            ->with('salesUser:id,name,email');
+            ->with('salesUser:id,name,email')
+            ->whereHas('salesUser', function (Builder $query) {
+                $query->whereHas('roles', function ($q) {
+                    $q->where('name', Roles::Sales->value());
+                });
+            });
     }
 
     public function adminApprovalTurnaroundQuery(): QueryBuilder
@@ -283,7 +293,12 @@ class AdminReportService
             ->whereNotNull('user_id')
             ->whereNotNull('comment')
             ->groupBy(DB::raw("{$groupByPeriod}, user_id"))
-            ->with('doneBy:id,name,email');
+            ->with('doneBy:id,name,email')
+            ->whereHas('doneBy', function (Builder $query) {
+                $query->whereHas('roles', function ($q) {
+                    $q->where('name', Roles::Service->value());
+                });
+            });
     }
 
     public function adminServiceTeamPerformanceQuery(): QueryBuilder

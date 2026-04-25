@@ -38,6 +38,11 @@ export default function SalesQuotationForm({ modal, handleModalClose }: Props) {
     name: "is_active",
   });
 
+  const isEdit = useWatch({
+    control: form.control,
+    name: "is_edit",
+  });
+
   return (
     <Drawer
       opened={modal.show}
@@ -188,6 +193,19 @@ export default function SalesQuotationForm({ modal, handleModalClose }: Props) {
             <SimpleGrid cols={{ base: 1, md: 2, lg: 2 }} mt="md">
               <Controller
                 control={form.control}
+                name="part_vin"
+                render={({ field, fieldState }) => (
+                  <TextInput
+                    label="Vin"
+                    value={field.value ? field.value : ""}
+                    onChange={field.onChange}
+                    error={fieldState.error?.message}
+                    withAsterisk={isActive === 1}
+                  />
+                )}
+              />
+              <Controller
+                control={form.control}
                 name="part_warranty"
                 render={({ field, fieldState }) => (
                   <Select
@@ -197,19 +215,6 @@ export default function SalesQuotationForm({ modal, handleModalClose }: Props) {
                       label: (i + 1).toString(),
                     }))}
                     value={field.value ? field.value.toString() : undefined}
-                    onChange={field.onChange}
-                    error={fieldState.error?.message}
-                    withAsterisk={isActive === 1}
-                  />
-                )}
-              />
-              <Controller
-                control={form.control}
-                name="part_vin"
-                render={({ field, fieldState }) => (
-                  <TextInput
-                    label="Vin"
-                    value={field.value ? field.value : ""}
                     onChange={field.onChange}
                     error={fieldState.error?.message}
                     withAsterisk={isActive === 1}
@@ -227,7 +232,7 @@ export default function SalesQuotationForm({ modal, handleModalClose }: Props) {
                   onChange={field.onChange}
                   error={fieldState.error?.message}
                   withAsterisk={isActive === 1}
-                  rows={5}
+                  rows={2}
                   mt="md"
                 />
               )}
@@ -364,6 +369,25 @@ export default function SalesQuotationForm({ modal, handleModalClose }: Props) {
               )}
             />
           </Fieldset>
+          {isEdit && (
+            <Fieldset legend="Comment Information" variant="filled" mt="md">
+              <Controller
+                control={form.control}
+                name="comment"
+                render={({ field, fieldState }) => (
+                  <Textarea
+                    label="Comment"
+                    value={field.value ? field.value : ""}
+                    onChange={field.onChange}
+                    error={fieldState.error?.message}
+                    rows={5}
+                    withAsterisk
+                  />
+                )}
+              />
+            </Fieldset>
+          )}
+
           <Group gap="xs" mt="md">
             <Button
               type="submit"
