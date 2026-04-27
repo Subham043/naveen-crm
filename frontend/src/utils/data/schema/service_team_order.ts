@@ -82,8 +82,8 @@ export const serviceTeamOrderSchema = yup
             .required("Shipping Address is required"),
         sale_price: yup
             .number()
-            .typeError("Total Price must be a number")
-            .required("Total Price is required"),
+            .typeError("Sale Price must be a number")
+            .required("Sale Price is required"),
         cost_price: yup
             .number()
             .typeError("Cost Price must be a number")

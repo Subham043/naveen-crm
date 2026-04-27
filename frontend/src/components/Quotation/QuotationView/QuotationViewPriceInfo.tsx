@@ -26,7 +26,7 @@ function QuotationViewPriceInfo({
         <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }}>
           <Box>
             <Text fw={600} c="blue">
-              Total Price
+              Sale Price
             </Text>
             <Text size="sm" c="dimmed">
               {sale_price ? sale_price : 0.0}

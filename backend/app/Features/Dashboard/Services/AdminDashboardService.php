@@ -54,14 +54,14 @@ class AdminDashboardService
 
                 SUM(COALESCE(quotations.shipping_cost,0)) as shippingCost,
 
-                ROUND(SUM((COALESCE(quotations.shipping_cost,0) + COALESCE(quotations.cost_price,0)) * 0.04), 2) as totalSalesTax,
+                ROUND(SUM((COALESCE(quotations.sale_price,0)) * 0.04), 2) as totalSalesTax,
 
                 ROUND(SUM(
                     COALESCE(quotations.sale_price,0)
                     - (
                         COALESCE(quotations.cost_price,0)
                         + COALESCE(quotations.shipping_cost,0)
-                        + ((COALESCE(quotations.cost_price,0) + COALESCE(quotations.shipping_cost,0)) * 0.04)
+                        + (COALESCE(quotations.sale_price,0) * 0.04)
                     )
                 ), 2) as totalGrossProfit,
 

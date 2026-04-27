@@ -34,7 +34,7 @@ class AdminReportService
                 SUM(COALESCE(sale_price,0)) as total_revenue,
                 ROUND(SUM(CASE WHEN quotation_status = 1 THEN 
                     (COALESCE(sale_price,0) -
-                    (COALESCE(cost_price,0) + COALESCE(shipping_cost,0) + ((COALESCE(cost_price,0) + COALESCE(shipping_cost,0)) * 0.04))) 
+                    (COALESCE(cost_price,0) + COALESCE(shipping_cost,0) + (COALESCE(sale_price,0) * 0.04))) 
                     ELSE 0 END
                 ), 2) as total_profit,
                 ROUND(
@@ -94,16 +94,16 @@ class AdminReportService
                 SUM(COALESCE(sale_price,0)) as total_revenue,
                 SUM(COALESCE(cost_price,0)) as total_cost,
                 SUM(COALESCE(shipping_cost,0)) as total_shipping,
-                ROUND(SUM(((COALESCE(cost_price,0) + COALESCE(shipping_cost,0)) * 0.04)), 2) as total_tax,
+                ROUND(SUM(((COALESCE(sale_price,0)) * 0.04)), 2) as total_tax,
                 ROUND(SUM(
                     COALESCE(sale_price,0) -
-                    (COALESCE(cost_price,0) + COALESCE(shipping_cost,0) + ((COALESCE(cost_price,0) + COALESCE(shipping_cost,0)) * 0.04))
+                    (COALESCE(cost_price,0) + COALESCE(shipping_cost,0) + (COALESCE(sale_price,0) * 0.04))
                 ), 2) as total_profit,
                 ROUND(
                     (
                         SUM(
                             COALESCE(sale_price,0) -
-                            (COALESCE(cost_price,0) + COALESCE(shipping_cost,0) + ((COALESCE(cost_price,0) + COALESCE(shipping_cost,0)) * 0.04))
+                            (COALESCE(cost_price,0) + COALESCE(shipping_cost,0) + (COALESCE(sale_price,0) * 0.04))
                         )
                         / NULLIF(SUM(COALESCE(sale_price,0)),0)
                     ) * 100,
@@ -170,7 +170,7 @@ class AdminReportService
                 sales_user_id,
                 ROUND(SUM(
                     COALESCE(sale_price,0) -
-                    (COALESCE(cost_price,0) + COALESCE(shipping_cost,0) + ((COALESCE(cost_price,0) + COALESCE(shipping_cost,0)) * 0.04))
+                    (COALESCE(cost_price,0) + COALESCE(shipping_cost,0) + (COALESCE(sale_price,0) * 0.04))
                 ), 2) as total_profit,
                 SUM(COALESCE(sale_price,0)) as total_revenue
             ")

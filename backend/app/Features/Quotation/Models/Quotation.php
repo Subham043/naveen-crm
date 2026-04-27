@@ -103,7 +103,7 @@ class Quotation extends Model
     public function salesTax(): Attribute
     {
         return Attribute::make(
-            get: fn () => !($this->shipping_cost || $this->cost_price) ? 0.0 : round((($this->shipping_cost + $this->cost_price) * 0.04), 2),
+            get: fn () => !($this->sale_price) ? 0.0 : round(($this->sale_price * 0.04), 2),
         );
     }
 
