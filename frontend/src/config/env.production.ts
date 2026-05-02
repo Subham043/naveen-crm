@@ -1,7 +1,7 @@
 import { base } from "./env.base";
 
-const APP_ENDPOINT = "https://wiseman-crm.digisole.in";
-const API_ENDPOINT = "https://wiseman-server.digisole.in";
+const APP_ENDPOINT = "https://crm.wisemanautomart.com";
+const API_ENDPOINT = "https://api.wisemanautomart.com";
 
 /*
  * Configuration for production env
