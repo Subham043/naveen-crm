@@ -1,6 +1,6 @@
 <?php
 
-use App\Features\Order\Controllers\OrderWebhookCreateController;
+use App\Features\Quotation\Controllers\QuotationWebhookCreateController;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/order/webhook/create', [OrderWebhookCreateController::class, 'index']);
+Route::post('/quotation/webhook/create', [QuotationWebhookCreateController::class, 'index']);
