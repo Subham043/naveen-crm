@@ -32,7 +32,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
         $middleware->encryptCookies(except: ['WISEMAN_AUTOMART_AUTH']);
         $middleware->validateCsrfTokens(except: [
-            'order/webhook/create',
+            'quotation/webhook/create',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
