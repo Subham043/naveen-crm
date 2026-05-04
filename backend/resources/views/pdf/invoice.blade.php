@@ -161,7 +161,7 @@
 							<tr>
 								<td width="100%"
 									style="font-size:17px;font-weight:bold;text-align:right; white-space:nowrap;">
-									Date # {{ date('d/m/Y') }}
+									Date # {{ date('m/d/Y') }}
 								</td>
 							</tr>
 
@@ -255,7 +255,7 @@
 			<td width="20%" style="text-align:center;font-weight:bold;">AMOUNT</td>
 		</tr>
 		<tr>
-			<td style="border-top:1px solid #000; vertical-align:top;">
+			<td style="border-top:1px solid #000; vertical-align:top;font-weight:bold;">
 				<table width="100%" cellspacing="0" cellpadding="2">
 					<tr>
 						<td width="100">Year</td>
@@ -294,9 +294,9 @@
 					</tr>
 				</table>
 			</td>
-			<td style="border-left:1px solid #000;border-top:1px solid #000;text-align:center;vertical-align:middle;">
+			<td style="border-left:1px solid #000;border-top:1px solid #000;text-align:center;vertical-align:middle;font-weight:bold;">
 				Yes </td>
-			<td style="border-left:1px solid #000;border-top:1px solid #000;text-align:center;vertical-align:middle;">
+			<td style="border-left:1px solid #000;border-top:1px solid #000;text-align:center;vertical-align:middle;font-weight:bold;">
 				${{$order->quotation->sale_price}} </td>
 		</tr>
 		<tr style="background-color:#1f3864; color: white;">
@@ -345,7 +345,7 @@
 		RESTOCKING FEES AND ARE AT THE SOLE DESCRIPTION OF THE SELLER. RETURNING THE PART IS THE RESPONSIBILITY OF THE
 		CUSTOMER AT THEIR EXPENSE. RETURN SHIPPING COSTS WILL NOT BE REIMBURSED. THIS SALE AGREEMENT IS GOVERNED BY THE
 		LAWS OF THE STATE OF GEORGIA AND YOU HEREBY CONSENT TO THE EXCLUSIVE JURISDICTION AND VENUE OF THE COURTS OF
-		GEORGIA FOR ALL DISPUTES. TERMS AND CONDITIONS OF SALE READ AND AGREED. </p> <br><br>
+		GEORGIA FOR ALL DISPUTES. TERMS AND CONDITIONS OF SALE READ AND AGREED. </p> <br>
 	<table width="100%">
 		<tr>
 			<td width="50%"> Date: __________________________ </td>
