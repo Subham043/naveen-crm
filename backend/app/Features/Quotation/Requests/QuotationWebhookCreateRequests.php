@@ -26,10 +26,7 @@ class QuotationWebhookCreateRequests extends InputRequest
             return false;
         }
         $secret = config('services.webhook.secret');
-        $payload = json_encode(
-            json_decode(request()->getContent(), true),
-            JSON_UNESCAPED_SLASHES
-        );
+        $payload = request()->getContent();
         $computedSignature = hash_hmac('sha256', $payload, $secret);
 
         return hash_equals($computedSignature, $signature);
