@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -30,6 +31,9 @@ return new class extends Migration
             $table->foreignId('quotation_id')->unique()->nullable()->index();
             $table->timestamps();
         });
+
+        // Set starting AUTO_INCREMENT value
+        DB::statement('ALTER TABLE orders AUTO_INCREMENT = 3879;');
     }
 
     /**
