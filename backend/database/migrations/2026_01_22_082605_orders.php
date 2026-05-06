@@ -33,7 +33,7 @@ return new class extends Migration
         });
 
         // Set starting AUTO_INCREMENT value
-        DB::statement('ALTER TABLE orders AUTO_INCREMENT = 3879;');
+        DB::statement('ALTER TABLE orders AUTO_INCREMENT = 3892;');
     }
 
     /**
