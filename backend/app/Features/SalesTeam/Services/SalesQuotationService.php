@@ -20,14 +20,23 @@ class SalesQuotationService extends AbstractService
         return Quotation::select('id', 'name', 'email', 'phone', 'country_code', 'billing_address', 'shipping_address', 'part_year', 'part_model', 'part_make', 'part_name', 'part_number', 'part_warranty', 'part_vin', 'part_description', 'lead_source', 'sales_user_id', 'is_created_by_agent', 'assigned_at', 'sale_price', 'cost_price', 'shipping_cost', 'quotation_status', 'approval_by_id', 'approval_at', 'is_active', 'quotation_sent', 'created_at', 'updated_at')
         ->with([
             'salesUser' => function($query){
-                $query->select('id', 'name', 'email', 'phone')->where('id', Auth::guard(Guards::API->value())->user()->id);
+                $query->select('id', 'name', 'email', 'phone');
+                // ->where('id', Auth::guard(Guards::API->value())->user()->id);
             },
             'approvalBy' => function($query){
                 $query->select('id', 'name', 'email', 'phone');
             }
-        ])->whereHas('salesUser', function($query){
-            $query->where('id', Auth::guard(Guards::API->value())->user()->id);
-        })->where('sales_user_id', Auth::guard(Guards::API->value())->user()->id);
+        ])
+        ->where(function ($query) {
+            $query
+                ->where('sales_user_id', Auth::guard(Guards::API->value())->user()->id)
+                ->orWhereNull('sales_user_id');
+        });
+        // ->where(function($query){
+        //     $query->whereHas('salesUser', function($query){
+        //         $query->where('id', Auth::guard(Guards::API->value())->user()->id);
+        //     })->where('sales_user_id', Auth::guard(Guards::API->value())->user()->id);
+        // })->orWhere('sales_user_id', null);
     }
 
     public function query(): QueryBuilder

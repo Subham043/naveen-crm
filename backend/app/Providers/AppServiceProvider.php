@@ -13,9 +13,11 @@ use App\Features\Quotation\Listeners\CreateTimelineForCreatedPublicQuotationList
 use App\Features\Quotation\Listeners\CreateTimelineForQuotationApprovalListener;
 use App\Features\Quotation\Listeners\CreateTimelineForUpdatedQuotationListener;
 use App\Features\Roles\Enums\Roles;
+use App\Features\SalesTeam\Events\AssignSalesQuotationToAgent;
 use App\Features\SalesTeam\Events\SalesQuotationCreated;
 use App\Features\SalesTeam\Events\SalesQuotationSubmittedForApproval;
 use App\Features\SalesTeam\Events\SalesQuotationUpdated;
+use App\Features\SalesTeam\Listeners\AssignAgentToQuotationListener;
 use App\Features\SalesTeam\Listeners\CreateTimelineForCreatedSalesQuotationListener;
 use App\Features\SalesTeam\Listeners\CreateTimelineForSalesQuotationSubmittedForApprovalListener;
 use App\Features\SalesTeam\Listeners\CreateTimelineForUpdatedSalesQuotationListener;
@@ -98,6 +100,11 @@ class AppServiceProvider extends ServiceProvider
         Event::listen(
             WebhookQuotationCreated::class,
             AssignAgentToCreatedPublicQuotationListener::class,
+        );
+        
+        Event::listen(
+            AssignSalesQuotationToAgent::class,
+            AssignAgentToQuotationListener::class,
         );
         
         Event::listen(

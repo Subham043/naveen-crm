@@ -3,6 +3,7 @@
 namespace App\Features\SalesTeam\Controllers;
 
 use App\Features\SalesTeam\DTO\SalesQuotationSaveDTO;
+use App\Features\SalesTeam\Events\AssignSalesQuotationToAgent;
 use App\Features\SalesTeam\Events\SalesQuotationUpdated;
 use App\Http\Controllers\Controller;
 use App\Features\SalesTeam\Requests\SalesQuotationSaveRequests;
@@ -41,6 +42,10 @@ class SalesQuotationUpdateController extends Controller
                     $quotation
                 );
             });
+
+            if($quotation->sales_user_id == null){
+                event(new AssignSalesQuotationToAgent($quotation, $user));
+            }
             
             event(new SalesQuotationUpdated($updated_quotation, $oldValues, $dto, $user->id, $user->name, $user->email, $request->safe()->input('comment')));
             return response()->json(["message" => "Quotation updated successfully.", "data" => SalesQuotationCollection::make($updated_quotation)], 200);
