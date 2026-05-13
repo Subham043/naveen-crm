@@ -25,7 +25,7 @@ class QuotationPublicCreateController extends Controller
     public function index(QuotationPublicCreateRequests $request){
         try {
             $dto = QuotationPublicCreateDTO::fromRequest($request);
-            DB::transaction(function () use ($dto) {
+            $quotation = DB::transaction(function () use ($dto) {
                 return $this->quotationService->create([
                     ...$dto->toArray(),
                     'is_active' => false,
@@ -33,7 +33,7 @@ class QuotationPublicCreateController extends Controller
                     'lead_source' => LeadSource::Website->value(),
                 ]);
             });
-            // event(new PublicQuotationCreated($quotation, $dto));
+            event(new PublicQuotationCreated($quotation, $dto));
             return response()->json([
                 "message" => "Quotation created successfully.",
             ], 201);

@@ -3,16 +3,17 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, type Resolver, type UseFormReturn } from "react-hook-form";
 import { handleFormServerErrors } from "@/utils/helper";
 import { useCallback, useEffect } from "react";
-import { quotationUpdateSchema, type QuotationUpdateFormValuesType } from "@/utils/data/schema/quotation";
+import { quotationSchema, type QuotationFormValuesType } from "@/utils/data/schema/quotation";
 import { useQuotationQuery } from "@/utils/data/query/quotation";
-import { useQuotationUpdateMutation } from "@/utils/data/mutation/quotation";
+import { useQuotationCreateMutation, useQuotationUpdateMutation } from "@/utils/data/mutation/quotation";
 
 type Props = {
   modal: ExtendedModalProps<{ id: undefined }, { id: number }>;
   closeModal: () => void;
 };
 
-const quotationUpdateDefaultValues: QuotationUpdateFormValuesType = {
+const quotationUpdateDefaultValues: QuotationFormValuesType = {
+  is_edit: false,
   name: "",
   email: "",
   phone: "",
@@ -42,10 +43,11 @@ export function useQuotationForm({ modal, closeModal }: Props) {
     isEdit
   );
 
+  const quotationCreate = useQuotationCreateMutation();
   const quotationUpdate = useQuotationUpdateMutation(modal.type === "update" ? modal.id : 0);
 
-  const form = useForm<QuotationUpdateFormValuesType>({
-    resolver: yupResolver(quotationUpdateSchema) as Resolver<QuotationUpdateFormValuesType>,
+  const form = useForm<QuotationFormValuesType>({
+    resolver: yupResolver(quotationSchema) as Resolver<QuotationFormValuesType>,
     defaultValues: quotationUpdateDefaultValues,
   });
 
@@ -53,6 +55,7 @@ export function useQuotationForm({ modal, closeModal }: Props) {
     if (!modal.show) return;
     if (modal.type === "update" && data) {
       form.reset({
+        is_edit: true,
         name: data.name ?? "",
         email: data.email ?? "",
         phone: data.phone ?? "",
@@ -90,20 +93,29 @@ export function useQuotationForm({ modal, closeModal }: Props) {
       if (modal.type === "update") {
         await quotationUpdate.mutateAsync(values, {
           onError: (error) => {
-            handleFormServerErrors(error, form as UseFormReturn<QuotationUpdateFormValuesType>);
+            handleFormServerErrors(error, form as UseFormReturn<QuotationFormValuesType>);
+          },
+          onSuccess: () => {
+            handleClose();
+          }
+        });
+      } else {
+        await quotationCreate.mutateAsync(values, {
+          onError: (error) => {
+            handleFormServerErrors(error, form as UseFormReturn<QuotationFormValuesType>);
           },
           onSuccess: () => {
             handleClose();
           }
         });
       }
-    }), [modal.type, form.handleSubmit, quotationUpdate.mutate, handleClose]);
+    }), [modal.type, form.handleSubmit, quotationUpdate.mutate, quotationCreate.mutate, handleClose]);
 
   return {
     form,
     data,
     isLoading: isLoading || isFetching || isRefetching,
-    loading: quotationUpdate.isPending,
+    loading: quotationUpdate.isPending || quotationCreate.isPending,
     onSubmit,
     handleClose,
   };

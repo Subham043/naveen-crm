@@ -6,9 +6,11 @@ use App\Features\Order\Events\OrderUpdated;
 use App\Features\Order\Listeners\CreateTimelineForUpdatedOrderListener;
 use App\Features\Quotation\Events\QuotationApproval;
 use App\Features\Quotation\Events\PublicQuotationCreated;
+use App\Features\Quotation\Events\QuotationCreated;
 use App\Features\Quotation\Events\QuotationUpdated;
 use App\Features\Quotation\Events\WebhookQuotationCreated;
-use App\Features\Quotation\Listeners\AssignAgentToCreatedPublicQuotationListener;
+// use App\Features\Quotation\Listeners\AssignAgentToCreatedPublicQuotationListener;
+use App\Features\Quotation\Listeners\CreateTimelineForCreatedAdminQuotationListener;
 use App\Features\Quotation\Listeners\CreateTimelineForCreatedPublicQuotationListener;
 use App\Features\Quotation\Listeners\CreateTimelineForQuotationApprovalListener;
 use App\Features\Quotation\Listeners\CreateTimelineForUpdatedQuotationListener;
@@ -92,19 +94,24 @@ class AppServiceProvider extends ServiceProvider
             CreateTimelineForCreatedPublicQuotationListener::class,
         );
         
-        Event::listen(
-            PublicQuotationCreated::class,
-            AssignAgentToCreatedPublicQuotationListener::class,
-        );
+        // Event::listen(
+        //     PublicQuotationCreated::class,
+        //     AssignAgentToCreatedPublicQuotationListener::class,
+        // );
         
-        Event::listen(
-            WebhookQuotationCreated::class,
-            AssignAgentToCreatedPublicQuotationListener::class,
-        );
+        // Event::listen(
+        //     WebhookQuotationCreated::class,
+        //     AssignAgentToCreatedPublicQuotationListener::class,
+        // );
         
         Event::listen(
             AssignSalesQuotationToAgent::class,
             AssignAgentToQuotationListener::class,
+        );
+        
+        Event::listen(
+            QuotationCreated::class,
+            CreateTimelineForCreatedAdminQuotationListener::class,
         );
         
         Event::listen(

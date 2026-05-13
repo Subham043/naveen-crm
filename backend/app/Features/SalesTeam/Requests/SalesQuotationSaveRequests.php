@@ -81,7 +81,7 @@ class SalesQuotationSaveRequests extends InputRequest
             'part_make' => 'make',
             'part_model' => 'model',
             'part_warranty' => 'warranty',
-            'part_warranty' => 'vin',
+            'part_vin' => 'vin',
         ];
     }
 

@@ -85,7 +85,7 @@ export default function QuotationForm({ modal, handleModalClose }: Props) {
                   <Input.Wrapper
                     label="Phone Number"
                     error={fieldState.error?.message}
-                    withAsterisk
+                    withAsterisk={modal.type === "update" ? true : false}
                   >
                     <PhoneInput
                       defaultCountry="us"
@@ -119,7 +119,7 @@ export default function QuotationForm({ modal, handleModalClose }: Props) {
                     value={field.value ? field.value : undefined}
                     onChange={field.onChange}
                     error={fieldState.error?.message}
-                    withAsterisk
+                    withAsterisk={modal.type === "update" ? true : false}
                   />
                 )}
               />
@@ -132,7 +132,7 @@ export default function QuotationForm({ modal, handleModalClose }: Props) {
                     value={field.value ? field.value : ""}
                     onChange={field.onChange}
                     error={fieldState.error?.message}
-                    withAsterisk
+                    withAsterisk={modal.type === "update" ? true : false}
                   />
                 )}
               />
@@ -145,7 +145,7 @@ export default function QuotationForm({ modal, handleModalClose }: Props) {
                     value={field.value ? field.value : ""}
                     onChange={field.onChange}
                     error={fieldState.error?.message}
-                    withAsterisk
+                    withAsterisk={modal.type === "update" ? true : false}
                   />
                 )}
               />
@@ -160,7 +160,7 @@ export default function QuotationForm({ modal, handleModalClose }: Props) {
                     value={field.value ? field.value : ""}
                     onChange={field.onChange}
                     error={fieldState.error?.message}
-                    withAsterisk
+                    withAsterisk={modal.type === "update" ? true : false}
                   />
                 )}
               />
@@ -173,7 +173,7 @@ export default function QuotationForm({ modal, handleModalClose }: Props) {
                     value={field.value ? field.value : ""}
                     onChange={field.onChange}
                     error={fieldState.error?.message}
-                    withAsterisk
+                    withAsterisk={modal.type === "update" ? true : false}
                   />
                 )}
               />
@@ -188,7 +188,7 @@ export default function QuotationForm({ modal, handleModalClose }: Props) {
                     value={field.value ? field.value : ""}
                     onChange={field.onChange}
                     error={fieldState.error?.message}
-                    withAsterisk
+                    withAsterisk={modal.type === "update" ? true : false}
                   />
                 )}
               />
@@ -205,7 +205,7 @@ export default function QuotationForm({ modal, handleModalClose }: Props) {
                     value={field.value ? field.value.toString() : "1"}
                     onChange={field.onChange}
                     error={fieldState.error?.message}
-                    withAsterisk
+                    withAsterisk={modal.type === "update" ? true : false}
                   />
                 )}
               />
@@ -219,7 +219,7 @@ export default function QuotationForm({ modal, handleModalClose }: Props) {
                   value={field.value ? field.value : ""}
                   onChange={field.onChange}
                   error={fieldState.error?.message}
-                  withAsterisk
+                  withAsterisk={modal.type === "update" ? true : false}
                   rows={2}
                   mt="md"
                 />
@@ -238,7 +238,7 @@ export default function QuotationForm({ modal, handleModalClose }: Props) {
                     value={field.value ? field.value : undefined}
                     onChange={field.onChange}
                     error={fieldState.error?.message}
-                    withAsterisk
+                    withAsterisk={modal.type === "update" ? true : false}
                   />
                 )}
               />
@@ -252,7 +252,7 @@ export default function QuotationForm({ modal, handleModalClose }: Props) {
                     value={field.value ? field.value : undefined}
                     onChange={field.onChange}
                     error={fieldState.error?.message}
-                    withAsterisk
+                    withAsterisk={modal.type === "update" ? true : false}
                   />
                 )}
               />
@@ -266,7 +266,7 @@ export default function QuotationForm({ modal, handleModalClose }: Props) {
                     value={field.value ? field.value : undefined}
                     onChange={field.onChange}
                     error={fieldState.error?.message}
-                    withAsterisk
+                    withAsterisk={modal.type === "update" ? true : false}
                   />
                 )}
               />
@@ -283,7 +283,7 @@ export default function QuotationForm({ modal, handleModalClose }: Props) {
                     value={field.value ? field.value : ""}
                     onChange={field.onChange}
                     error={fieldState.error?.message}
-                    withAsterisk
+                    withAsterisk={modal.type === "update" ? true : false}
                     rows={5}
                   />
                 )}
@@ -297,7 +297,7 @@ export default function QuotationForm({ modal, handleModalClose }: Props) {
                     value={field.value ? field.value : ""}
                     onChange={field.onChange}
                     error={fieldState.error?.message}
-                    withAsterisk
+                    withAsterisk={modal.type === "update" ? true : false}
                     rows={5}
                   />
                 )}
@@ -331,11 +331,11 @@ export default function QuotationForm({ modal, handleModalClose }: Props) {
             <Button
               type="submit"
               variant="filled"
-              color="cyan"
+              color={modal.type === "create" ? "teal" : "cyan"}
               disabled={loading}
               loading={loading}
             >
-              Update
+              {modal.type === "create" ? "Create" : "Update"}
             </Button>
             <Button
               type="button"

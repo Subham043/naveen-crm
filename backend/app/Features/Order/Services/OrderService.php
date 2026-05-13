@@ -159,7 +159,7 @@ class CommonFilter implements Filter
                     ->orWhere('email', 'LIKE', '%' . $value . '%')
                     ->orWhere('phone', 'LIKE', '%' . $value . '%');
                 });
-            });
+            })->orWhere('id', 'LIKE', '%' . preg_replace('/\D/', '', $value) . '%');
         });
     }
 }

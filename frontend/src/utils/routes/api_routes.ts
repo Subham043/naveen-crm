@@ -33,6 +33,7 @@ export const api_routes = {
     paginate: "/api/v1/quotation/paginate",
     view: "/api/v1/quotation/view",
     excel: "/api/v1/quotation/excel",
+    create: "/api/v1/quotation/create",
     update: "/api/v1/quotation/update",
     approval: "/api/v1/quotation/approval",
     timeline: "/api/v1/quotation/timeline",

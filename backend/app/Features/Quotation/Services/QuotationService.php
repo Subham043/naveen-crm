@@ -25,8 +25,8 @@ class QuotationService extends AbstractService
             'approvalBy' => function($query){
                 $query->select('id', 'name', 'email', 'phone');
             },
-        ])
-        ->whereHas('salesUser');
+        ]);
+        // ->whereHas('salesUser');
     }
 
     public function query(): QueryBuilder
@@ -97,6 +97,7 @@ class CommonFilter implements Filter
             ->orWhere('part_make', 'LIKE', '%' . $value . '%')
             ->orWhere('part_name', 'LIKE', '%' . $value . '%')
             ->orWhere('part_number', 'LIKE', '%' . $value . '%')
+            ->orWhere('id', 'LIKE', '%' . $value . '%')
             ->orWhereHas('salesUser', function($q) use($value){
                 $q->where('name', 'LIKE', '%' . $value . '%')
                 ->orWhere('email', 'LIKE', '%' . $value . '%')

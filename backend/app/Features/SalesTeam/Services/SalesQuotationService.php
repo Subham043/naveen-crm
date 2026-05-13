@@ -107,6 +107,7 @@ class CommonFilter implements Filter
             ->orWhere('part_description', 'LIKE', '%' . $value . '%')
             ->orWhere('billing_address', 'LIKE', '%' . $value . '%')
             ->orWhere('shipping_address', 'LIKE', '%' . $value . '%')
+            ->orWhere('id', 'LIKE', '%' . $value . '%')
             ->orWhereHas('approvalBy', function($q) use($value){
                 $q->where('name', 'LIKE', '%' . $value . '%')
                 ->orWhere('email', 'LIKE', '%' . $value . '%')

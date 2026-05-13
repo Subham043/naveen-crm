@@ -22,6 +22,7 @@ use App\Features\Order\Controllers\OrderPaginateController;
 use App\Features\Order\Controllers\OrderUpdateController;
 use App\Features\Quotation\Controllers\QuotationPublicCreateController;
 use App\Features\Order\Controllers\OrderViewController;
+use App\Features\Quotation\Controllers\QuotationCreateController;
 use App\Features\Quotation\Controllers\QuotationExportController;
 use App\Features\Quotation\Controllers\QuotationPaginateController;
 use App\Features\Quotation\Controllers\QuotationUpdateController;
@@ -126,6 +127,7 @@ Route::prefix('v1')->middleware([Throttle::API->middleware()])->group(function (
             Route::prefix('quotation')->group(function () {
                 Route::get('/excel', [QuotationExportController::class, 'index']);
                 Route::get('/paginate', [QuotationPaginateController::class, 'index']);
+                Route::post('/create', [QuotationCreateController::class, 'index']);
                 Route::get('/view/{id}', [QuotationViewController::class, 'index']);
                 Route::post('/update/{id}', [QuotationUpdateController::class, 'index']);
                 Route::post('/approval/{id}', [QuotationApprovalController::class, 'index']);

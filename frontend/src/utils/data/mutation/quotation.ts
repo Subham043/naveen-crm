@@ -1,8 +1,8 @@
 import { useToast } from "@/hooks/useToast";
 import { useMutation } from "@tanstack/react-query";
 import { nprogress } from "@mantine/nprogress";
-import type { QuotationApprovalFormValuesType, QuotationPublicCreateFormValuesType, QuotationUpdateFormValuesType } from "../schema/quotation";
-import { approvalQuotationHandler, createPublicQuotationHandler, updateQuotationHandler } from "../dal/quotation";
+import type { QuotationApprovalFormValuesType, QuotationPublicCreateFormValuesType, QuotationFormValuesType } from "../schema/quotation";
+import { approvalQuotationHandler, createPublicQuotationHandler, createQuotationHandler, updateQuotationHandler } from "../dal/quotation";
 import type { PaginationType, QuotationType } from "@/utils/types";
 import { QuotationQueryKey, QuotationsQueryKey } from "../query/quotation";
 import { useSearchParams } from "react-router";
@@ -65,7 +65,7 @@ export const useQuotationUpdateMutation = (id: number) => {
     const [params] = useSearchParams();
 
     return useMutation({
-        mutationFn: async (val: QuotationUpdateFormValuesType) => {
+        mutationFn: async (val: QuotationFormValuesType) => {
             nprogress.start()
             return await updateQuotationHandler(id, val);
         },
@@ -86,6 +86,25 @@ export const useQuotationUpdateMutation = (id: number) => {
             });
             context.client.setQueryData(QuotationQueryKey(id), data);
             context.client.setQueryData(QuotationQueryKey(id, true), data);
+        },
+        onSettled: () => {
+            nprogress.complete();
+        }
+    });
+};
+
+export const useQuotationCreateMutation = () => {
+    const { toastSuccess } = useToast();
+    const [params] = useSearchParams();
+
+    return useMutation({
+        mutationFn: async (val: QuotationFormValuesType) => {
+            nprogress.start()
+            return await createQuotationHandler(val);
+        },
+        onSuccess: (_, __, ___, context) => {
+            toastSuccess(" Quotation created successfully");
+            context.client.invalidateQueries({ queryKey: QuotationsQueryKey(params) });
         },
         onSettled: () => {
             nprogress.complete();

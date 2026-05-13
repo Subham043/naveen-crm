@@ -25,7 +25,7 @@ class QuotationWebhookCreateController extends Controller
     public function index(QuotationWebhookCreateRequests $request){
         try {
             $dto = QuotationWebhookCreateDTO::fromRequest($request);
-            DB::transaction(function () use ($dto) {
+            $quotation = DB::transaction(function () use ($dto) {
                 return $this->quotationService->create([
                     ...$dto->toArray(),
                     'is_active' => false,
@@ -33,7 +33,7 @@ class QuotationWebhookCreateController extends Controller
                     'lead_source' => LeadSource::Website->value(),
                 ]);
             });
-            // event(new WebhookQuotationCreated($quotation, $dto));
+            event(new WebhookQuotationCreated($quotation, $dto));
             return response()->json([
                 "message" => "Quotation created successfully.",
             ], 201);

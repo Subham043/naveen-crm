@@ -1,5 +1,5 @@
 import PermittedLayout from "@/layouts/PermittedLayout";
-import { Box, Divider, Group, Paper, Title } from "@mantine/core";
+import { Box, Button, Divider, Group, Paper, Title } from "@mantine/core";
 import CustomPagination from "@/components/CustomPagination";
 import QuotationTable from "./QuotationPage/QuotationTable";
 import QuotationFilters from "./QuotationPage/QuotationFilters";
@@ -23,6 +23,10 @@ export default function Quotation() {
     id: undefined,
   });
 
+  const handleModalOpen = useCallback(() => {
+    setModal({ show: true, type: "create", id: undefined });
+  }, []);
+
   const handleModalClose = useCallback(
     () => setModal({ show: false, type: "create", id: undefined }),
     [],
@@ -43,6 +47,14 @@ export default function Quotation() {
               allowedRoles={["Super-Admin"]}
             >
               <Group gap="xs" justify="flex-end" align="center">
+                <Button
+                  variant="filled"
+                  color="teal"
+                  type="button"
+                  onClick={handleModalOpen}
+                >
+                  ADD
+                </Button>
                 <QuotationExportBtn />
               </Group>
             </PermittedLayout>
