@@ -21,7 +21,7 @@ function OrderViewLogisticInfo({ tracking_details, tracking_status }: Props) {
             <Text fw={600} c="blue">
               Tracking Details
             </Text>
-            <Text size="sm" c="dimmed">
+            <Text size="sm" c="dimmed" style={{ whiteSpace: "pre-wrap" }}>
               {tracking_details || "N/A"}
             </Text>
           </Box>

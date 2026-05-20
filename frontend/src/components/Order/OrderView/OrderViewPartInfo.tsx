@@ -75,7 +75,7 @@ function OrderViewPartInfo({ quotation_info }: Props) {
             <Text fw={600} c="blue">
               Description
             </Text>
-            <Text size="sm" c="dimmed">
+            <Text size="sm" c="dimmed" style={{ whiteSpace: "pre-wrap" }}>
               {quotation_info.part_description || "N/A"}
             </Text>
           </Box>

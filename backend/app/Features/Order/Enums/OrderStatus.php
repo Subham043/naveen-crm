@@ -5,13 +5,17 @@ namespace App\Features\Order\Enums;
 enum OrderStatus: int
 {
 	case Pending = 0;
-	case Escalation = 1;
-	case Cancelled = 2;
-    case PendingForRefund = 3;
-    case Refunded = 4;
-	case PartShipped = 5;
-	case Completed = 6;
-	case ChargeBack = 7;
+	case Relocate = 1;
+	case Escalation = 2;
+	case InvoiceSent = 3;
+	case TrackingSent = 4;
+    case RefundPendingFromYard = 5;
+    case RefundPendingToCustomer = 6;
+	case Cancelled = 7;
+    case POSent = 8;
+	case PartShipped = 9;
+	case ChargeBack = 10;
+	case Completed = 11;
     
     public function value(): int
     {
@@ -22,13 +26,17 @@ enum OrderStatus: int
 	{
 		return match ($value) {
 			self::Pending->value => 'Pending',
+			self::Relocate->value => 'Relocate',
 			self::Escalation->value => 'Escalation',
+			self::InvoiceSent->value => 'Invoice Sent',
+			self::TrackingSent->value => 'Tracking Sent',
+			self::RefundPendingFromYard->value => 'Refund Pending From Yard',
+			self::RefundPendingToCustomer->value => 'Refund Pending To Customer',
 			self::Cancelled->value => 'Cancelled',
-			self::PendingForRefund->value => 'Pending For Refund',
-			self::Refunded->value => 'Refunded',
+			self::POSent->value => 'PO Sent',
 			self::PartShipped->value => 'Part Shipped',
-			self::Completed->value => 'Completed',
 			self::ChargeBack->value => 'ChargeBack',
+			self::Completed->value => 'Completed',
 			null => null,
 			default => null,
 		};

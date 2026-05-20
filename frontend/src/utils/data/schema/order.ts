@@ -136,7 +136,7 @@ export const orderUpdateSchema = yup
         order_status: yup
             .number()
             .typeError("Order Status must be a number")
-            .oneOf([0, 1, 2, 3, 4, 5, 6, 7], "Order Status must be 0 or 1 or 2 or 3 or 4 or 5 or 6 or 7")
+            .oneOf([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], "Order Status must be 0 or 1 or 2 or 3 or 4 or 5 or 6 or 7 or 8 or 9 or 10 or 11")
             .required("Order Status is required"),
         payment_card_type: yup
             .number()

@@ -90,7 +90,7 @@ function QuotationViewCustomerInfo({
             <Text fw={600} c="blue">
               Billing Address
             </Text>
-            <Text size="sm" c="dimmed">
+            <Text size="sm" c="dimmed" style={{ whiteSpace: "pre-wrap" }}>
               {billing_address || "N/A"}
             </Text>
           </Box>
@@ -98,7 +98,7 @@ function QuotationViewCustomerInfo({
             <Text fw={600} c="blue">
               Shipping Address
             </Text>
-            <Text size="sm" c="dimmed">
+            <Text size="sm" c="dimmed" style={{ whiteSpace: "pre-wrap" }}>
               {shipping_address || "N/A"}
             </Text>
           </Box>

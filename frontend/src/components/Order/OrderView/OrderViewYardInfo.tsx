@@ -49,7 +49,7 @@ function OrderViewYardInfo({
               <Text fw={600} c="blue">
                 Yard Detail {index + 1}
               </Text>
-              <Text size="sm" c="dimmed">
+              <Text size="sm" c="dimmed" style={{ whiteSpace: "pre-wrap" }}>
                 {yard.yard}
               </Text>
             </Box>

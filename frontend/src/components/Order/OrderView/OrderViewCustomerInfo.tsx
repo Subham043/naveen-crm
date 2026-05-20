@@ -70,7 +70,7 @@ function OrderViewCustomerInfo({ quotation_info, created_at }: Props) {
             <Text fw={600} c="blue">
               Billing Address
             </Text>
-            <Text size="sm" c="dimmed">
+            <Text size="sm" c="dimmed" style={{ whiteSpace: "pre-wrap" }}>
               {quotation_info.billing_address || "N/A"}
             </Text>
           </Box>
@@ -78,7 +78,7 @@ function OrderViewCustomerInfo({ quotation_info, created_at }: Props) {
             <Text fw={600} c="blue">
               Shipping Address
             </Text>
-            <Text size="sm" c="dimmed">
+            <Text size="sm" c="dimmed" style={{ whiteSpace: "pre-wrap" }}>
               {quotation_info.shipping_address || "N/A"}
             </Text>
           </Box>

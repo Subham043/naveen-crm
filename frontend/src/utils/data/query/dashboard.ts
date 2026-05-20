@@ -4,6 +4,7 @@ import { useAuthStore } from "@/stores/auth.store";
 import {
     IconAlignBoxLeftStretch,
     IconAppWindow,
+    IconArrowBack,
     IconBasketStar,
     IconBrandCashapp,
     IconCancel,
@@ -82,13 +83,14 @@ const TotalTrackingPendingOrders = "totalTrackingPendingOrders";
 const TotalTrackingSentOrders = "totalTrackingSentOrders";
 
 const TotalPendingOrders = "totalPendingOrders";
+const TotalRelocateOrders = "totalRelocateOrders";
 const TotalEscalationOrders = "totalEscalationOrders";
+const TotalRefundPendingFromYardOrders = "totalRefundPendingFromYardOrders";
+const TotalRefundPendingToCustomerOrders = "totalRefundPendingToCustomerOrders";
 const TotalCancelledOrders = "totalCancelledOrders";
-const TotalPendingForRefundOrders = "totalPendingForRefundOrders";
-const TotalRefundedOrders = "totalRefundedOrders";
 const TotalPartShippedOrders = "totalPartShippedOrders";
-const TotalCompletedOrders = "totalCompletedOrders";
 const TotalChargeBackOrders = "totalChargeBackOrders";
+const TotalCompletedOrders = "totalCompletedOrders";
 
 const TotalApprovedByMeOrders = "totalApprovedByMeOrders";
 const TotalRejectedByMeOrders = "totalRejectedByMeOrders";
@@ -144,13 +146,14 @@ const OrderTrackingStatusGraphContent = [
 
 const OrderStatusGraphContent = [
     TotalPendingOrders,
+    TotalRelocateOrders,
     TotalEscalationOrders,
+    TotalRefundPendingFromYardOrders,
+    TotalRefundPendingToCustomerOrders,
     TotalCancelledOrders,
-    TotalPendingForRefundOrders,
-    TotalRefundedOrders,
     TotalPartShippedOrders,
-    TotalCompletedOrders,
     TotalChargeBackOrders,
+    TotalCompletedOrders,
 ];
 
 const OrderApprovalStatusGraphContent = [
@@ -299,33 +302,37 @@ const dashboardKeyIconMap = {
         Icon: IconLoader,
         color: "var(--mantine-color-gray-filled)",
     },
+    [TotalRelocateOrders]: {
+        Icon: IconArrowBack,
+        color: "var(--mantine-color-orange-filled)",
+    },
     [TotalEscalationOrders]: {
         Icon: IconZoomExclamation,
-        color: "var(--mantine-color-orange-filled)",
+        color: "var(--mantine-color-red-filled)",
+    },
+    [TotalRefundPendingFromYardOrders]: {
+        Icon: IconCashMoveBack,
+        color: "var(--mantine-color-yellow-filled)",
+    },
+    [TotalRefundPendingToCustomerOrders]: {
+        Icon: IconCashMoveBack,
+        color: "var(--mantine-color-indigo-filled)",
     },
     [TotalCancelledOrders]: {
         Icon: IconCancel,
         color: "var(--mantine-color-red-filled)",
     },
-    [TotalPendingForRefundOrders]: {
-        Icon: IconCashMoveBack,
-        color: "var(--mantine-color-yellow-filled)",
-    },
-    [TotalRefundedOrders]: {
-        Icon: IconCashMoveBack,
-        color: "var(--mantine-color-indigo-filled)",
-    },
     [TotalPartShippedOrders]: {
         Icon: IconPackageImport,
         color: "var(--mantine-color-cyan-filled)",
     },
-    [TotalCompletedOrders]: {
-        Icon: IconCubeSend,
-        color: "var(--mantine-color-green-filled)",
-    },
     [TotalChargeBackOrders]: {
         Icon: IconCashRegister,
         color: "var(--mantine-color-dark-filled)",
+    },
+    [TotalCompletedOrders]: {
+        Icon: IconCubeSend,
+        color: "var(--mantine-color-green-filled)",
     },
     [TotalApprovedByMeOrders]: {
         Icon: IconChecks,

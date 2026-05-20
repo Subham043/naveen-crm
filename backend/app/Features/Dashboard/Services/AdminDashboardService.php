@@ -89,13 +89,14 @@ class AdminDashboardService
                 SUM(CASE WHEN orders.tracking_status = ? THEN 1 ELSE 0 END) as totalTrackingSentOrders,
 
                 SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalPendingOrders,
+                SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalRelocateOrders,
                 SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalEscalationOrders,
+                SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalRefundPendingFromYardOrders,
+                SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalRefundPendingToCustomerOrders,
                 SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalCancelledOrders,
-                SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalPendingForRefundOrders,
-                SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalRefundedOrders,
                 SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalPartShippedOrders,
-                SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalCompletedOrders,
                 SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalChargeBackOrders,
+                SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalCompletedOrders,
 
                 SUM(CASE WHEN quotations.quotation_status = 1 AND quotations.approval_by_id = ? THEN 1 ELSE 0 END) as totalApprovedByMeOrders,
                 SUM(CASE WHEN quotations.quotation_status = 2 AND quotations.approval_by_id = ? THEN 1 ELSE 0 END) as totalRejectedByMeOrders
@@ -124,13 +125,14 @@ class AdminDashboardService
                 TrackingStatus::Sent->value(),
 
                 OrderStatus::Pending->value(),
+                OrderStatus::Relocate->value(),
                 OrderStatus::Escalation->value(),
+                OrderStatus::RefundPendingFromYard->value(),
+                OrderStatus::RefundPendingToCustomer->value(),
                 OrderStatus::Cancelled->value(),
-                OrderStatus::PendingForRefund->value(),
-                OrderStatus::Refunded->value(),
                 OrderStatus::PartShipped->value(),
-                OrderStatus::Completed->value(),
                 OrderStatus::ChargeBack->value(),
+                OrderStatus::Completed->value(),
 
                 Auth::guard(Guards::API->value)->id(),
                 Auth::guard(Guards::API->value)->id(),
@@ -183,13 +185,14 @@ class AdminDashboardService
             "totalTrackingPendingOrders" => 0,
             "totalTrackingSentOrders" => 0,
             "totalPendingOrders" => 0,
+            "totalRelocateOrders" => 0,
             "totalEscalationOrders" => 0,
+            "totalRefundPendingFromYardOrders" => 0,
+            "totalRefundPendingToCustomerOrders" => 0,
             "totalCancelledOrders" => 0,
-            "totalPendingForRefundOrders" => 0,
-            "totalRefundedOrders" => 0,
             "totalPartShippedOrders" => 0,
-            "totalCompletedOrders" => 0,
             "totalChargeBackOrders" => 0,
+            "totalCompletedOrders" => 0,
             "totalApprovedByMeOrders" => 0,
             "totalRejectedByMeOrders" => 0
         ], $data);
