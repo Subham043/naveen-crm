@@ -176,7 +176,7 @@ function OrderTable({ loading, orders, onEdit }: OrderTableProps) {
             <Table.Th>SOURCE</Table.Th>
             <Table.Th>AGENT</Table.Th>
             <Table.Th>SALE PRICE</Table.Th>
-            <Table.Th>STATUS</Table.Th>
+            <Table.Th>ORDER STATUS</Table.Th>
             <Table.Th>CREATED AT</Table.Th>
             <Table.Th />
           </Table.Tr>
