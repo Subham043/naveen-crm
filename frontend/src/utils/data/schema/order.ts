@@ -97,11 +97,6 @@ export const orderUpdateSchema = yup
             .string()
             .typeError("Tracking Details must contain characters only")
             .optional(),
-        tracking_status: yup
-            .number()
-            .typeError("Tracking Status must be a number")
-            .oneOf([0, 1], "Tracking Status must be 0 or 1")
-            .required("Tracking Status is required"),
         payment_status: yup
             .number()
             .typeError("Payment Status must be a number")
@@ -123,16 +118,6 @@ export const orderUpdateSchema = yup
                 then: (schema) => schema.required("Transaction ID is required"),
                 otherwise: (schema) => schema.optional(),
             }),
-        invoice_status: yup
-            .number()
-            .typeError("Invoice Status must be a number")
-            .oneOf([0, 1, 2], "Invoice Status must be 0 or 1 or 2")
-            .required("Invoice Status is required"),
-        po_status: yup
-            .number()
-            .typeError("PO Status must be a number")
-            .oneOf([1, 2], "PO Status must be 1 or 2")
-            .required("PO Status is required"),
         order_status: yup
             .number()
             .typeError("Order Status must be a number")

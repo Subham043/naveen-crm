@@ -2,15 +2,12 @@
 
 namespace App\Features\Order\Exports;
 
-use App\Features\Order\Enums\InvoiceStatus;
 use App\Features\Quotation\Enums\LeadSource;
 use App\Features\Order\Enums\OrderStatus;
 use App\Features\Quotation\Enums\QuotationStatus;
 use App\Features\Order\Enums\PaymentStatus;
 use App\Features\Order\Enums\PaymentCardType;
 use App\Features\Order\Enums\PaymentGateway;
-use App\Features\Order\Enums\TrackingStatus;
-use App\Features\Order\Enums\POStatus;
 use App\Features\Order\Enums\YardLocated;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -63,9 +60,6 @@ class OrderExport implements FromQuery, WithHeadings, WithMapping
 			$data->quotation->sales_tax ?? 'N/A',
 			$data->quotation->gross_profit ?? 'N/A',
 			$data->tracking_details ?? 'N/A',
-			TrackingStatus::getValue($data->tracking_status),
-			InvoiceStatus::getValue($data->invoice_status),
-			POStatus::getValue($data->po_status),
 			YardLocated::getValue($data->yard_located),
 			PaymentGateway::getValue($data->payment_gateway),
 			OrderStatus::getValue($data->order_status),
@@ -110,9 +104,6 @@ class OrderExport implements FromQuery, WithHeadings, WithMapping
 			'Sales Tax',
 			'Gross Profit',
 			'Tracking Details',
-			'Tracking Status',
-			'Invoice Status',
-			'PO Status',
 			'Yard Located',
 			'Yard Payment Details',
 			'Order Status',

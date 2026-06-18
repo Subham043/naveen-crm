@@ -200,12 +200,6 @@ function OrderTable({ loading, orders, onEdit }: OrderTableProps) {
                 transaction_id={item.transaction_id}
                 yard_located={item.yard_located}
                 tracking_details={item.tracking_details}
-                tracking_status={item.tracking_status}
-                tracking_status_info={item.tracking_status_info}
-                invoice_status={item.invoice_status}
-                invoice_status_info={item.invoice_status_info}
-                po_status={item.po_status}
-                po_status_info={item.po_status_info}
                 order_status={item.order_status}
                 order_status_info={item.order_status_info}
                 created_at={item.created_at}

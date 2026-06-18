@@ -1,48 +1,13 @@
 import type { ServiceTeamOrderFormValuesType } from "@/utils/data/schema/service_team_order";
-import { Fieldset, SimpleGrid, Select } from "@mantine/core";
+import { Fieldset, SimpleGrid, Select, Textarea } from "@mantine/core";
 import { memo } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 
 function StatusFormSection() {
   const { control } = useFormContext<ServiceTeamOrderFormValuesType>();
   return (
-    <Fieldset legend="Status Information" variant="filled" mt="md">
-      <SimpleGrid cols={{ base: 1, md: 2, lg: 3 }}>
-        <Controller
-          control={control}
-          name="invoice_status"
-          render={({ field, fieldState }) => (
-            <Select
-              label="Invoice Status"
-              value={field.value !== undefined ? field.value.toString() : "0"}
-              onChange={(val) => field.onChange(val ? Number(val) : undefined)}
-              error={fieldState.error?.message}
-              withAsterisk
-              data={[
-                { value: "0", label: "Not Generated" },
-                { value: "1", label: "Generated" },
-                { value: "2", label: "Sent" },
-              ]}
-            />
-          )}
-        />
-        <Controller
-          control={control}
-          name="po_status"
-          render={({ field, fieldState }) => (
-            <Select
-              label="PO Status"
-              value={field.value ? field.value.toString() : "1"}
-              onChange={(val) => field.onChange(val ? Number(val) : undefined)}
-              error={fieldState.error?.message}
-              withAsterisk
-              data={[
-                { value: "1", label: "PO Pending" },
-                { value: "2", label: "PO Sent" },
-              ]}
-            />
-          )}
-        />
+    <Fieldset legend="Logistic & Status Information" variant="filled" mt="md">
+      <SimpleGrid cols={{ base: 1, md: 1, lg: 1 }}>
         <Controller
           control={control}
           name="order_status"
@@ -67,6 +32,21 @@ function StatusFormSection() {
                 { value: "10", label: "ChargeBack" },
                 { value: "11", label: "Completed" },
               ]}
+            />
+          )}
+        />
+      </SimpleGrid>
+      <SimpleGrid cols={{ base: 1, md: 1, lg: 1 }} mt="md">
+        <Controller
+          control={control}
+          name="tracking_details"
+          render={({ field, fieldState }) => (
+            <Textarea
+              label="Tracking Details"
+              value={field.value ? field.value : ""}
+              onChange={field.onChange}
+              error={fieldState.error?.message}
+              rows={5}
             />
           )}
         />

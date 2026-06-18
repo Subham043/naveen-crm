@@ -2,7 +2,6 @@ import { useQuery, type UseQueryResult } from "@tanstack/react-query";
 import { getDashboardHandler } from "../dal/dashboard";
 import { useAuthStore } from "@/stores/auth.store";
 import {
-    IconAlignBoxLeftStretch,
     IconAppWindow,
     IconArrowBack,
     IconBasketStar,
@@ -18,7 +17,6 @@ import {
     IconCubeSend,
     IconFileSpreadsheet,
     IconHelpOctagon,
-    IconInvoice,
     IconLetterB,
     IconLetterS,
     IconLetterZ,
@@ -72,22 +70,16 @@ const TotalPaymentStripeOrders = "totalPaymentStripeOrders";
 const TotalPaymentBoaOrders = "totalPaymentBoaOrders";
 const TotalPaymentZelleOrders = "totalPaymentZelleOrders";
 
-const TotalInvoiceNotGeneratedOrders = "totalInvoiceNotGeneratedOrders";
-const TotalInvoiceGeneratedOrders = "totalInvoiceGeneratedOrders";
-const TotalInvoiceSentOrders = "totalInvoiceSentOrders";
-
-const TotalPOPendingOrders = "totalPOPendingOrders";
-const TotalPOSentOrders = "totalPOSentOrders";
-
-const TotalTrackingPendingOrders = "totalTrackingPendingOrders";
-const TotalTrackingSentOrders = "totalTrackingSentOrders";
 
 const TotalPendingOrders = "totalPendingOrders";
 const TotalRelocateOrders = "totalRelocateOrders";
 const TotalEscalationOrders = "totalEscalationOrders";
+const TotalInvoiceSentOrders = "totalInvoiceSentOrders";
+const TotalTrackingSentOrders = "totalTrackingSentOrders";
 const TotalRefundPendingFromYardOrders = "totalRefundPendingFromYardOrders";
 const TotalRefundPendingToCustomerOrders = "totalRefundPendingToCustomerOrders";
 const TotalCancelledOrders = "totalCancelledOrders";
+const TotalPOSentOrders = "totalPOSentOrders";
 const TotalPartShippedOrders = "totalPartShippedOrders";
 const TotalChargeBackOrders = "totalChargeBackOrders";
 const TotalCompletedOrders = "totalCompletedOrders";
@@ -128,29 +120,16 @@ const OrderPaymentGatewayGraphContent = [
     TotalPaymentZelleOrders,
 ];
 
-const OrderInvoiceStatusGraphContent = [
-    TotalInvoiceNotGeneratedOrders,
-    TotalInvoiceGeneratedOrders,
-    TotalInvoiceSentOrders,
-];
-
-const OrderPOStatusGraphContent = [
-    TotalPOPendingOrders,
-    TotalPOSentOrders,
-];
-
-const OrderTrackingStatusGraphContent = [
-    TotalTrackingPendingOrders,
-    TotalTrackingSentOrders,
-];
-
 const OrderStatusGraphContent = [
     TotalPendingOrders,
     TotalRelocateOrders,
     TotalEscalationOrders,
+    TotalInvoiceSentOrders,
+    TotalTrackingSentOrders,
     TotalRefundPendingFromYardOrders,
     TotalRefundPendingToCustomerOrders,
     TotalCancelledOrders,
+    TotalPOSentOrders,
     TotalPartShippedOrders,
     TotalChargeBackOrders,
     TotalCompletedOrders,
@@ -270,34 +249,6 @@ const dashboardKeyIconMap = {
         Icon: IconLetterZ,
         color: "var(--mantine-color-teal-filled)",
     },
-    [TotalInvoiceNotGeneratedOrders]: {
-        Icon: IconAlignBoxLeftStretch,
-        color: "var(--mantine-color-gray-filled)",
-    },
-    [TotalInvoiceGeneratedOrders]: {
-        Icon: IconInvoice,
-        color: "var(--mantine-color-violet-filled)",
-    },
-    [TotalInvoiceSentOrders]: {
-        Icon: IconPinInvoke,
-        color: "var(--mantine-color-teal-filled)",
-    },
-    [TotalPOPendingOrders]: {
-        Icon: IconLoader,
-        color: "var(--mantine-color-gray-filled)",
-    },
-    [TotalPOSentOrders]: {
-        Icon: IconCubeSend,
-        color: "var(--mantine-color-pink-filled)",
-    },
-    [TotalTrackingPendingOrders]: {
-        Icon: IconLoader,
-        color: "var(--mantine-color-gray-filled)",
-    },
-    [TotalTrackingSentOrders]: {
-        Icon: IconCubeSend,
-        color: "var(--mantine-color-grape-filled)",
-    },
     [TotalPendingOrders]: {
         Icon: IconLoader,
         color: "var(--mantine-color-gray-filled)",
@@ -310,6 +261,14 @@ const dashboardKeyIconMap = {
         Icon: IconZoomExclamation,
         color: "var(--mantine-color-red-filled)",
     },
+    [TotalInvoiceSentOrders]: {
+        Icon: IconPinInvoke,
+        color: "var(--mantine-color-purple-filled)",
+    },
+    [TotalTrackingSentOrders]: {
+        Icon: IconCubeSend,
+        color: "var(--mantine-color-grape-filled)",
+    },
     [TotalRefundPendingFromYardOrders]: {
         Icon: IconCashMoveBack,
         color: "var(--mantine-color-yellow-filled)",
@@ -321,6 +280,10 @@ const dashboardKeyIconMap = {
     [TotalCancelledOrders]: {
         Icon: IconCancel,
         color: "var(--mantine-color-red-filled)",
+    },
+    [TotalPOSentOrders]: {
+        Icon: IconCubeSend,
+        color: "var(--mantine-color-pink-filled)",
     },
     [TotalPartShippedOrders]: {
         Icon: IconPackageImport,
@@ -422,42 +385,6 @@ export const DashboardQueryFn = async ({
                 dashboardKeyIconMap[key as keyof typeof dashboardKeyIconMap]?.color ??
                 "var(--mantine-color-blue-filled)",
         }));
-    const orderInvoiceStatusGraphContent = Object.entries(resp)
-        .filter(([key]) => OrderInvoiceStatusGraphContent.includes(key as string))
-        .map(([key, value]) => ({
-            name: key
-                .replace(/[_-]/g, " ")
-                .replace(/([a-z])([A-Z])/g, "$1 $2")
-                .replace(/\b\w/g, (c) => c.toUpperCase()),
-            y: value ? Number(value) : 0,
-            color:
-                dashboardKeyIconMap[key as keyof typeof dashboardKeyIconMap]?.color ??
-                "var(--mantine-color-blue-filled)",
-        }));
-    const orderTrackingStatusGraphContent = Object.entries(resp)
-        .filter(([key]) => OrderTrackingStatusGraphContent.includes(key as string))
-        .map(([key, value]) => ({
-            name: key
-                .replace(/[_-]/g, " ")
-                .replace(/([a-z])([A-Z])/g, "$1 $2")
-                .replace(/\b\w/g, (c) => c.toUpperCase()),
-            y: value ? Number(value) : 0,
-            color:
-                dashboardKeyIconMap[key as keyof typeof dashboardKeyIconMap]?.color ??
-                "var(--mantine-color-blue-filled)",
-        }));
-    const orderPOStatusGraphContent = Object.entries(resp)
-        .filter(([key]) => OrderPOStatusGraphContent.includes(key as string))
-        .map(([key, value]) => ({
-            name: key
-                .replace(/[_-]/g, " ")
-                .replace(/([a-z])([A-Z])/g, "$1 $2")
-                .replace(/\b\w/g, (c) => c.toUpperCase()),
-            y: value ? Number(value) : 0,
-            color:
-                dashboardKeyIconMap[key as keyof typeof dashboardKeyIconMap]?.color ??
-                "var(--mantine-color-blue-filled)",
-        }));
     const orderApprovalStatusGraphContent = Object.entries(resp)
         .filter(([key]) => OrderApprovalStatusGraphContent.includes(key as string))
         .map(([key, value]) => ({
@@ -533,18 +460,6 @@ export const DashboardQueryFn = async ({
             {
                 chartTitle: "Order Payment Gateway Summary",
                 data: orderPaymentGatewayGraphContent,
-            },
-            {
-                chartTitle: "Order Invoice Summary",
-                data: orderInvoiceStatusGraphContent,
-            },
-            {
-                chartTitle: "Order Tracking Summary",
-                data: orderTrackingStatusGraphContent,
-            },
-            {
-                chartTitle: "Order PO Summary",
-                data: orderPOStatusGraphContent,
             },
             {
                 chartTitle: "Order Approval Summary",

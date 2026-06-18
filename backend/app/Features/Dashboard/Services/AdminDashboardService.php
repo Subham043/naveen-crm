@@ -2,13 +2,10 @@
 
 namespace App\Features\Dashboard\Services;
 
-use App\Features\Order\Enums\InvoiceStatus;
 use App\Features\Order\Enums\OrderStatus;
 use App\Features\Order\Enums\PaymentCardType;
 use App\Features\Order\Enums\PaymentGateway;
 use App\Features\Order\Enums\PaymentStatus;
-use App\Features\Order\Enums\POStatus;
-use App\Features\Order\Enums\TrackingStatus;
 use App\Features\Order\Models\Order;
 use App\Features\Quotation\Models\Quotation;
 use Illuminate\Database\Eloquent\Builder;
@@ -77,23 +74,16 @@ class AdminDashboardService
                 SUM(CASE WHEN orders.payment_status != 0 AND orders.payment_gateway = ? THEN 1 ELSE 0 END) as totalPaymentStripeOrders,
                 SUM(CASE WHEN orders.payment_status != 0 AND orders.payment_gateway = ? THEN 1 ELSE 0 END) as totalPaymentBoaOrders,
                 SUM(CASE WHEN orders.payment_status != 0 AND orders.payment_gateway = ? THEN 1 ELSE 0 END) as totalPaymentZelleOrders,
-
-                SUM(CASE WHEN orders.invoice_status = ? THEN 1 ELSE 0 END) as totalInvoiceNotGeneratedOrders,
-                SUM(CASE WHEN orders.invoice_status = ? THEN 1 ELSE 0 END) as totalInvoiceGeneratedOrders,
-                SUM(CASE WHEN orders.invoice_status = ? THEN 1 ELSE 0 END) as totalInvoiceSentOrders,
-
-                SUM(CASE WHEN orders.po_status = ? THEN 1 ELSE 0 END) as totalPOPendingOrders,
-                SUM(CASE WHEN orders.po_status = ? THEN 1 ELSE 0 END) as totalPOSentOrders,
-
-                SUM(CASE WHEN orders.tracking_status = ? THEN 1 ELSE 0 END) as totalTrackingPendingOrders,
-                SUM(CASE WHEN orders.tracking_status = ? THEN 1 ELSE 0 END) as totalTrackingSentOrders,
-
+                
                 SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalPendingOrders,
                 SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalRelocateOrders,
                 SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalEscalationOrders,
+                SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalInvoiceSentOrders,
+                SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalTrackingSentOrders,
                 SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalRefundPendingFromYardOrders,
                 SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalRefundPendingToCustomerOrders,
                 SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalCancelledOrders,
+                SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalPOSentOrders,
                 SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalPartShippedOrders,
                 SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalChargeBackOrders,
                 SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalCompletedOrders,
@@ -114,22 +104,15 @@ class AdminDashboardService
                 PaymentGateway::Boa->value(),
                 PaymentGateway::Zelle->value(),
 
-                InvoiceStatus::NotGenerated->value(),
-                InvoiceStatus::Generated->value(),
-                InvoiceStatus::Sent->value(),
-
-                POStatus::POPending->value(),
-                POStatus::POSent->value(),
-
-                TrackingStatus::Pending->value(),
-                TrackingStatus::Sent->value(),
-
                 OrderStatus::Pending->value(),
                 OrderStatus::Relocate->value(),
                 OrderStatus::Escalation->value(),
+                OrderStatus::InvoiceSent->value(),
+                OrderStatus::TrackingSent->value(),
                 OrderStatus::RefundPendingFromYard->value(),
                 OrderStatus::RefundPendingToCustomer->value(),
                 OrderStatus::Cancelled->value(),
+                OrderStatus::POSent->value(),
                 OrderStatus::PartShipped->value(),
                 OrderStatus::ChargeBack->value(),
                 OrderStatus::Completed->value(),
@@ -177,19 +160,15 @@ class AdminDashboardService
             "totalPaymentStripeOrders" => 0,
             "totalPaymentBoaOrders" => 0,
             "totalPaymentZelleOrders" => 0,
-            "totalInvoiceNotGeneratedOrders" => 0,
-            "totalInvoiceGeneratedOrders" => 0,
-            "totalInvoiceSentOrders" => 0,
-            "totalPOPendingOrders" => 0,
-            "totalPOSentOrders" => 0,
-            "totalTrackingPendingOrders" => 0,
-            "totalTrackingSentOrders" => 0,
             "totalPendingOrders" => 0,
             "totalRelocateOrders" => 0,
             "totalEscalationOrders" => 0,
+            "totalInvoiceSentOrders" => 0,
+            "totalTrackingSentOrders" => 0,
             "totalRefundPendingFromYardOrders" => 0,
             "totalRefundPendingToCustomerOrders" => 0,
             "totalCancelledOrders" => 0,
+            "totalPOSentOrders" => 0,
             "totalPartShippedOrders" => 0,
             "totalChargeBackOrders" => 0,
             "totalCompletedOrders" => 0,

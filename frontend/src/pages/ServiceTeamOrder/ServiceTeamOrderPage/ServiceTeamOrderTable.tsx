@@ -8,12 +8,10 @@ import TableRowNotFound from "@/components/TableRowNotFound";
 import Datetime from "@/components/Datetime";
 import { memo, useCallback } from "react";
 import ServiceTeamOrderViewBtn from "./ServiceTeamOrderViewBtn";
-import OrderPOStatus, { type POStatus } from "@/components/Order/OrderPOStatus";
-import type { PaymentStatus } from "@/components/Order/OrderPaymentStatus";
-import OrderPaymentStatus from "@/components/Order/OrderPaymentStatus";
-import type { InvoiceStatus } from "@/components/Order/OrderInvoiceStatus";
-import OrderInvoiceStatus from "@/components/Order/OrderInvoiceStatus";
 import ServiceTeamOrderPdfExportBtn from "./ServiceTeamOrderPdfExportBtn";
+import OrderStatus, {
+  type OrderStatusType,
+} from "@/components/Order/OrderStatus";
 
 type ServiceTeamOrderTableProps = {
   serviceTeamOrders: ServiceTeamOrderType[];
@@ -25,9 +23,7 @@ const ServiceTeamOrderTableRow = memo(
   ({
     id,
     quotation_info,
-    payment_status,
-    invoice_status,
-    po_status,
+    order_status,
     created_at,
     onEdit,
   }: ServiceTeamOrderType & {
@@ -135,17 +131,7 @@ const ServiceTeamOrderTableRow = memo(
           {quotation_info?.sale_price ? quotation_info.sale_price : 0.0}
         </Table.Td>
         <Table.Td>
-          <OrderPaymentStatus
-            payment_status={payment_status as PaymentStatus}
-          />
-        </Table.Td>
-        <Table.Td>
-          <OrderInvoiceStatus
-            invoice_status={invoice_status as InvoiceStatus}
-          />
-        </Table.Td>
-        <Table.Td>
-          <OrderPOStatus po_status={po_status as POStatus} />
+          <OrderStatus order_status={order_status as OrderStatusType} />
         </Table.Td>
         <Table.Td>
           <Datetime value={created_at} />
@@ -195,9 +181,7 @@ function ServiceTeamOrderTable({
             <Table.Th>SOURCE</Table.Th>
             <Table.Th>AGENT</Table.Th>
             <Table.Th>TOTAL PRICE</Table.Th>
-            <Table.Th>PAYMENT</Table.Th>
-            <Table.Th>INVOICE</Table.Th>
-            <Table.Th>PO</Table.Th>
+            <Table.Th>ORDER STATUS</Table.Th>
             <Table.Th>CREATED AT</Table.Th>
             <Table.Th />
           </Table.Tr>
@@ -221,12 +205,6 @@ function ServiceTeamOrderTable({
                 transaction_id={item.transaction_id}
                 yard_located={item.yard_located}
                 tracking_details={item.tracking_details}
-                tracking_status={item.tracking_status}
-                tracking_status_info={item.tracking_status_info}
-                invoice_status={item.invoice_status}
-                invoice_status_info={item.invoice_status_info}
-                po_status={item.po_status}
-                po_status_info={item.po_status_info}
                 order_status={item.order_status}
                 order_status_info={item.order_status_info}
                 created_at={item.created_at}

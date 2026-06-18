@@ -104,12 +104,6 @@ export type OrderType = {
   yard_located: number;
   yard_located_info?: string;
   tracking_details?: string;
-  tracking_status: number;
-  tracking_status_info?: string;
-  invoice_status: number;
-  invoice_status_info?: string;
-  po_status: number;
-  po_status_info?: string;
   order_status: number;
   order_status_info?: string;
   created_at: string;

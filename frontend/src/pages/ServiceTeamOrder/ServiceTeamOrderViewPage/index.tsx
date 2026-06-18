@@ -5,7 +5,6 @@ import { IconArrowNarrowLeft, IconX } from "@tabler/icons-react";
 import { useParams } from "react-router";
 import { useNavigate } from "react-router";
 import ServiceTeamOrderEditBtn from "./ServiceTeamOrderEditBtn";
-import OrderViewLogisticInfo from "@/components/Order/OrderView/OrderViewLogisticInfo";
 import OrderViewYardInfo from "@/components/Order/OrderView/OrderViewYardInfo";
 import OrderViewPaymentInfo from "@/components/Order/OrderView/OrderViewPaymentInfo";
 import OrderViewAgentInfo from "@/components/Order/OrderView/OrderViewAgentInfo";
@@ -85,15 +84,9 @@ export default function ServiceTeamOrderView() {
         yard_located_info={data.yard_located_info}
       />
 
-      <OrderViewLogisticInfo
-        tracking_details={data.tracking_details}
-        tracking_status={data.tracking_status}
-      />
-
       <OrderViewStatusInfo
-        invoice_status={data.invoice_status}
-        po_status={data.po_status}
         order_status={data.order_status}
+        tracking_details={data.tracking_details}
       />
 
       {data.quotation_id && <ViewTimeline quotation_id={data.quotation_id} />}

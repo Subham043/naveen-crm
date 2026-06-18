@@ -2,13 +2,10 @@
 
 namespace App\Features\Order\Requests;
 
-use App\Features\Order\Enums\InvoiceStatus;
 use App\Features\Order\Enums\OrderStatus;
 use App\Features\Order\Enums\PaymentCardType;
 use App\Features\Order\Enums\PaymentGateway;
 use App\Features\Order\Enums\PaymentStatus;
-use App\Features\Order\Enums\POStatus;
-use App\Features\Order\Enums\TrackingStatus;
 use App\Features\Order\Enums\YardLocated;
 use App\Http\Enums\Guards;
 use App\Http\Requests\InputRequest;
@@ -54,7 +51,6 @@ class OrderSaveRequests extends InputRequest
             'cost_price' => 'required|numeric',
             'shipping_cost' => 'required|numeric',
             'tracking_details' => 'nullable|string',
-            'tracking_status' => ['required', 'numeric', new Enum(TrackingStatus::class)],
             'yard_located' => ['required', 'numeric', new Enum(YardLocated::class)],
             'yards' => [Rule::excludeIf(fn() => $this->yard_located == YardLocated::No->value()), 'array', 'min:1'],
             'yards.*.yard' => [Rule::excludeIf(fn() => $this->yard_located == YardLocated::No->value()), 'string'],
@@ -63,8 +59,6 @@ class OrderSaveRequests extends InputRequest
             'payment_status' => ['required', 'numeric', new Enum(PaymentStatus::class)],
             'payment_gateway' => ['required_if:payment_status,1', 'required_if:payment_status,2', 'numeric', new Enum(PaymentGateway::class)],
             'transaction_id' => ['required_if:payment_status,1', 'required_if:payment_status,2', 'string'],
-            'invoice_status' => ['required', 'numeric', new Enum(InvoiceStatus::class)],
-            'po_status' => ['required', 'numeric', new Enum(POStatus::class)],
             'order_status' => ['required', 'numeric', new Enum(OrderStatus::class)],
         ];
     }
@@ -88,5 +82,4 @@ class OrderSaveRequests extends InputRequest
             'payment_gateway' => 'yard payment details',
         ];
     }
-
 }

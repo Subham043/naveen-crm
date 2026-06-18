@@ -54,23 +54,16 @@ class ServiceTeamDashboardService
                 SUM(CASE WHEN orders.payment_status != 0 AND orders.payment_gateway = ? THEN 1 ELSE 0 END) as totalPaymentStripeOrders,
                 SUM(CASE WHEN orders.payment_status != 0 AND orders.payment_gateway = ? THEN 1 ELSE 0 END) as totalPaymentBoaOrders,
                 SUM(CASE WHEN orders.payment_status != 0 AND orders.payment_gateway = ? THEN 1 ELSE 0 END) as totalPaymentZelleOrders,
-
-                SUM(CASE WHEN orders.invoice_status = ? THEN 1 ELSE 0 END) as totalInvoiceNotGeneratedOrders,
-                SUM(CASE WHEN orders.invoice_status = ? THEN 1 ELSE 0 END) as totalInvoiceGeneratedOrders,
-                SUM(CASE WHEN orders.invoice_status = ? THEN 1 ELSE 0 END) as totalInvoiceSentOrders,
-
-                SUM(CASE WHEN orders.po_status = ? THEN 1 ELSE 0 END) as totalPOPendingOrders,
-                SUM(CASE WHEN orders.po_status = ? THEN 1 ELSE 0 END) as totalPOSentOrders,
-
-                SUM(CASE WHEN orders.tracking_status = ? THEN 1 ELSE 0 END) as totalTrackingPendingOrders,
-                SUM(CASE WHEN orders.tracking_status = ? THEN 1 ELSE 0 END) as totalTrackingSentOrders,
-
+                
                 SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalPendingOrders,
                 SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalRelocateOrders,
                 SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalEscalationOrders,
+                SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalInvoiceSentOrders,
+                SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalTrackingSentOrders,
                 SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalRefundPendingFromYardOrders,
                 SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalRefundPendingToCustomerOrders,
                 SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalCancelledOrders,
+                SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalPOSentOrders,
                 SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalPartShippedOrders,
                 SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalChargeBackOrders,
                 SUM(CASE WHEN orders.order_status = ? THEN 1 ELSE 0 END) as totalCompletedOrders
@@ -88,22 +81,15 @@ class ServiceTeamDashboardService
                 PaymentGateway::Boa->value(),
                 PaymentGateway::Zelle->value(),
 
-                InvoiceStatus::NotGenerated->value(),
-                InvoiceStatus::Generated->value(),
-                InvoiceStatus::Sent->value(),
-
-                POStatus::POPending->value(),
-                POStatus::POSent->value(),
-
-                TrackingStatus::Pending->value(),
-                TrackingStatus::Sent->value(),
-
                 OrderStatus::Pending->value(),
                 OrderStatus::Relocate->value(),
                 OrderStatus::Escalation->value(),
+                OrderStatus::InvoiceSent->value(),
+                OrderStatus::TrackingSent->value(),
                 OrderStatus::RefundPendingFromYard->value(),
                 OrderStatus::RefundPendingToCustomer->value(),
                 OrderStatus::Cancelled->value(),
+                OrderStatus::POSent->value(),
                 OrderStatus::PartShipped->value(),
                 OrderStatus::ChargeBack->value(),
                 OrderStatus::Completed->value(),
@@ -111,14 +97,14 @@ class ServiceTeamDashboardService
     }
 
     protected function query(): QueryBuilder
-	{
-		return QueryBuilder::for($this->model());
-	}
+    {
+        return QueryBuilder::for($this->model());
+    }
 
     public function get()
-	{
-		$data =  $this->query()->first();
-        if($data){
+    {
+        $data =  $this->query()->first();
+        if ($data) {
             return $data;
         }
         return collect([
@@ -140,21 +126,17 @@ class ServiceTeamDashboardService
             "totalPaymentStripeOrders" => 0,
             "totalPaymentBoaOrders" => 0,
             "totalPaymentZelleOrders" => 0,
-            "totalInvoiceNotGeneratedOrders" => 0,
-            "totalInvoiceGeneratedOrders" => 0,
-            "totalInvoiceSentOrders" => 0,
-            "totalPOPendingOrders" => 0,
-            "totalPOSentOrders" => 0,
-            "totalTrackingPendingOrders" => 0,
-            "totalTrackingSentOrders" => 0,
             "totalPendingOrders" => 0,
             "totalEscalationOrders" => 0,
+            "totalInvoiceSentOrders" => 0,
+            "totalTrackingSentOrders" => 0,
             "totalCancelledOrders" => 0,
             "totalPendingForRefundOrders" => 0,
             "totalRefundedOrders" => 0,
+            "totalPOSentOrders" => 0,
             "totalPartShippedOrders" => 0,
             "totalCompletedOrders" => 0,
             "totalChargeBackOrders" => 0,
         ])->toArray();
-	}
+    }
 }

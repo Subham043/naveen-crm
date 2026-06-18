@@ -23,9 +23,6 @@ return new class extends Migration
             $table->tinyInteger('yard_located')->default(0);
             //logistic info
             $table->text('tracking_details')->nullable();
-            $table->tinyInteger('tracking_status')->nullable()->default(0);
-            $table->tinyInteger('invoice_status')->nullable()->default(0);
-            $table->tinyInteger('po_status')->nullable()->default(1);
             //order status
             $table->tinyInteger('order_status')->nullable()->default(0);
             $table->foreignId('quotation_id')->unique()->nullable()->index();

@@ -6,7 +6,6 @@ import CustomerFormSection from "./sections/CustomerFormSection";
 import PartFormSection from "./sections/PartFormSection";
 import PriceFormSection from "./sections/PriceFormSection";
 import AddressFormSection from "./sections/AddressFormSection";
-import LogisticFormSection from "./sections/LogisticFormSection";
 import PaymentFormSection from "./sections/PaymentFormSection";
 import StatusFormSection from "./sections/StatusFormSection";
 import YardFormSection from "./sections/YardFormSection";
@@ -47,7 +46,6 @@ export default function OrderForm({ modal, handleModalClose }: Props) {
             <PartFormSection />
             <PriceFormSection />
             <AddressFormSection />
-            <LogisticFormSection />
             <PaymentFormSection />
             <StatusFormSection />
             <YardFormSection />

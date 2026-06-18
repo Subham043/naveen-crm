@@ -29,9 +29,6 @@ class Order extends Model
         'transaction_id',
         'yard_located',
         'tracking_details',
-        'tracking_status',
-        'invoice_status',
-        'po_status',
         'order_status',
         'quotation_id',
     ];
@@ -43,9 +40,6 @@ class Order extends Model
         'transaction_id' => null,
         'yard_located' => 0,
         'tracking_details' => null,
-        'tracking_status' => 0,
-        'invoice_status' => 0,
-        'po_status' => 1,
         'order_status' => 0,
         'quotation_id' => null,
     ];
@@ -71,26 +65,25 @@ class Order extends Model
     {
         $logName = "quotation_{$this->quotation_id}_order_{$this->id}";
         $user = Auth::guard(Guards::API->value())->user();
-        if($user){
+        if ($user) {
             $logName .= "_user_{$user->id}";
         }
         return LogOptions::defaults()
-        ->useLogName($logName)
-        ->setDescriptionForEvent(
-            function(string $eventName) use ($user) {
-                $description = "Order with id {$this->id} was {$eventName} because of Quotation with id {$this->quotation_id} was approved";
-                if($user){
-                    $role = request()->user()->currentRole() ?? Roles::Sales->value();
-                    $doneBy = "{$user->name} <{$user->email}> ({$role})";
-                    $description = "Order with id {$this->id} was {$eventName} by {$doneBy}";
+            ->useLogName($logName)
+            ->setDescriptionForEvent(
+                function (string $eventName) use ($user) {
+                    $description = "Order with id {$this->id} was {$eventName} because of Quotation with id {$this->quotation_id} was approved";
+                    if ($user) {
+                        $role = request()->user()->currentRole() ?? Roles::Sales->value();
+                        $doneBy = "{$user->name} <{$user->email}> ({$role})";
+                        $description = "Order with id {$this->id} was {$eventName} by {$doneBy}";
+                    }
+                    return $description;
                 }
-                return $description;
-            }
-        )
-        ->logFillable()
-        ->logExcept(['updated_at', 'created_at'])
-        ->logOnlyDirty()
-        ->dontSubmitEmptyLogs();
+            )
+            ->logFillable()
+            ->logExcept(['updated_at', 'created_at'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
-
 }

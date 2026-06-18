@@ -7,7 +7,6 @@ import CustomerFormSection from "./sections/CustomerFormSection";
 import PartFormSection from "./sections/PartFormSection";
 import PriceFormSection from "./sections/PriceFormSection";
 import AddressFormSection from "./sections/AddressFormSection";
-import LogisticFormSection from "./sections/LogisticFormSection";
 import PaymentFormSection from "./sections/PaymentFormSection";
 import StatusFormSection from "./sections/StatusFormSection";
 import CommentFormSection from "./sections/CommentFormSection";
@@ -52,7 +51,6 @@ export default function ServiceTeamOrderForm({
             <PartFormSection />
             <PriceFormSection />
             <AddressFormSection />
-            <LogisticFormSection />
             <PaymentFormSection />
             <StatusFormSection />
             <YardFormSection />

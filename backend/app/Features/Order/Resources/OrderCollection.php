@@ -2,13 +2,10 @@
 
 namespace App\Features\Order\Resources;
 
-use App\Features\Order\Enums\InvoiceStatus;
 use App\Features\Order\Enums\OrderStatus;
 use App\Features\Order\Enums\PaymentStatus;
 use App\Features\Order\Enums\PaymentCardType;
 use App\Features\Order\Enums\PaymentGateway;
-use App\Features\Order\Enums\TrackingStatus;
-use App\Features\Order\Enums\POStatus;
 use App\Features\Order\Enums\YardLocated;
 use App\Features\Quotation\Resources\QuotationCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -36,12 +33,6 @@ class OrderCollection extends JsonResource
 			'yard_located' => $this->yard_located,
 			'yard_located_info' => YardLocated::getValue($this->yard_located),
 			'tracking_details' => $this->tracking_details,
-			'tracking_status' => $this->tracking_status,
-			'tracking_status_info' => TrackingStatus::getValue($this->tracking_status),
-			'invoice_status' => $this->invoice_status,
-			'invoice_status_info' => InvoiceStatus::getValue($this->invoice_status),
-			'po_status' => $this->po_status,
-			'po_status_info' => POStatus::getValue($this->po_status),
 			'order_status' => $this->order_status,
 			'order_status_info' => OrderStatus::getValue($this->order_status),
 			'quotation_id' => $this->quotation_id,
