@@ -12,4 +12,5 @@ export const env_production = {
   MODE: "production",
   API_ENDPOINT,
   APP_ENDPOINT,
+  CAPTCHA_KEY: `6LdfpfUsAAAAAEzspaJMKkBqdFiqe34vD6xnF_au`,
 } as const;
