@@ -19,8 +19,7 @@ class CreateTimelineForUpdatedServiceTeamOrderListener implements ShouldQueue
     /**
      * Create the event listener.
      */
-    public function __construct(private TimelineService $timelineService)
-    {}
+    public function __construct(private TimelineService $timelineService) {}
 
     /**
      * Handle the event.
@@ -31,7 +30,7 @@ class CreateTimelineForUpdatedServiceTeamOrderListener implements ShouldQueue
             $changes = new TimelineChangeCollection();
             foreach (array_merge($event->orderDto->toArray(), $event->quotationDto->toArray()) as $key => $newValue) {
                 $oldValue = $event->oldOrderValues[$key] ?? null;
-                if($oldValue != $newValue){
+                if ($oldValue != $newValue) {
                     $changes->pushChange(
                         new TimelineChange(
                             field: $key,
@@ -41,20 +40,20 @@ class CreateTimelineForUpdatedServiceTeamOrderListener implements ShouldQueue
                     );
                 }
             }
-            
-            if($event->yards && count($event->yards->toDatabaseArray())>0){
+
+            if ($event->yards && count($event->yards->toDatabaseArray()) > 0) {
                 $yardChanges = $this->timelineService->prepareYardChanges($event->oldYardValues, $event->yards);
                 $yardChanges->each(function ($change) use ($changes) {
                     $changes->pushChange($change);
                 });
             }
 
-            if($changes->isEmpty()){
-                return;
-            }
+            // if($changes->isEmpty()){
+            //     return;
+            // }
 
             $message = "Order#{$event->order->id} was updated by {$event->userName}<{$event->userEmail}>";
-            
+
             $this->timelineService->createTimeline($event->order->quotation, $changes, $message, $event->userId, $event->comment, $event->additionalComment);
         });
     }
