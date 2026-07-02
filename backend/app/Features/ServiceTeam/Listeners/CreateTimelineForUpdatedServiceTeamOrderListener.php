@@ -48,9 +48,14 @@ class CreateTimelineForUpdatedServiceTeamOrderListener implements ShouldQueue
                 });
             }
 
-            // if($changes->isEmpty()){
-            //     return;
-            // }
+            if ($changes->isEmpty()) {
+                // return;
+                activity("quotation_{$event->order->quotation->id}_order_{$event->order->id}_user_{$event->userId}")
+                    ->causedBy($event->userId)
+                    ->performedOn($event->order)
+                    ->event("updated")
+                    ->log("Order with id {$event->order->id} was updated by {$event->userName}<{$event->userEmail}> (Service-Team)");
+            }
 
             $message = "Order#{$event->order->id} was updated by {$event->userName}<{$event->userEmail}>";
 
