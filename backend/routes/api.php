@@ -33,6 +33,8 @@ use App\Features\Report\Controllers\Admin\AdminConversionFunnelReportExportContr
 use App\Features\Report\Controllers\Admin\AdminConversionFunnelReportPaginateController;
 use App\Features\Report\Controllers\Admin\AdminOrderPaymentReportExportController;
 use App\Features\Report\Controllers\Admin\AdminOrderPaymentReportPaginateController;
+use App\Features\Report\Controllers\Admin\AdminOrderStatusReportExportController;
+use App\Features\Report\Controllers\Admin\AdminOrderStatusReportPaginateController;
 use App\Features\Report\Controllers\Admin\AdminProfitLeaderboardReportExportController;
 use App\Features\Report\Controllers\Admin\AdminProfitLeaderboardReportPaginateController;
 use App\Features\Report\Controllers\Admin\AdminRevenueSummaryReportExportController;
@@ -151,6 +153,10 @@ Route::prefix('v1')->middleware([Throttle::API->middleware()])->group(function (
                 Route::prefix('order-payment')->group(function () {
                     Route::get('/excel', [AdminOrderPaymentReportExportController::class, 'index']);
                     Route::get('/paginate', [AdminOrderPaymentReportPaginateController::class, 'index']);
+                });
+                Route::prefix('order-status')->group(function () {
+                    Route::get('/excel', [AdminOrderStatusReportExportController::class, 'index']);
+                    Route::get('/paginate', [AdminOrderStatusReportPaginateController::class, 'index']);
                 });
                 Route::prefix('approval-turn-around')->group(function () {
                     Route::get('/excel', [AdminApprovalTurnAroundReportExportController::class, 'index']);

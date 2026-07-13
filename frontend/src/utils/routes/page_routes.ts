@@ -27,6 +27,7 @@ export const page_routes = {
   sales_performance_reports: { link: "/reports/sales-performance", name: "Sales Performance Reports" },
   service_performance_reports: { link: "/reports/service-performance", name: "Service Performance Reports" },
   order_payment_reports: { link: "/reports/order-payment", name: "Order Payment Reports" },
+  order_status_reports: { link: "/reports/order-status", name: "Order Status Reports" },
   revenue_summary_reports: { link: "/reports/revenue-summary", name: "Revenue Summary Reports" },
   dashboard: { link: "/", name: "Dashboard" },
 } as const;

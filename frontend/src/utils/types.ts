@@ -238,6 +238,23 @@ export type AdminOrderPaymentReportType = {
   payment_success_rate: number;
 }
 
+export type AdminOrderStatusReportType = {
+  period: string;
+  total_orders: number;
+  pending_orders: number;
+  relocate_orders: number;
+  escalation_orders: number;
+  invoice_sent_orders: number;
+  tracking_sent_orders: number;
+  refund_pending_from_yard_orders: number;
+  refund_pending_to_customer_orders: number;
+  cancelled_orders: number;
+  po_sent_orders: number;
+  part_shipped_orders: number;
+  chargeback_orders: number;
+  completed_orders: number;
+}
+
 export type SalesTeamPipelineStatusReportType = {
   quotation_status: string;
   total_sales: number;

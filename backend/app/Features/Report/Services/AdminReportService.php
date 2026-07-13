@@ -402,4 +402,48 @@ class AdminReportService
             ->paginate($total)
             ->appends(request()->query());
     }
+
+    public function adminOrderStatusModel(): Builder
+    {
+        $type = request('type', 'day');
+
+        $groupByPeriod = match ($type) {
+            'year'  => 'YEAR(created_at)',
+            'month' => 'DATE_FORMAT(created_at, "%Y-%m")',
+            default => 'DATE(created_at)',
+        };
+
+        return Order::query()
+            ->selectRaw("
+                {$groupByPeriod} as period,
+                COUNT(id) as total_orders,
+                SUM(CASE WHEN order_status = 0 THEN 1 ELSE 0 END) as pending_orders,
+                SUM(CASE WHEN order_status = 1 THEN 1 ELSE 0 END) as relocate_orders,
+                SUM(CASE WHEN order_status = 2 THEN 1 ELSE 0 END) as escalation_orders,
+                SUM(CASE WHEN order_status = 3 THEN 1 ELSE 0 END) as invoice_sent_orders,
+                SUM(CASE WHEN order_status = 4 THEN 1 ELSE 0 END) as tracking_sent_orders,
+                SUM(CASE WHEN order_status = 5 THEN 1 ELSE 0 END) as refund_pending_from_yard_orders,
+                SUM(CASE WHEN order_status = 6 THEN 1 ELSE 0 END) as refund_pending_to_customer_orders,
+                SUM(CASE WHEN order_status = 7 THEN 1 ELSE 0 END) as cancelled_orders,
+                SUM(CASE WHEN order_status = 8 THEN 1 ELSE 0 END) as po_sent_orders,
+                SUM(CASE WHEN order_status = 9 THEN 1 ELSE 0 END) as part_shipped_orders,
+                SUM(CASE WHEN order_status = 10 THEN 1 ELSE 0 END) as chargeback_orders,
+                SUM(CASE WHEN order_status = 11 THEN 1 ELSE 0 END) as completed_orders
+            ")
+            ->groupBy(DB::raw($groupByPeriod));
+    }
+
+    public function adminOrderStatusQuery(): QueryBuilder
+    {
+        return $this->query($this->adminOrderStatusModel())
+            ->defaultSort('-period')
+            ->allowedSorts('period', 'total_orders', 'pending_orders', 'relocate_orders', 'escalation_orders', 'invoice_sent_orders', 'tracking_sent_orders', 'refund_pending_from_yard_orders', 'refund_pending_to_customer_orders', 'cancelled_orders', 'po_sent_orders', 'part_shipped_orders', 'chargeback_orders', 'completed_orders');
+    }
+
+    public function paginateAdminOrderStatusModel(Int $total = 10): LengthAwarePaginator
+    {
+        return $this->adminOrderStatusQuery()
+            ->paginate($total)
+            ->appends(request()->query());
+    }
 }

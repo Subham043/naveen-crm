@@ -103,6 +103,11 @@ export const menus: LinksGroupProps[] = [
         canAccess: ["Super-Admin"],
       },
       {
+        label: page_routes.order_status_reports.name,
+        link: page_routes.order_status_reports.link,
+        canAccess: ["Super-Admin"],
+      },
+      {
         label: page_routes.sales_team_pipeline_status_report.name,
         link: page_routes.sales_team_pipeline_status_report.link,
         canAccess: ["Sales-Team"],

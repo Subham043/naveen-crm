@@ -69,6 +69,9 @@ const AdminServicePerformanceReport = React.lazy(
 const AdminOrderPaymentReport = React.lazy(
   () => import("@/pages/Report/AdminOrderPaymentReport"),
 );
+const AdminOrderStatusReport = React.lazy(
+  () => import("@/pages/Report/AdminOrderStatusReport"),
+);
 const AdminApprovalTurnAroundReport = React.lazy(
   () => import("@/pages/Report/AdminApprovalTurnAroundReport"),
 );
@@ -241,6 +244,10 @@ function App() {
                       <Route
                         path={page_routes.order_payment_reports.link}
                         element={<AdminOrderPaymentReport />}
+                      />
+                      <Route
+                        path={page_routes.order_status_reports.link}
+                        element={<AdminOrderStatusReport />}
                       />
                       <Route
                         path={page_routes.service_performance_reports.link}

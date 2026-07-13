@@ -64,6 +64,10 @@ export const api_routes = {
       paginate: "/api/v1/report/order-payment/paginate",
       excel: "/api/v1/report/order-payment/excel",
     },
+    orderStatus: {
+      paginate: "/api/v1/report/order-status/paginate",
+      excel: "/api/v1/report/order-status/excel",
+    },
     approvalTurnAround: {
       paginate: "/api/v1/report/approval-turn-around/paginate",
       excel: "/api/v1/report/approval-turn-around/excel",
