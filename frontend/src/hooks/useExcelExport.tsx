@@ -55,7 +55,7 @@ export const useExcelExport: ExcelExportHookType = () => {
         setExcelLoading(false);
       }
     },
-    [toastError, toastSuccess],
+    [toastError, toastSuccess, params.toString()],
   );
 
   return {
