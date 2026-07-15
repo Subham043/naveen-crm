@@ -217,6 +217,12 @@ function App() {
                         path={page_routes.service_team_performance_report.link}
                         element={<ServiceTeamPerformanceReport />}
                       />
+                      <Route
+                        path={
+                          page_routes.service_team_order_status_reports.link
+                        }
+                        element={<AdminOrderPaymentReport />}
+                      />
                     </Route>
                     <Route
                       element={

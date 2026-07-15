@@ -154,10 +154,6 @@ Route::prefix('v1')->middleware([Throttle::API->middleware()])->group(function (
                     Route::get('/excel', [AdminOrderPaymentReportExportController::class, 'index']);
                     Route::get('/paginate', [AdminOrderPaymentReportPaginateController::class, 'index']);
                 });
-                Route::prefix('order-status')->group(function () {
-                    Route::get('/excel', [AdminOrderStatusReportExportController::class, 'index']);
-                    Route::get('/paginate', [AdminOrderStatusReportPaginateController::class, 'index']);
-                });
                 Route::prefix('approval-turn-around')->group(function () {
                     Route::get('/excel', [AdminApprovalTurnAroundReportExportController::class, 'index']);
                     Route::get('/paginate', [AdminApprovalTurnAroundReportPaginateController::class, 'index']);
@@ -187,6 +183,16 @@ Route::prefix('v1')->middleware([Throttle::API->middleware()])->group(function (
             });
             Route::prefix('quotation')->group(function () {
                 Route::get('/timeline/{quotation_id}', [TimelinePaginateController::class, 'index']);
+            });
+        });
+        
+        //Admin || Service Team
+        Route::middleware([Roles::customMiddleware(Roles::SuperAdmin, Roles::Service)])->group(function () {
+            Route::prefix('report')->group(function () {
+                Route::prefix('order-status')->group(function () {
+                    Route::get('/excel', [AdminOrderStatusReportExportController::class, 'index']);
+                    Route::get('/paginate', [AdminOrderStatusReportPaginateController::class, 'index']);
+                });
             });
         });
 

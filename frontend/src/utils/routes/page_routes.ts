@@ -21,6 +21,7 @@ export const page_routes = {
   sales_team_profitability_per_quotation_report: { link: "/sales/reports/profitability-per-quotation", name: "Profit Per Quotation Report" },
   service_team_orders: { link: "/service-team/orders", name: "Orders" },
   service_team_performance_report: { link: "/service-team/reports/service-performance", name: "Performance Report" },
+  service_team_order_status_reports: { link: "/service-team/reports/order-status", name: "Order Status Reports" },
   approval_turn_around_reports: { link: "/reports/approval-turn-around", name: "Approval Turn Around Reports" },
   conversion_funnel_reports: { link: "/reports/conversion-funnel", name: "Conversion Funnel Reports" },
   profit_leaderboard_reports: { link: "/reports/profit-leaderboard", name: "Profit Leaderboard Reports" },

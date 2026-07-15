@@ -21,7 +21,7 @@ export default function AdminOrderPaymentReport() {
             <Title order={4}>Order Payment Report</Title>
             <PermittedLayout
               outletType="children"
-              allowedRoles={["Super-Admin"]}
+              allowedRoles={["Super-Admin", "Service-Team"]}
             >
               <Group gap="xs" justify="flex-end" align="center">
                 <AdminOrderPaymentReportExportBtn />

@@ -147,6 +147,11 @@ export const menus: LinksGroupProps[] = [
         link: page_routes.service_team_performance_report.link,
         canAccess: ["Service-Team"],
       },
+      {
+        label: page_routes.service_team_order_status_reports.name,
+        link: page_routes.service_team_order_status_reports.link,
+        canAccess: ["Service-Team"],
+      },
     ],
   },
   {
